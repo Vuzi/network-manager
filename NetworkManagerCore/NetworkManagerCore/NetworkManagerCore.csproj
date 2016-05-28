@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="src\NetworkManager\Domain\Software.cs" />
     <Compile Include="src\NetworkManager\Domain\User.cs" />
+    <Compile Include="src\NetworkManager\Scheduling\Task.cs" />
     <Compile Include="src\NetworkManager\Utils.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
