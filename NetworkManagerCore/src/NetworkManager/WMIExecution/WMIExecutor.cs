@@ -1,5 +1,4 @@
 ﻿
-using NetworkManager.Domain;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,7 +9,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace NetworkManagerCore.WMIExecution {
+using NetworkManager.Domain;
+using Microsoft.Win32;
+
+namespace NetworkManager.WMIExecution {
     /// <summary>
     /// WMI Execution result
     /// </summary>
@@ -64,29 +66,96 @@ namespace NetworkManagerCore.WMIExecution {
             }
         }
 
-        // TODO user class
-        // TODO get system user ?
-        public static List<string> getLoggedUser(Computer computer) {
-            List<string> users = new List<string>();
+        const string registry_key = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
+
+
+        public static List<string> GetInstalledPrograms() {
+            var result = new List<string>();
+            result.AddRange(GetInstalledProgramsFromRegistry(RegistryView.Registry32));
+            result.AddRange(GetInstalledProgramsFromRegistry(RegistryView.Registry64));
+            return result;
+        }
+
+        private static IEnumerable<string> GetInstalledProgramsFromRegistry(RegistryView registryView) {
+            var result = new List<string>();
+
+            using (RegistryKey key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, registryView).OpenSubKey(registry_key)) {
+                foreach (string subkey_name in key.GetSubKeyNames()) {
+                    using (RegistryKey subkey = key.OpenSubKey(subkey_name)) {
+                        if (IsProgramVisible(subkey)) {
+                            result.Add((string)subkey.GetValue("DisplayName"));
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private static bool IsProgramVisible(RegistryKey subkey) {
+            var name = (string)subkey.GetValue("DisplayName");
+            var releaseType = (string)subkey.GetValue("ReleaseType");
+            //var unistallString = (string)subkey.GetValue("UninstallString");
+            var systemComponent = subkey.GetValue("SystemComponent");
+            var parentName = (string)subkey.GetValue("ParentDisplayName");
+
+            return
+                !string.IsNullOrEmpty(name)
+                && string.IsNullOrEmpty(releaseType)
+                && string.IsNullOrEmpty(parentName)
+                && (systemComponent == null);
+        }
+
+        /// <summary>
+        /// Get a list of all the logged user on the provided computer. Note that all account will
+        /// be returned, such as local service or anonymous logon
+        /// </summary>
+        /// <param name="computer">The computer to use</param>
+        /// <returns>A list of all the logged in users</returns>
+        public static IEnumerable<User> getLoggedUsers(Computer computer) {
+            Dictionary<string, User> users = new Dictionary<string, User>();
             try {
                 var scope = new ManagementScope($@"\\{computer.name}\root\cimv2", getConnectionOptions());
                 scope.Connect();
-                var Query = new SelectQuery("SELECT LogonId FROM Win32_LogonSession Where LogonType=10 or LogonType=2");
+                var Query = new SelectQuery("SELECT LogonId FROM Win32_LogonSession");
                 var Searcher = new ManagementObjectSearcher(scope, Query);
-                var regName = new Regex($"(?i)Domain=\"{computer.domain.ToLower()}\",Name=\"(?<value>.+)\"");
+                var regName = new Regex($"(?i)Name=\"(?<value>.+)\"");
 
                 foreach (ManagementObject WmiObject in Searcher.Get()) {
                     foreach (ManagementObject LWmiObject in WmiObject.GetRelationships("Win32_LoggedOnUser")) {
                         Match m = regName.Match(LWmiObject["Antecedent"].ToString());
-                        if (m.Success)
-                            users.Add(m.Groups["value"].Value);
+                        if (m.Success) {
+                            string login = m.Groups["value"].Value;
+
+                            // Look for user information
+                            ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, new SelectQuery($"SELECT * FROM Win32_Account WHERE Name='{login}'"));
+                            try {
+                                foreach (ManagementObject mo in searcher.Get()) {
+                                    if (users.ContainsKey(mo["SID"].ToString()))
+                                        continue;
+
+                                    users[mo["SID"].ToString()] = (new User() {
+                                        caption = mo["Caption"].ToString(),
+                                        description = mo["Description"].ToString(),
+                                        domain = mo["Domain"].ToString(),
+                                        localAccount = (bool) mo["LocalAccount"],
+                                        name = mo["Name"].ToString(),
+                                        SID = mo["SID"].ToString(),
+                                        SIDType = (byte) mo["SIDType"],
+                                        status = mo["Status"].ToString()
+                                    });
+                                }
+                            } catch(Exception e) {
+                                // Ignore not found error
+                            }
+                        }
                     }
                 }
-            } catch (Exception ex) {
-                users.Add(ex.Message);
+            } catch (Exception e) {
+                throw new WMIException() { error = e };
             }
 
-            return users;
+            return users.Values.AsEnumerable();
         }
 
         /// <summary>

@@ -1,12 +1,14 @@
 ﻿
 using ActiveDs;
-using NetworkManagerCore.WMIExecution;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.DirectoryServices;
 using System.IO;
 using System.Threading.Tasks;
+
+using NetworkManager.WMIExecution;
+using System.Linq;
 
 namespace NetworkManager.Domain {
 
@@ -114,9 +116,22 @@ namespace NetworkManager.Domain {
             rdcProcess.Start();
         }
 
-        // TODO user object
-        public List<string> getLoggedUsers() {
-            return WMIExecutor.getLoggedUser(this);
+        /// <summary>
+        /// Return the logged users on the computed. Note that only real user accounts will
+        /// be returned
+        /// </summary>
+        /// <returns>The logged user</returns>
+        public IEnumerable<User> getLoggedUsers() {
+            return WMIExecutor.getLoggedUsers(this).Where(u => u.SIDType == 1);
+        }
+
+        /// <summary>
+        /// Return all the logged users on the computer. Note that local system account will
+        /// also be returned
+        /// </summary>
+        /// <returns>ALl the logged users</returns>
+        public IEnumerable<User> getAllLoggedUsers() {
+            return WMIExecutor.getLoggedUsers(this);
         }
 
         // TODO app object

@@ -46,10 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\NetworkManager\Domain\User.cs" />
+    <Compile Include="src\NetworkManager\Utils.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\Domain\Computer.cs" />
-    <Compile Include="src\WMIExecution\WMIExecutor.cs" />
+    <Compile Include="src\NetworkManager\Domain\Computer.cs" />
+    <Compile Include="src\NetworkManager\WMIExecution\WMIExecutor.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
