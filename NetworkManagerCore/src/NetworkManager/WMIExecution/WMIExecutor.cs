@@ -8,9 +8,9 @@ using System.Management;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Globalization;
 
 using NetworkManager.Domain;
-using Microsoft.Win32;
 
 namespace NetworkManager.WMIExecution {
     /// <summary>
@@ -53,7 +53,7 @@ namespace NetworkManager.WMIExecution {
                 var wmiScope = new ManagementScope($@"\\{computer.name}\root\cimv2", getConnectionOptions());
 
                 // Get the WMI process
-                var wmiProcess = new ManagementClass(wmiScope, new ManagementPath(path), null /*new ObjectGetOptions()*/);
+                var wmiProcess = new ManagementClass(wmiScope, new ManagementPath(path), null);
 
                 // Action
                 uint returnValue = (uint)wmiProcess.GetInstances().OfType<ManagementObject>().FirstOrDefault().InvokeMethod(method, new object[] { });
@@ -66,46 +66,71 @@ namespace NetworkManager.WMIExecution {
             }
         }
 
-        const string registry_key = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
+        /// <summary>
+        /// Return the list of locally installed softwares on the computer
+        /// </summary>
+        /// <param name="computer">The computer to use</param>
+        /// <returns>A list of all the installed softwares</returns>
+        public static IEnumerable<Software> getInstalledSoftwares(Computer computer) {
+            const string softwareRegLoc = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
+            const uint HKEY_LOCAL_MACHINE = 0x80000002;
+            string[] valueNames = { "DisplayName", "DisplayVersion", "InstallDate", "Publisher", "Comment", "ReleaseType", "SystemComponent", "ParentDisplayName" };
 
+            List<Software> installedSoftwares = new List<Software>();
 
-        public static List<string> GetInstalledPrograms() {
-            var result = new List<string>();
-            result.AddRange(GetInstalledProgramsFromRegistry(RegistryView.Registry32));
-            result.AddRange(GetInstalledProgramsFromRegistry(RegistryView.Registry64));
-            return result;
-        }
+            // Create the scope
+            var wmiScope = new ManagementScope($@"\\{computer.name}\root\cimv2", getConnectionOptions());
+            wmiScope.Connect();
 
-        private static IEnumerable<string> GetInstalledProgramsFromRegistry(RegistryView registryView) {
-            var result = new List<string>();
+            // Get the WMI process
+            var wmiProcess = new ManagementClass(wmiScope, new ManagementPath("StdRegProv"), null);
 
-            using (RegistryKey key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, registryView).OpenSubKey(registry_key)) {
-                foreach (string subkey_name in key.GetSubKeyNames()) {
-                    using (RegistryKey subkey = key.OpenSubKey(subkey_name)) {
-                        if (IsProgramVisible(subkey)) {
-                            result.Add((string)subkey.GetValue("DisplayName"));
-                        }
+            // First request to get all the subkeys
+            ManagementBaseObject inParams = wmiProcess.GetMethodParameters("EnumKey");
+            inParams["hDefKey"] = HKEY_LOCAL_MACHINE;
+            inParams["sSubKeyName"] = softwareRegLoc;
+
+            // Read Registry Key Names 
+            ManagementBaseObject outParams = wmiProcess.InvokeMethod("EnumKey", inParams, null);
+            string[] programGuids = outParams["sNames"] as string[];
+
+            // For each subkey
+            foreach (string subKeyName in programGuids) {
+                Dictionary<string, string> values = new Dictionary<string, string>();
+                foreach (string valueName in valueNames) {
+                    inParams = wmiProcess.GetMethodParameters("GetStringValue");
+                    inParams["hDefKey"] = HKEY_LOCAL_MACHINE;
+                    inParams["sSubKeyName"] = $@"{softwareRegLoc}\{subKeyName}";
+                    inParams["sValueName"] = valueName;
+                    // Read Registry Value 
+                    outParams = wmiProcess.InvokeMethod("GetStringValue", inParams, null);
+
+                    if (outParams.Properties["sValue"].Value != null) {
+                        values[valueName] = outParams.Properties["sValue"].Value.ToString();
                     }
+                }
+                
+                if(!string.IsNullOrEmpty(values.GetValueOrDefault("DisplayName"))
+                && string.IsNullOrEmpty(values.GetValueOrDefault("ReleaseType"))
+                && string.IsNullOrEmpty(values.GetValueOrDefault("ParentDisplayName"))) {
+                    var software = new Software() {
+                        displayName = values.GetValueOrDefault("DisplayName"),
+                        displayVersion = values.GetValueOrDefault("DisplayVersion"),
+                        publisher = values.GetValueOrDefault("Publisher"),
+                        comment = values.GetValueOrDefault("Comment")
+                    };
+
+                    var installDate = values.GetValueOrDefault("InstallDate");
+                    if(installDate != null)
+                        software.installDate = DateTime.ParseExact(installDate, "yyyyMMdd", CultureInfo.InvariantCulture);
+
+                    installedSoftwares.Add(software);
                 }
             }
 
-            return result;
+            return installedSoftwares;
         }
-
-        private static bool IsProgramVisible(RegistryKey subkey) {
-            var name = (string)subkey.GetValue("DisplayName");
-            var releaseType = (string)subkey.GetValue("ReleaseType");
-            //var unistallString = (string)subkey.GetValue("UninstallString");
-            var systemComponent = subkey.GetValue("SystemComponent");
-            var parentName = (string)subkey.GetValue("ParentDisplayName");
-
-            return
-                !string.IsNullOrEmpty(name)
-                && string.IsNullOrEmpty(releaseType)
-                && string.IsNullOrEmpty(parentName)
-                && (systemComponent == null);
-        }
-
+        
         /// <summary>
         /// Get a list of all the logged user on the provided computer. Note that all account will
         /// be returned, such as local service or anonymous logon

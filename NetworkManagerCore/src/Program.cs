@@ -1,6 +1,8 @@
-﻿using NetworkManager.Domain;
-using NetworkManager.WMIExecution;
+﻿
 using System;
+
+using NetworkManager.Domain;
+using NetworkManager.WMIExecution;
 
 namespace NetworkManager {
     public class Program {
@@ -11,18 +13,21 @@ namespace NetworkManager {
                     Source = "NetworkManagerClient"
                 };
 
-            Console.WriteLine(">>>>>>>>>>>>>>>");
-            foreach (string s in WMIExecutor.GetInstalledPrograms())
-                Console.WriteLine(s);
-
 
             foreach (Computer computer in Computer.getComputersInDomain()) {
 
                 Console.WriteLine(computer.name);
+
+                Console.WriteLine("Softwares : ");
+                foreach (var soft in WMIExecutor.getInstalledSoftwares(computer)) {
+                    Console.WriteLine("\t" + soft.displayName + " " + soft.installDate);
+                }
                 Console.WriteLine("Logged : ");
                 foreach (User user in WMIExecutor.getLoggedUsers(computer)) {
-                    Console.WriteLine(user.name);
+                    Console.WriteLine("\t" + user.name);
                 }
+
+                Console.WriteLine("========================================");
 
                 /*
                 try {

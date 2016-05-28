@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\NetworkManager\Domain\Software.cs" />
     <Compile Include="src\NetworkManager\Domain\User.cs" />
     <Compile Include="src\NetworkManager\Utils.cs" />
     <Compile Include="src\Program.cs" />

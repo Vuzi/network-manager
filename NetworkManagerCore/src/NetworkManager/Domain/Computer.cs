@@ -1,14 +1,14 @@
 ﻿
 using ActiveDs;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.DirectoryServices;
 using System.IO;
+using System.Linq;
+using System.Diagnostics;
 using System.Threading.Tasks;
+using System.DirectoryServices;
+using System.Collections.Generic;
 
 using NetworkManager.WMIExecution;
-using System.Linq;
 
 namespace NetworkManager.Domain {
 
@@ -134,16 +134,27 @@ namespace NetworkManager.Domain {
             return WMIExecutor.getLoggedUsers(this);
         }
 
-        // TODO app object
-        public List<string> getInstalledApps() {
-            // TODO
-            return null;
+        /// <summary>
+        /// Return all the sofwares installed on the computer.
+        /// </summary>
+        /// <returns>All the installed sofwares</returns>
+        public IEnumerable<Software> getInstalledSofwares() {
+            return WMIExecutor.getInstalledSoftwares(this);
         }
 
+        /// <summary>
+        /// Return all the computers of the local domain
+        /// </summary>
+        /// <returns>All the computers of the local domain</returns>
         public static List<Computer> getComputersInDomain() {
             return getComputersInDomain(System.Environment.UserDomainName);
         }
 
+        /// <summary>
+        /// Return all the computer of the provided domain
+        /// </summary>
+        /// <param name="domain">The domain to use</param>
+        /// <returns>All the computer of the domain</returns>
         public static List<Computer> getComputersInDomain(string domain) {
             List<Computer> ComputerNames = new List<Computer>();
 
