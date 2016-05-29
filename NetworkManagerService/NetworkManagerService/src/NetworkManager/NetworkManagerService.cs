@@ -6,11 +6,11 @@ using System.Data.SQLite;
 using System.Timers;
 
 namespace NetworkManager {
-    class NetworkManagementService {
+    public class NetworkManagerService {
         
         private Timer timer;
         private SQLiteConnection conn;
-        public TaskStore taskStore;
+        private TaskStore taskStore;
 
         private Dictionary<TaskType, Action<Computer, TaskResult>> handlers = 
             new Dictionary<TaskType, Action<Computer, TaskResult>> {
@@ -74,13 +74,13 @@ namespace NetworkManager {
         /// check which tasks should be performed, and performs them, and then log
         /// the result
         /// </summary>
-        public NetworkManagementService() {
+        public NetworkManagerService() {
 
             // Connect to the local database
             prepareDatabaseConnection();
 
             // Create the timer
-            timer = new Timer(30);
+            timer = new Timer(5000); //5s
             timer.Elapsed += (sender, e) => {
 
                 try {

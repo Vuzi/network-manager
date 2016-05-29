@@ -1,5 +1,5 @@
-﻿namespace NetworkManagerService {
-    partial class Service1 {
+﻿namespace NetworkManager {
+    partial class Service {
         /// <summary> 
         /// Variable nécessaire au concepteur.
         /// </summary>

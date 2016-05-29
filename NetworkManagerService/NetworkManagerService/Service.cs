@@ -4,15 +4,28 @@ using System.Data.SQLite;
 using System.Linq;
 using System.ServiceProcess;
 
-namespace NetworkManagerService {
-    public partial class Service1 : ServiceBase {
-        public Service1() {
+namespace NetworkManager {
+    public partial class Service : ServiceBase {
+
+        private NetworkManagerService service;
+
+        /// <summary>
+        /// Initialize the service
+        /// </summary>
+        public Service() {
             InitializeComponent();
+
+            service = new NetworkManagerService();
         }
 
+        /// <summary>
+        /// When the service should start
+        /// </summary>
+        /// <param name="args"></param>
         protected override void OnStart(string[] args) {
-            Console.WriteLine("hello world");
-
+            service.start();
+            
+            /*
             Task task = new Task() {
                 UUID = Guid.NewGuid().ToString(),
                 date = DateTime.Now,
@@ -38,14 +51,20 @@ namespace NetworkManagerService {
 
             taskStore.insertTaskResult(taskResult);
 
-            taskResult = taskStore.getTasksResultByTask(task).FirstOrDefault();
-
-            Console.WriteLine("hello world");
+            taskResult = taskStore.getTasksResultByTask(task).FirstOrDefault();*/
         }
 
+        /// <summary>
+        /// When the service should stop
+        /// </summary>
         protected override void OnStop() {
+            service.stop();
         }
 
+        /// <summary>
+        /// Manually start the service
+        /// </summary>
+        /// <param name="args"></param>
         public void Start(string[] args) {
             OnStart(args);
         }

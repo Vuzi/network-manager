@@ -7,6 +7,8 @@ using NetworkManager.WMIExecution;
 namespace NetworkManager {
     public class Program {
         static void Main(string[] args) {
+            // Tests
+
             if (!Utils.isRunAsAdministrator())
                 throw new Exception() {
                     Data = { { "why", "The application should only be used as an administrator" } },

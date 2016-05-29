@@ -1,17 +1,16 @@
-﻿using System;
+﻿using NetworkManagerService;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetworkManagerService {
+namespace NetworkManager {
     static class Program {
-        /// <summary>
-        /// Point d'entrée principal de l'application.
-        /// </summary>
+
         static void Main(string[] args) {
-            Service1 service = new Service1();
+            Service service = new Service();
 
             if (Environment.UserInteractive) {
                 service.Start(args);
@@ -22,5 +21,6 @@ namespace NetworkManagerService {
                 ServiceBase.Run(service);
             }
         }
+
     }
 }
