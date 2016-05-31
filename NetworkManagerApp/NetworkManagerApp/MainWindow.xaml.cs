@@ -6,13 +6,23 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace NetworkManager {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+        /// <summary>
+        /// Selected computer
+        /// </summary>
         private Computer computer;
+
+        /// <summary>
+        /// Async task cancellation token
+        /// </summary>
+        CancellationTokenSource ts;
 
         public MainWindow() {
             InitializeComponent();
@@ -56,26 +66,71 @@ namespace NetworkManager {
             tree.Items.Add(domainModel);
         }
         
+        CancellationTokenSource loggedUserToken;
+
+        private async void UpdateLoggedUsers() {
+            if (loggedUserToken != null)
+                loggedUserToken.Cancel();
+            
+            loggedUserToken = new CancellationTokenSource();
+            var localTs = loggedUserToken;
+
+            listBox_ConnectedUsers.Items.Clear();
+
+            IEnumerable<User> loggedUsers;
+            if (checkBox_ShowAllUsers.IsChecked.Value)
+                loggedUsers = await computer.getAllLoggedUsers();
+            else
+                loggedUsers = await computer.getLoggedUsers();
+
+            if (localTs != null && localTs.IsCancellationRequested)
+                return;
+
+            foreach (var user in loggedUsers) {
+                listBox_ConnectedUsers.Items.Add(user);
+            }
+        }
+
+        CancellationTokenSource installedSofwaresToken;
+
+        private async void UpdateInstalledSoftwares() {
+            if (installedSofwaresToken != null)
+                installedSofwaresToken.Cancel();
+
+            installedSofwaresToken = new CancellationTokenSource();
+            var localTs = installedSofwaresToken;
+
+            listBox_ShowAllInstalledSoftware.ItemsSource = new List<Software>();
+
+            IEnumerable<Software> installedSoftwares = await computer.getInstalledSofwares();
+
+            if (localTs != null && localTs.IsCancellationRequested)
+                return;
+
+            listBox_ShowAllInstalledSoftware.ItemsSource = installedSoftwares.ToList();
+        }
+
         private void List_Computer_Selected(object sender, RoutedEventArgs e) {
             TreeViewItem tvi = e.OriginalSource as TreeViewItem;
-            if(tvi.DataContext is ComputerModel) {
+            if (tvi.DataContext is ComputerModel) {
                 this.computer = (tvi.DataContext as ComputerModel).computer;
 
                 label_ClientName.Content = computer.name;
                 textBox_OperatingSystem.Text = computer.os;
                 textBox_OperatingSystemVersion.Text = computer.version;
+                
+                //showLoading();
 
-                listBox_ConnectedUsers.Items.Clear();
-                foreach (var user in computer.getAllLoggedUsers()) {
-                    listBox_ConnectedUsers.Items.Add(user.name);
-                }
+                UpdateLoggedUsers();
+                UpdateInstalledSoftwares();
 
-                listBox_ShowAllInstalledSoftware.Items.Clear();
-                foreach (var software in computer.getInstalledSofwares()) {
-                    listBox_ShowAllInstalledSoftware.Items.Add(software.displayName);
-                }
+                //hideLoading();
             }
-            
+
+        }
+
+        private void checkBox_ShowAllUsers_Click(object sender, RoutedEventArgs e) {
+            UpdateLoggedUsers();
         }
     }
 

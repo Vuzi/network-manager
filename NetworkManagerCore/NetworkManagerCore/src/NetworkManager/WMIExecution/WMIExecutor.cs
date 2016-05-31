@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Globalization;
 
 using NetworkManager.Domain;
+using System.Drawing;
 
 namespace NetworkManager.WMIExecution {
     /// <summary>
@@ -71,124 +72,131 @@ namespace NetworkManager.WMIExecution {
         /// </summary>
         /// <param name="computer">The computer to use</param>
         /// <returns>A list of all the installed softwares</returns>
-        public static IEnumerable<Software> getInstalledSoftwares(Computer computer, int architecture) {
+        public static async Task<IEnumerable<Software>> getInstalledSoftwares(Computer computer, int architecture) {
             const string softwareRegLoc = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
             const uint HKEY_LOCAL_MACHINE = 0x80000002;
-            string[] valueNames = { "DisplayName", "DisplayVersion", "InstallDate", "Publisher", "Comment", "ReleaseType", "SystemComponent", "ParentDisplayName" };
+            string[] valueNames = { "DisplayName", "DisplayVersion", "InstallDate", "Publisher", "Comment", "ReleaseType", "SystemComponent", "ParentDisplayName", "InstallLocation" };
 
-            List<Software> installedSoftwares = new List<Software>();
+            // Perform the operation asynchronously
+            return await Task.Run(() => {
+                List<Software> installedSoftwares = new List<Software>();
 
-            // Create the scope
-            var wmiScope = new ManagementScope($@"\\{computer.name}\root\cimv2", getConnectionOptions());
-            wmiScope.Options.Context.Add("__ProviderArchitecture", architecture);
-            wmiScope.Options.Context.Add("__RequiredArchitecture", true);
-            wmiScope.Connect();
+                // Create the scope
+                var wmiScope = new ManagementScope($@"\\{computer.name}\root\cimv2", getConnectionOptions());
+                wmiScope.Options.Context.Add("__ProviderArchitecture", architecture);
+                wmiScope.Options.Context.Add("__RequiredArchitecture", true);
+                wmiScope.Connect();
 
-            // Get the WMI process
-            var wmiProcess = new ManagementClass(wmiScope, new ManagementPath("StdRegProv"), null);
+                // Get the WMI process
+                var wmiProcess = new ManagementClass(wmiScope, new ManagementPath("StdRegProv"), null);
 
-            // First request to get all the subkeys
-            ManagementBaseObject inParams = wmiProcess.GetMethodParameters("EnumKey");
-            inParams["hDefKey"] = HKEY_LOCAL_MACHINE;
-            inParams["sSubKeyName"] = softwareRegLoc;
+                // First request to get all the subkeys
+                ManagementBaseObject inParams = wmiProcess.GetMethodParameters("EnumKey");
+                inParams["hDefKey"] = HKEY_LOCAL_MACHINE;
+                inParams["sSubKeyName"] = softwareRegLoc;
 
-            // Read Registry Key Names 
-            ManagementBaseObject outParams = wmiProcess.InvokeMethod("EnumKey", inParams, null);
-            string[] programGuids = outParams["sNames"] as string[];
+                // Read Registry Key Names 
+                ManagementBaseObject outParams = wmiProcess.InvokeMethod("EnumKey", inParams, null);
+                string[] programGuids = outParams["sNames"] as string[];
 
-            // For each subkey
-            foreach (string subKeyName in programGuids) {
-                Dictionary<string, string> values = new Dictionary<string, string>();
-                foreach (string valueName in valueNames) {
-                    inParams = wmiProcess.GetMethodParameters("GetStringValue");
-                    inParams["hDefKey"] = HKEY_LOCAL_MACHINE;
-                    inParams["sSubKeyName"] = $@"{softwareRegLoc}\{subKeyName}";
-                    inParams["sValueName"] = valueName;
-                    // Read Registry Value 
-                    outParams = wmiProcess.InvokeMethod("GetStringValue", inParams, null);
+                // For each subkey
+                foreach (string subKeyName in programGuids) {
+                    Dictionary<string, string> values = new Dictionary<string, string>();
+                    foreach (string valueName in valueNames) {
+                        inParams = wmiProcess.GetMethodParameters("GetStringValue");
+                        inParams["hDefKey"] = HKEY_LOCAL_MACHINE;
+                        inParams["sSubKeyName"] = $@"{softwareRegLoc}\{subKeyName}";
+                        inParams["sValueName"] = valueName;
+                        // Read Registry Value 
+                        outParams = wmiProcess.InvokeMethod("GetStringValue", inParams, null);
 
-                    if (outParams.Properties["sValue"].Value != null) {
-                        values[valueName] = outParams.Properties["sValue"].Value.ToString();
+                        if (outParams.Properties["sValue"].Value != null) {
+                            values[valueName] = outParams.Properties["sValue"].Value.ToString();
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(values.GetValueOrDefault("DisplayName"))
+                    && string.IsNullOrEmpty(values.GetValueOrDefault("ReleaseType"))
+                    && string.IsNullOrEmpty(values.GetValueOrDefault("ParentDisplayName"))) {
+                        var software = new Software() {
+                            displayName = values.GetValueOrDefault("DisplayName"),
+                            displayVersion = values.GetValueOrDefault("DisplayVersion"),
+                            publisher = values.GetValueOrDefault("Publisher"),
+                            comment = values.GetValueOrDefault("Comment")
+                        };
+
+                        var installDate = values.GetValueOrDefault("InstallDate");
+                        if (installDate != null)
+                            software.installDate = DateTime.ParseExact(installDate, "yyyyMMdd", CultureInfo.InvariantCulture);
+
+                        installedSoftwares.Add(software);
                     }
                 }
-                
-                if(!string.IsNullOrEmpty(values.GetValueOrDefault("DisplayName"))
-                && string.IsNullOrEmpty(values.GetValueOrDefault("ReleaseType"))
-                && string.IsNullOrEmpty(values.GetValueOrDefault("ParentDisplayName"))) {
-                    var software = new Software() {
-                        displayName = values.GetValueOrDefault("DisplayName"),
-                        displayVersion = values.GetValueOrDefault("DisplayVersion"),
-                        publisher = values.GetValueOrDefault("Publisher"),
-                        comment = values.GetValueOrDefault("Comment")
-                    };
 
-                    var installDate = values.GetValueOrDefault("InstallDate");
-                    if(installDate != null)
-                        software.installDate = DateTime.ParseExact(installDate, "yyyyMMdd", CultureInfo.InvariantCulture);
-
-                    installedSoftwares.Add(software);
-                }
-            }
-
-            return installedSoftwares;
+                return installedSoftwares;
+            });
         }
-        
+
         /// <summary>
         /// Get a list of all the logged user on the provided computer. Note that all account will
         /// be returned, such as local service or anonymous logon
         /// </summary>
         /// <param name="computer">The computer to use</param>
         /// <returns>A list of all the logged in users</returns>
-        public static IEnumerable<User> getLoggedUsers(Computer computer) {
-            Dictionary<string, User> users = new Dictionary<string, User>();
-            try {
-                var scopeLocal = new ManagementScope($@"\\127.0.0.1\root\cimv2", getConnectionOptions());
-                var scope = new ManagementScope($@"\\{computer.name}\root\cimv2", getConnectionOptions());
-                var Query = new SelectQuery("SELECT LogonId FROM Win32_LogonSession");
-                var Searcher = new ManagementObjectSearcher(scope, Query);
-                var regName = new Regex($"(?i)Domain=\"(?<valueDomain>.+)\",Name=\"(?<valueName>.+)\"");
+        public static async Task<IEnumerable<User>> getLoggedUsers(Computer computer) {
 
-                foreach (ManagementObject WmiObject in Searcher.Get()) {
-                    foreach (ManagementObject LWmiObject in WmiObject.GetRelationships("Win32_LoggedOnUser")) {
-                        Match m = regName.Match(LWmiObject["Antecedent"].ToString());
-                        if (m.Success) {
-                            string login = m.Groups["valueName"].Value;
-                            string domain = m.Groups["valueDomain"].Value;
+            // Perform the operation asynchronously
+            return await Task.Run(() => {
+                Dictionary<string, User> users = new Dictionary<string, User>();
+                try {
+                    var scopeLocal = new ManagementScope($@"\\127.0.0.1\root\cimv2", getConnectionOptions());
+                    var scope = new ManagementScope($@"\\{computer.name}\root\cimv2", getConnectionOptions());
+                    var Query = new SelectQuery("SELECT LogonId FROM Win32_LogonSession");
+                    var Searcher = new ManagementObjectSearcher(scope, Query);
+                    var regName = new Regex($"(?i)Domain=\"(?<valueDomain>.+)\",Name=\"(?<valueName>.+)\"");
 
-                            // Look for user information
-                            ManagementObjectSearcher searcher;
-                            if(domain == computer.domain)
-                                searcher = new ManagementObjectSearcher(scopeLocal, new SelectQuery($"SELECT * FROM Win32_Account WHERE Name='{login}'"));
-                            else
-                                searcher = new ManagementObjectSearcher(scope, new SelectQuery($"SELECT * FROM Win32_Account WHERE Name='{login}'"));
+                    foreach (ManagementObject WmiObject in Searcher.Get()) {
+                        foreach (ManagementObject LWmiObject in WmiObject.GetRelationships("Win32_LoggedOnUser")) {
+                            Match m = regName.Match(LWmiObject["Antecedent"].ToString());
+                            if (m.Success) {
+                                string login = m.Groups["valueName"].Value;
+                                string domain = m.Groups["valueDomain"].Value;
 
-                            try {
-                                foreach (ManagementObject mo in searcher.Get()) {
-                                    if (users.ContainsKey(mo["SID"].ToString()))
-                                        continue;
+                                // Look for user information
+                                ManagementObjectSearcher searcher;
+                                if (domain == computer.domain)
+                                    searcher = new ManagementObjectSearcher(scopeLocal, new SelectQuery($"SELECT * FROM Win32_Account WHERE Name='{login}'"));
+                                else
+                                    searcher = new ManagementObjectSearcher(scope, new SelectQuery($"SELECT * FROM Win32_Account WHERE Name='{login}'"));
 
-                                    users[mo["SID"].ToString()] = (new User() {
-                                        caption = mo["Caption"].ToString(),
-                                        description = mo["Description"].ToString(),
-                                        domain = mo["Domain"].ToString(),
-                                        localAccount = (bool) mo["LocalAccount"],
-                                        name = mo["Name"].ToString(),
-                                        SID = mo["SID"].ToString(),
-                                        SIDType = (byte) mo["SIDType"],
-                                        status = mo["Status"].ToString()
-                                    });
+                                try {
+                                    foreach (ManagementObject mo in searcher.Get()) {
+                                        if (users.ContainsKey(mo["SID"].ToString()))
+                                            continue;
+
+                                        users[mo["SID"].ToString()] = (new User() {
+                                            caption = mo["Caption"].ToString(),
+                                            description = mo["Description"].ToString(),
+                                            domain = mo["Domain"].ToString(),
+                                            localAccount = (bool)mo["LocalAccount"],
+                                            name = mo["Name"].ToString(),
+                                            SID = mo["SID"].ToString(),
+                                            SIDType = (byte)mo["SIDType"],
+                                            status = mo["Status"].ToString()
+                                        });
+                                    }
+                                } catch (Exception e) {
+                                    // Ignore not found error
                                 }
-                            } catch(Exception e) {
-                                // Ignore not found error
                             }
                         }
                     }
+                } catch (Exception e) {
+                    throw new WMIException() { error = e };
                 }
-            } catch (Exception e) {
-                throw new WMIException() { error = e };
-            }
 
-            return users.Values.AsEnumerable();
+                return users.Values.AsEnumerable();
+            });
         }
 
         /// <summary>

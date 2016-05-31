@@ -2,6 +2,7 @@
 using NetworkManager.WMIExecution;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace NetworkManager.Domain {
     public class User {
@@ -19,8 +20,8 @@ namespace NetworkManager.Domain {
         /// be returned
         /// </summary>
         /// <returns>The logged user</returns>
-        public static IEnumerable<User> getLoggedUsers(Computer computer) {
-            return WMIExecutor.getLoggedUsers(computer).Where(u => u.SIDType == 1);
+        public static async Task<IEnumerable<User>> getLoggedUsers(Computer computer) {
+            return (await WMIExecutor.getLoggedUsers(computer)).Where(u => u.SIDType == 1);
         }
 
         /// <summary>
@@ -28,8 +29,8 @@ namespace NetworkManager.Domain {
         /// also be returned
         /// </summary>
         /// <returns>ALl the logged users</returns>
-        public static IEnumerable<User> getAllLoggedUsers(Computer computer) {
-            return WMIExecutor.getLoggedUsers(computer);
+        public static async Task<IEnumerable<User>> getAllLoggedUsers(Computer computer) {
+            return (await WMIExecutor.getLoggedUsers(computer));
         }
     }
 }

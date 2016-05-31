@@ -4,10 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NetworkManager"
-        Title="Network Application" Height="800.842" Width="969.979" Background="LightGray">
+        Title="Network Application" Height="805.637" Width="1042.856" Background="LightGray">
     <Grid>
-        <Label x:Name="label_Computers" Content="Computers" VerticalAlignment="Top" Margin="31,8,0,0" HorizontalAlignment="Left" Width="225" FontWeight="Bold" FontSize="18"/>
-        <TreeView x:Name="List_Computer" Loaded="List_Machine_Loaded"  Margin="2,48,0,-0.8" HorizontalAlignment="Left" Width="238" TreeViewItem.Selected="List_Computer_Selected">
+        <Label x:Name="label_Computers" Content="Computers" VerticalAlignment="Top" Margin="10,8,0,0" HorizontalAlignment="Left" Width="246" FontWeight="Bold" FontSize="18"/>
+        <TreeView x:Name="List_Computer" Loaded="List_Machine_Loaded"  Margin="10,48,0,10" HorizontalAlignment="Left" Width="230" TreeViewItem.Selected="List_Computer_Selected">
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type local:DomainModel}" ItemsSource="{Binding computers}">
                     <StackPanel Orientation="Horizontal">
@@ -90,25 +90,25 @@
         <TextBox x:Name="textBox_LastConnection" Text="Now" Margin="479,431,0,0" Width="150px" BorderThickness="2" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="False"/>
         <Label x:Name="label_GroupPolicy" Content="Group Policy :" Margin="477,346,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
         <TextBox x:Name="textBox_GroupPolicy" Text="" Margin="478,371,0,0" Width="150px" BorderThickness="2" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="False"/>
-        <ListBox x:Name="listBox_ConnectedUsers" HorizontalAlignment="Left" Height="207" Margin="251,240,0,0" VerticalAlignment="Top" Width="151"/>
+        <ListBox x:Name="listBox_ConnectedUsers" HorizontalAlignment="Left" Height="207" Margin="251,240,0,0" VerticalAlignment="Top" Width="211"/>
         <Label x:Name="label_ConnectedUsers" Content="Connected Users" HorizontalAlignment="Left" Margin="249,213,0,0" VerticalAlignment="Top" Width="150px" Height="30px" FontWeight="Bold" FontSize="14"/>
-        <CheckBox x:Name="checkBox_ShowAllUsers" Content="Show All Users" HorizontalAlignment="Left" Margin="248,454,0,0" VerticalAlignment="Top" Height="21"/>
+        <CheckBox x:Name="checkBox_ShowAllUsers" Content="Show All Users" HorizontalAlignment="Left" Margin="248,454,0,0" VerticalAlignment="Top" Height="21" Click="checkBox_ShowAllUsers_Click"/>
         <Label x:Name="label_ClientName" Content="Machine Name" VerticalAlignment="Top" Margin="246,9,0,0" HorizontalAlignment="Left" Width="225" FontWeight="Bold" FontSize="18"/>
-        <ListBox x:Name="listBox_ShowAllInstalledSoftware" HorizontalAlignment="Left" Height="207" Margin="253,516,0,0" VerticalAlignment="Top" Width="151"/>
-        <CheckBox x:Name="checkBox_ShowAllInstalledSoftware" Content="Show all installed software" HorizontalAlignment="Left" Margin="247,732,0,0" VerticalAlignment="Top" Height="21"/>
+        <DataGrid x:Name="listBox_ShowAllInstalledSoftware" Margin="253,516,10,10" 
+          CanUserReorderColumns="True" CanUserResizeColumns="True" 
+          CanUserResizeRows="False" CanUserSortColumns="True" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn  Header="Name" Width="360" Binding="{Binding displayName}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Version" Width="90" Binding="{Binding displayVersion}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Installation Date" Width="140" Binding="{Binding installDate}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Publisher" Width="140" Binding="{Binding publisher}" IsReadOnly="True" CanUserReorder="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
         <Label x:Name="label_InstalledSoftware" Content="Installed Softwares" HorizontalAlignment="Left" Margin="251,487,0,0" VerticalAlignment="Top" Width="150px" Height="30px" FontWeight="Bold" FontSize="14"/>
-        <TextBox x:Name="textBox_NameSoftware" Text="" Margin="482,526,0,0" Height="21" BorderThickness="2" VerticalAlignment="Top" IsEnabled="False" HorizontalAlignment="Left" Width="150"/>
-        <Label x:Name="label_NameSoftware" Content="Name :" Margin="478,502,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <Label x:Name="label_Publisher" Content="Publisher :" Margin="480,559,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox x:Name="textBox_Publisher" Text="" Margin="482,584,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsEnabled="False" HorizontalAlignment="Left"/>
-        <Label x:Name="label_Version" Content="Version :" Margin="480,618,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox x:Name="textBox_Version" Text="" Margin="482,643,0,0" Width="150px" BorderThickness="2" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="False"/>
         <Label x:Name="label_SID" Content="SID :" Margin="677,406,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
         <TextBox x:Name="textBox_SID" Text="" Margin="679,431,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsEnabled="False" HorizontalAlignment="Left"/>
         <Label x:Name="label_FullNameUser" Content="Fullname User :" Margin="677,229,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
         <TextBox x:Name="textBox_FullNameUser" Text="" Margin="679,254,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsEnabled="False" HorizontalAlignment="Left"/>
-        <Label x:Name="label_Author" Content="Author :" Margin="666,559,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox x:Name="textBox_Author" Text="" Margin="668,584,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsEnabled="False" HorizontalAlignment="Left"/>
         <Label x:Name="label_OperatingSystem_Copy" Content="Operating System Version :" Margin="440,149,0,0" Width="162" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
         <TextBox x:Name="textBox_OperatingSystemVersion" IsReadOnly="True" Text="" Margin="441,174,0,0" Width="150px" BorderThickness="2" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" />
 

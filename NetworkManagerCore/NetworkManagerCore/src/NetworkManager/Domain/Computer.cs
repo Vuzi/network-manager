@@ -122,8 +122,8 @@ namespace NetworkManager.Domain {
         /// be returned
         /// </summary>
         /// <returns>The logged user</returns>
-        public IEnumerable<User> getLoggedUsers() {
-            return WMIExecutor.getLoggedUsers(this).Where(u => u.SIDType == 1);
+        public async Task<IEnumerable<User>> getLoggedUsers() {
+            return (await WMIExecutor.getLoggedUsers(this)).Where(u => u.SIDType == 1);
         }
 
         /// <summary>
@@ -131,16 +131,19 @@ namespace NetworkManager.Domain {
         /// also be returned
         /// </summary>
         /// <returns>ALl the logged users</returns>
-        public IEnumerable<User> getAllLoggedUsers() {
-            return WMIExecutor.getLoggedUsers(this);
+        public async Task<IEnumerable<User>> getAllLoggedUsers() {
+            return await WMIExecutor.getLoggedUsers(this);
         }
 
         /// <summary>
         /// Return all the sofwares installed on the computer.
         /// </summary>
         /// <returns>All the installed sofwares</returns>
-        public IEnumerable<Software> getInstalledSofwares() {
-            return WMIExecutor.getInstalledSoftwares(this, 32).Concat(WMIExecutor.getInstalledSoftwares(this, 64));
+        public async Task<IEnumerable<Software>> getInstalledSofwares() {
+            var results = await Task.WhenAll(
+                Task.Run(() => WMIExecutor.getInstalledSoftwares(this, 32)), 
+                Task.Run(() => WMIExecutor.getInstalledSoftwares(this, 64)));
+            return results.SelectMany(result => result);
         }
     }
 
