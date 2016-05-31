@@ -16,12 +16,12 @@ namespace NetworkManager {
                 };
 
 
-            foreach (Computer computer in Computer.getComputersInDomain()) {
+            foreach (Computer computer in NetworkManager.Domain.Domain.getComputersInDomain()) {
 
                 Console.WriteLine(computer.name);
 
                 Console.WriteLine("Softwares : ");
-                foreach (var soft in WMIExecutor.getInstalledSoftwares(computer)) {
+                foreach (var soft in WMIExecutor.getInstalledSoftwares(computer, 64)) {
                     Console.WriteLine("\t" + soft.displayName + " " + soft.installDate);
                 }
                 Console.WriteLine("Logged : ");

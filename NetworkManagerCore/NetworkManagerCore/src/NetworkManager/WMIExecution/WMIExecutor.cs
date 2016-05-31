@@ -71,7 +71,7 @@ namespace NetworkManager.WMIExecution {
         /// </summary>
         /// <param name="computer">The computer to use</param>
         /// <returns>A list of all the installed softwares</returns>
-        public static IEnumerable<Software> getInstalledSoftwares(Computer computer) {
+        public static IEnumerable<Software> getInstalledSoftwares(Computer computer, int architecture) {
             const string softwareRegLoc = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
             const uint HKEY_LOCAL_MACHINE = 0x80000002;
             string[] valueNames = { "DisplayName", "DisplayVersion", "InstallDate", "Publisher", "Comment", "ReleaseType", "SystemComponent", "ParentDisplayName" };
@@ -80,6 +80,8 @@ namespace NetworkManager.WMIExecution {
 
             // Create the scope
             var wmiScope = new ManagementScope($@"\\{computer.name}\root\cimv2", getConnectionOptions());
+            wmiScope.Options.Context.Add("__ProviderArchitecture", architecture);
+            wmiScope.Options.Context.Add("__RequiredArchitecture", true);
             wmiScope.Connect();
 
             // Get the WMI process
@@ -140,20 +142,26 @@ namespace NetworkManager.WMIExecution {
         public static IEnumerable<User> getLoggedUsers(Computer computer) {
             Dictionary<string, User> users = new Dictionary<string, User>();
             try {
+                var scopeLocal = new ManagementScope($@"\\127.0.0.1\root\cimv2", getConnectionOptions());
                 var scope = new ManagementScope($@"\\{computer.name}\root\cimv2", getConnectionOptions());
-                scope.Connect();
                 var Query = new SelectQuery("SELECT LogonId FROM Win32_LogonSession");
                 var Searcher = new ManagementObjectSearcher(scope, Query);
-                var regName = new Regex($"(?i)Name=\"(?<value>.+)\"");
+                var regName = new Regex($"(?i)Domain=\"(?<valueDomain>.+)\",Name=\"(?<valueName>.+)\"");
 
                 foreach (ManagementObject WmiObject in Searcher.Get()) {
                     foreach (ManagementObject LWmiObject in WmiObject.GetRelationships("Win32_LoggedOnUser")) {
                         Match m = regName.Match(LWmiObject["Antecedent"].ToString());
                         if (m.Success) {
-                            string login = m.Groups["value"].Value;
+                            string login = m.Groups["valueName"].Value;
+                            string domain = m.Groups["valueDomain"].Value;
 
                             // Look for user information
-                            ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, new SelectQuery($"SELECT * FROM Win32_Account WHERE Name='{login}'"));
+                            ManagementObjectSearcher searcher;
+                            if(domain == computer.domain)
+                                searcher = new ManagementObjectSearcher(scopeLocal, new SelectQuery($"SELECT * FROM Win32_Account WHERE Name='{login}'"));
+                            else
+                                searcher = new ManagementObjectSearcher(scope, new SelectQuery($"SELECT * FROM Win32_Account WHERE Name='{login}'"));
+
                             try {
                                 foreach (ManagementObject mo in searcher.Get()) {
                                     if (users.ContainsKey(mo["SID"].ToString()))

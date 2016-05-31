@@ -24,6 +24,7 @@ namespace NetworkManager.Domain {
         public DateTime lastLogOn { get; set; }
         public DateTime creation { get; set; }
         public DateTime lastChange { get; set; }
+        public bool isAlive { get; set; }
 
         /// <summary>
         /// Upload a file to the domain computer. The path should either be a full name including partion
@@ -139,68 +140,7 @@ namespace NetworkManager.Domain {
         /// </summary>
         /// <returns>All the installed sofwares</returns>
         public IEnumerable<Software> getInstalledSofwares() {
-            return WMIExecutor.getInstalledSoftwares(this);
-        }
-
-        /// <summary>
-        /// Return all the computers of the local domain
-        /// </summary>
-        /// <returns>All the computers of the local domain</returns>
-        public static List<Computer> getComputersInDomain() {
-            return getComputersInDomain(System.Environment.UserDomainName);
-        }
-
-        /// <summary>
-        /// Return all the computer of the provided domain
-        /// </summary>
-        /// <param name="domain">The domain to use</param>
-        /// <returns>All the computer of the domain</returns>
-        public static List<Computer> getComputersInDomain(string domain) {
-            List<Computer> ComputerNames = new List<Computer>();
-
-            DirectoryEntry entry = new DirectoryEntry("LDAP://" + domain);
-            DirectorySearcher mySearcher = new DirectorySearcher(entry);
-            mySearcher.Filter = ("(objectClass=computer)");
-            mySearcher.SizeLimit = int.MaxValue;
-            mySearcher.PageSize = int.MaxValue;
-
-            foreach (SearchResult searchResult in mySearcher.FindAll()) {
-                var ds = searchResult.GetDirectoryEntry();
-
-                string desc = (string)ds.Properties["description"].Value;
-                string os = (string)ds.Properties["operatingsystem"].Value;
-                string version = (string)ds.Properties["operatingsystemversion"].Value;
-                DateTime lastLogOn = GetDateTimeFromLargeInteger(ds.Properties["lastlogon"].Value as IADsLargeInteger);
-                DateTime creation = (DateTime)ds.Properties["whencreated"].Value;
-                DateTime lastChange = (DateTime)ds.Properties["whenchanged"].Value;
-
-                string name = searchResult.GetDirectoryEntry().Name;
-                if (name.StartsWith("CN="))
-                    name = name.Remove(0, "CN=".Length);
-
-                ComputerNames.Add(new Computer() {
-                    name = name,
-                    domain = domain,
-                    description = desc,
-                    os = os,
-                    version = version,
-                    lastLogOn = lastLogOn,
-                    lastChange = lastChange,
-                    creation = creation
-                });
-            }
-
-            mySearcher.Dispose();
-            entry.Dispose();
-            return ComputerNames;
-        }
-
-        private static DateTime GetDateTimeFromLargeInteger(IADsLargeInteger largeIntValue) {
-            if (largeIntValue == null)
-                return DateTime.MinValue;
-
-            long int64Value = (long)((uint)largeIntValue.LowPart + (((long)largeIntValue.HighPart) << 32));
-            return DateTime.FromFileTimeUtc(int64Value);
+            return WMIExecutor.getInstalledSoftwares(this, 32).Concat(WMIExecutor.getInstalledSoftwares(this, 64));
         }
     }
 
