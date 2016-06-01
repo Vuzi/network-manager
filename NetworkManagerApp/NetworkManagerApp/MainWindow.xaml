@@ -4,8 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NetworkManager"
-        Title="Network Application" Height="805.637" Width="1042.856" Background="LightGray">
+        Title="Network Manager" Height="805.637" Width="1042.856" Background="LightGray">
+    <!-- Installed softwares -->
+    <Window.Resources>
+        <RoutedUICommand x:Key="CopyLine" Text="Copy the line" />
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="{StaticResource CopyLine}" Executed="CommandBinding_CopyLine" />
+    </Window.CommandBindings>
+
     <Grid>
+        <!-- AD Computer treeview -->
         <Label x:Name="label_Computers" Content="Computers" VerticalAlignment="Top" Margin="10,8,0,0" HorizontalAlignment="Left" Width="246" FontWeight="Bold" FontSize="18"/>
         <TreeView x:Name="List_Computer" Loaded="List_Machine_Loaded"  Margin="10,48,0,10" HorizontalAlignment="Left" Width="230" TreeViewItem.Selected="List_Computer_Selected">
             <TreeView.Resources>
@@ -50,67 +59,98 @@
             </TreeView.Resources>
         </TreeView>
 
-        <TextBox x:Name="textBox_AdressMac" Text="" Margin="255,116,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsReadOnly="True" HorizontalAlignment="Left"/>
-        <Label x:Name="label_AdressMac" Content="Adresse mac :" Margin="250,92,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <Label x:Name="label_IPAdress" Content="IP Address :" Margin="252,149,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <Label x:Name="label_OperatingSystem" Content="Operating System :" Margin="439,91,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <!-- Selection computer informations -->
+        <Label x:Name="label_ClientName" Content="Machine Name" VerticalAlignment="Top" Margin="246,9,0,0" HorizontalAlignment="Left" Width="225" FontWeight="Bold" FontSize="18"/>
+
         <Button x:Name="button_CopyReboot" Margin="441,48,0,0" HorizontalAlignment="Left" Width="150" Height="45" VerticalAlignment="Top" Click="button_CopyReboot_Click">
-            <DockPanel LastChildFill="True" Width="118">
-                <Image DockPanel.Dock="Left" Source="resource/reboot.png" Width="32" Height="31"  Stretch="UniformToFill" />
+            <DockPanel LastChildFill="True" Width="135">
+                <Image DockPanel.Dock="Left" Source="resource/reboot.png" Width="30" Height="27"  Stretch="Uniform" />
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" >Reboot</TextBlock>
             </DockPanel>
         </Button>
         <Button x:Name="button_JobSchedule" Margin="625,48,0,0" HorizontalAlignment="Left" Width="150" Height="45" VerticalAlignment="Top" Click="button_JobSchedule_Click">
-            <DockPanel LastChildFill="True" Width="129">
-                <Image DockPanel.Dock="Left" Source="resource/jobschedule.png" Width="32" Height="32"  Stretch="UniformToFill" />
+            <DockPanel LastChildFill="True" Width="135">
+                <Image DockPanel.Dock="Left" Source="resource/jobschedule.png" Width="27" Height="29"  Stretch="Uniform" />
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" >Job Schedule</TextBlock>
             </DockPanel>
         </Button>
         <Button x:Name="button_Installsoftware"  Margin="807,48,0,0" Height="45" VerticalAlignment="Top" HorizontalAlignment="Left" Width="145" Click="button_Installsoftware_Click" >
             <DockPanel LastChildFill="True" Width="135">
-                <Image DockPanel.Dock="Left" Source="resource/installApp.png" Width="32" Height="31"  Stretch="UniformToFill" />
+                <Image DockPanel.Dock="Left" Source="resource/installApp.png" Width="26" Height="29"  Stretch="Uniform" />
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" >Install Software</TextBlock>
             </DockPanel>
         </Button>
         <Button x:Name="button_ShutDown" Margin="250,48,0,0" HorizontalAlignment="Left" Width="150" Height="45" VerticalAlignment="Top" Click="button_ShutDown_Click">
             <DockPanel LastChildFill="True"  Width="135">
-                <Image DockPanel.Dock="Left" Source="resource/shutdown.png" Width="29" Height="34"  Stretch="UniformToFill"/>
+                <Image DockPanel.Dock="Left" Source="resource/shutdown.png" Width="28" Height="32"  Stretch="Uniform"/>
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" >Shut Down</TextBlock>
             </DockPanel>
         </Button>
-        <TextBox x:Name="textBox_IPAdress" Text="" Margin="255,174,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsReadOnly="True" HorizontalAlignment="Left"/>
+
+        <Label x:Name="label_AdressMac" Content="Adresse mac :" Margin="250,92,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBox x:Name="textBox_AdressMac" Text="" Margin="255,116,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsReadOnly="True" HorizontalAlignment="Left"/>
+
+        <Label x:Name="label_IPAdress" Content="IP Address :" Margin="251,142,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBox x:Name="textBox_IPAdress" Text="" Margin="256,167,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsReadOnly="True" HorizontalAlignment="Left"/>
+
+        <Label x:Name="label_OperatingSystem" Content="Operating System :" Margin="439,91,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
         <TextBox x:Name="textBox_OperatingSystem" IsReadOnly="True" Text="" Margin="440,116,0,0" Width="215" BorderThickness="2" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" />
-        <Rectangle Fill="Gray" Height="9" Margin="240,206,0.2,0" VerticalAlignment="Top" RadiusY="0.9" RadiusX="0.9"/>
-        <Rectangle Fill="Gray" Height="9" Margin="240,474,-0.8,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="textBox_Domain" Text="" Margin="479,254,0,0" Height="21" BorderThickness="2" VerticalAlignment="Top" IsEnabled="False" HorizontalAlignment="Left" Width="150"/>
-        <Label x:Name="label_Domain" Content="Domain :" Margin="475,230,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <Label x:Name="label_AccountName" Content="Account Name :" Margin="477,287,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox x:Name="textBox_AccountName" Text="" Margin="479,312,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsEnabled="False" HorizontalAlignment="Left"/>
-        <Label x:Name="label_LastConnection" Content="Last Connection :" Margin="476,407,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox x:Name="textBox_LastConnection" Text="Now" Margin="479,431,0,0" Width="150px" BorderThickness="2" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="False"/>
-        <Label x:Name="label_GroupPolicy" Content="Group Policy :" Margin="477,346,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox x:Name="textBox_GroupPolicy" Text="" Margin="478,371,0,0" Width="150px" BorderThickness="2" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="False"/>
-        <ListBox x:Name="listBox_ConnectedUsers" HorizontalAlignment="Left" Height="207" Margin="251,240,0,0" VerticalAlignment="Top" Width="211"/>
+
+        <Label x:Name="label_OperatingSystem_Copy" Content="Operating System Version :" Margin="441,142,0,0" Width="162" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBox x:Name="textBox_OperatingSystemVersion" IsReadOnly="True" Text="" Margin="442,167,0,0" Width="150px" BorderThickness="2" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" />
+
+        <Rectangle Fill="Gray" Height="9" Margin="240,206,0.2,0" VerticalAlignment="Top"/>
+
+        <!-- Connected users -->
         <Label x:Name="label_ConnectedUsers" Content="Connected Users" HorizontalAlignment="Left" Margin="249,213,0,0" VerticalAlignment="Top" Width="150px" Height="30px" FontWeight="Bold" FontSize="14"/>
-        <CheckBox x:Name="checkBox_ShowAllUsers" Content="Show All Users" HorizontalAlignment="Left" Margin="248,454,0,0" VerticalAlignment="Top" Height="21" Click="checkBox_ShowAllUsers_Click"/>
-        <Label x:Name="label_ClientName" Content="Machine Name" VerticalAlignment="Top" Margin="246,9,0,0" HorizontalAlignment="Left" Width="225" FontWeight="Bold" FontSize="18"/>
-        <DataGrid x:Name="listBox_ShowAllInstalledSoftware" Margin="253,516,10,10" 
-          CanUserReorderColumns="True" CanUserResizeColumns="True" 
-          CanUserResizeRows="False" CanUserSortColumns="True" AutoGenerateColumns="False">
+        <DataGrid x:Name="dataGrid_ConnectedUsers" Margin="251,240,10,0"
+          CanUserReorderColumns="True" CanUserResizeColumns="True" SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
+          CanUserResizeRows="False" CanUserSortColumns="True" AutoGenerateColumns="False" Height="207" VerticalAlignment="Top">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="Copy">
+                    </MenuItem>
+                    <MenuItem Command="{StaticResource CopyLine}">
+                    </MenuItem>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <DataGridTextColumn  Header="Name" Width="360" Binding="{Binding displayName}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Version" Width="90" Binding="{Binding displayVersion}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Installation Date" Width="140" Binding="{Binding installDate}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Publisher" Width="140" Binding="{Binding publisher}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Name" Width="140" Binding="{Binding name}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Domain" Width="140" Binding="{Binding domain}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Caption" Width="300" Binding="{Binding caption}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
+                <DataGridTextColumn  Header="Description" Width="380" Binding="{Binding description}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridCheckBoxColumn  Header="Local Account" Width="90" Binding="{Binding localAccount}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Status" Width="120" Binding="{Binding status}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
+                <DataGridTextColumn  Header="SID Type" Width="100" Binding="{Binding SIDType}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
+                <DataGridTextColumn  Header="SID" Width="400" Binding="{Binding SID}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Label x:Name="label_InstalledSoftware" Content="Installed Softwares" HorizontalAlignment="Left" Margin="251,487,0,0" VerticalAlignment="Top" Width="150px" Height="30px" FontWeight="Bold" FontSize="14"/>
-        <Label x:Name="label_SID" Content="SID :" Margin="677,406,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox x:Name="textBox_SID" Text="" Margin="679,431,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsEnabled="False" HorizontalAlignment="Left"/>
-        <Label x:Name="label_FullNameUser" Content="Fullname User :" Margin="677,229,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox x:Name="textBox_FullNameUser" Text="" Margin="679,254,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsEnabled="False" HorizontalAlignment="Left"/>
-        <Label x:Name="label_OperatingSystem_Copy" Content="Operating System Version :" Margin="440,149,0,0" Width="162" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox x:Name="textBox_OperatingSystemVersion" IsReadOnly="True" Text="" Margin="441,174,0,0" Width="150px" BorderThickness="2" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" />
+        <CheckBox x:Name="checkBox_ShowAllUsers" Content="Show All Users" HorizontalAlignment="Left" Margin="252,452,0,0" VerticalAlignment="Top" Height="21" Click="checkBox_ShowAllUsers_Click"/>
+        <CheckBox x:Name="checkBox_ShowAllColumnsUsers" Content="Show More Information" HorizontalAlignment="Left" Margin="354,452,0,0" VerticalAlignment="Top" Height="21" Click="checkBox_ShowAllColumnsUsers_Click"/>
 
+        <Rectangle Fill="Gray" Height="9" Margin="240,474,-0.8,0" VerticalAlignment="Top"/>
+
+        <!-- Installed sofwares -->
+        <Label x:Name="label_InstalledSoftware" Content="Installed Softwares" HorizontalAlignment="Left" Margin="251,487,0,0" VerticalAlignment="Top" Width="150px" Height="30px" FontWeight="Bold" FontSize="14"/>
+        <DataGrid x:Name="dataGrid_ShowAllInstalledSoftware" Margin="253,516,10,34" 
+          CanUserReorderColumns="True" CanUserResizeColumns="True" SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
+          CanUserResizeRows="False" CanUserSortColumns="True" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn  Header="Name" Width="520" Binding="{Binding displayName}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Version" Width="90" Binding="{Binding displayVersion}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Installation Date" Width="140" Binding="{Binding installDate}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Publisher" Width="140" Visibility="Hidden" Binding="{Binding publisher}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Install Location" Width="140" Visibility="Hidden" Binding="{Binding installLocation}" IsReadOnly="True" CanUserReorder="True"/>
+            </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="Copy">
+                    </MenuItem>
+                    <MenuItem Command="{StaticResource CopyLine}">
+                    </MenuItem>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+        <CheckBox x:Name="checkBox_ShowAllInstalledSofwareColumns" Content="Show More Information" HorizontalAlignment="Left" Margin="253,0,0,7" Click="checkBox_ShowAllInstalledSofwareColumns_Click" Height="22" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>

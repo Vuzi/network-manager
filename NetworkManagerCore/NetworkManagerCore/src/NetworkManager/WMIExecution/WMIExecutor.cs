@@ -122,7 +122,8 @@ namespace NetworkManager.WMIExecution {
                             displayName = values.GetValueOrDefault("DisplayName"),
                             displayVersion = values.GetValueOrDefault("DisplayVersion"),
                             publisher = values.GetValueOrDefault("Publisher"),
-                            comment = values.GetValueOrDefault("Comment")
+                            comment = values.GetValueOrDefault("Comment"),
+                            installLocation = values.GetValueOrDefault("InstallLocation")
                         };
 
                         var installDate = values.GetValueOrDefault("InstallDate");

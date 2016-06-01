@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NetworkManager.Domain {
     public class Software {
@@ -12,5 +7,8 @@ namespace NetworkManager.Domain {
         public DateTime installDate { get; set; }
         public string publisher { get; set; }
         public string comment { get; set; }
+        public string installLocation { get; set; }
+        public string estimatedSize { get; set; }
+
     }
 }

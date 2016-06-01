@@ -68,14 +68,14 @@ namespace NetworkManager {
         
         CancellationTokenSource loggedUserToken;
 
-        private async void UpdateLoggedUsers() {
+        private async void updateLoggedUsers() {
             if (loggedUserToken != null)
                 loggedUserToken.Cancel();
             
             loggedUserToken = new CancellationTokenSource();
             var localTs = loggedUserToken;
 
-            listBox_ConnectedUsers.Items.Clear();
+            dataGrid_ConnectedUsers.Items.Clear();
 
             IEnumerable<User> loggedUsers;
             if (checkBox_ShowAllUsers.IsChecked.Value)
@@ -87,27 +87,47 @@ namespace NetworkManager {
                 return;
 
             foreach (var user in loggedUsers) {
-                listBox_ConnectedUsers.Items.Add(user);
+                dataGrid_ConnectedUsers.Items.Add(user);
             }
+        }
+
+        int[] loggedUserCollapsableColumns = { 2, 4, 5, 6 ,7 };
+
+        private void updateLoggedUsersVisibility() {
+            bool show = checkBox_ShowAllColumnsUsers.IsChecked.Value;
+
+            foreach(int i in loggedUserCollapsableColumns)
+                dataGrid_ConnectedUsers.Columns[i].Visibility = 
+                    show ? Visibility.Visible : Visibility.Hidden;
         }
 
         CancellationTokenSource installedSofwaresToken;
 
-        private async void UpdateInstalledSoftwares() {
+        private async void updateInstalledSoftwares() {
             if (installedSofwaresToken != null)
                 installedSofwaresToken.Cancel();
 
             installedSofwaresToken = new CancellationTokenSource();
             var localTs = installedSofwaresToken;
 
-            listBox_ShowAllInstalledSoftware.ItemsSource = new List<Software>();
+            dataGrid_ShowAllInstalledSoftware.ItemsSource = new List<Software>();
 
             IEnumerable<Software> installedSoftwares = await computer.getInstalledSofwares();
 
             if (localTs != null && localTs.IsCancellationRequested)
                 return;
 
-            listBox_ShowAllInstalledSoftware.ItemsSource = installedSoftwares.ToList();
+            dataGrid_ShowAllInstalledSoftware.ItemsSource = installedSoftwares.ToList();
+        }
+
+        int[] installedSoftwaresCollapsableColumns = { 3, 4 };
+
+        private void updateInstalledSoftwaresVisibility() {
+            bool show = checkBox_ShowAllInstalledSofwareColumns.IsChecked.Value;
+
+            foreach (int i in installedSoftwaresCollapsableColumns)
+                dataGrid_ShowAllInstalledSoftware.Columns[i].Visibility =
+                    show ? Visibility.Visible : Visibility.Hidden;
         }
 
         private void List_Computer_Selected(object sender, RoutedEventArgs e) {
@@ -121,8 +141,8 @@ namespace NetworkManager {
                 
                 //showLoading();
 
-                UpdateLoggedUsers();
-                UpdateInstalledSoftwares();
+                updateLoggedUsers();
+                updateInstalledSoftwares();
 
                 //hideLoading();
             }
@@ -130,7 +150,23 @@ namespace NetworkManager {
         }
 
         private void checkBox_ShowAllUsers_Click(object sender, RoutedEventArgs e) {
-            UpdateLoggedUsers();
+            updateLoggedUsers();
+        }
+
+        private void checkBox_ShowAllColumnsUser_Click(object sender, RoutedEventArgs e) {
+            updateLoggedUsersVisibility();
+        }
+
+        private void checkBox_ShowAllColumnsUsers_Click(object sender, RoutedEventArgs e) {
+            updateLoggedUsersVisibility();
+        }
+
+        private void checkBox_ShowAllInstalledSofwareColumns_Click(object sender, RoutedEventArgs e) {
+            updateInstalledSoftwaresVisibility();
+        }
+
+        private void CommandBinding_CopyLine(object sender, System.Windows.Input.ExecutedRoutedEventArgs e) {
+
         }
     }
 
