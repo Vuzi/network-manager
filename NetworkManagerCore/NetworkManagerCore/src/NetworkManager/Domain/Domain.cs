@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.DirectoryServices;
 using System.Net.NetworkInformation;
+using System.Threading.Tasks;
 
 namespace NetworkManager.Domain {
     public class Domain {
@@ -12,20 +13,22 @@ namespace NetworkManager.Domain {
 
         public Domain() {
             name = System.Environment.UserDomainName;
-            computers = getComputersInDomain(name);
         }
 
         public Domain(string name) {
             this.name = name;
-            computers = getComputersInDomain(name);
+        }
+
+        public async Task fill() {
+            computers = await getComputersInDomain(name);
         }
 
         /// <summary>
         /// Return all the computers of the local domain
         /// </summary>
         /// <returns>All the computers of the local domain</returns>
-        public static List<Computer> getComputersInDomain() {
-            return getComputersInDomain(System.Environment.UserDomainName);
+        public async static Task<List<Computer>> getComputersInDomain() {
+            return await getComputersInDomain(System.Environment.UserDomainName);
         }
 
         /// <summary>
@@ -33,50 +36,55 @@ namespace NetworkManager.Domain {
         /// </summary>
         /// <param name="domain">The domain to use</param>
         /// <returns>All the computer of the domain</returns>
-        public static List<Computer> getComputersInDomain(string domain) {
-            List<Computer> ComputerNames = new List<Computer>();
+        public async static Task<List<Computer>> getComputersInDomain(string domain) {
+            return await Task.Run(() => {
+                List<Computer> Computers = new List<Computer>();
 
-            DirectoryEntry entry = new DirectoryEntry("LDAP://" + domain);
-            DirectorySearcher mySearcher = new DirectorySearcher(entry);
-            mySearcher.Filter = ("(objectClass=computer)");
-            mySearcher.SizeLimit = int.MaxValue;
-            mySearcher.PageSize = int.MaxValue;
+                DirectoryEntry entry = new DirectoryEntry("LDAP://" + domain);
+                DirectorySearcher mySearcher = new DirectorySearcher(entry);
+                mySearcher.Filter = ("(objectClass=computer)");
+                mySearcher.SizeLimit = int.MaxValue;
+                mySearcher.PageSize = int.MaxValue;
 
-            var d = System.DirectoryServices.ActiveDirectory.Domain.GetComputerDomain();
+                var d = System.DirectoryServices.ActiveDirectory.Domain.GetComputerDomain();
 
-            foreach (SearchResult searchResult in mySearcher.FindAll()) {
-                var ds = searchResult.GetDirectoryEntry();
+                foreach (SearchResult searchResult in mySearcher.FindAll()) {
+                    var ds = searchResult.GetDirectoryEntry();
 
-                string desc = (string)ds.Properties["description"].Value;
-                string os = (string)ds.Properties["operatingsystem"].Value;
-                string version = (string)ds.Properties["operatingsystemversion"].Value;
-                DateTime lastLogOn = GetDateTimeFromLargeInteger(ds.Properties["lastlogon"].Value as IADsLargeInteger);
-                DateTime creation = (DateTime)ds.Properties["whencreated"].Value;
-                DateTime lastChange = (DateTime)ds.Properties["whenchanged"].Value;
+                    string desc = (string)ds.Properties["description"].Value;
+                    string os = (string)ds.Properties["operatingsystem"].Value;
+                    string version = (string)ds.Properties["operatingsystemversion"].Value;
+                    DateTime lastLogOn = GetDateTimeFromLargeInteger(ds.Properties["lastlogon"].Value as IADsLargeInteger);
+                    DateTime creation = (DateTime)ds.Properties["whencreated"].Value;
+                    DateTime lastChange = (DateTime)ds.Properties["whenchanged"].Value;
 
-                string name = searchResult.GetDirectoryEntry().Name;
-                if (name.StartsWith("CN="))
-                    name = name.Remove(0, "CN=".Length);
+                    string name = searchResult.GetDirectoryEntry().Name;
+                    if (name.StartsWith("CN="))
+                        name = name.Remove(0, "CN=".Length);
 
-                var p = new Ping();
-                bool isAlive = p.Send(name).Status == IPStatus.Success;
-                
-                ComputerNames.Add(new Computer() {
-                    name = name,
-                    domain = domain,
-                    description = desc,
-                    os = os,
-                    version = version,
-                    lastLogOn = lastLogOn,
-                    lastChange = lastChange,
-                    creation = creation,
-                    isAlive = isAlive
-                });
-            }
+                    bool isAlive = false;
+                    try {
+                        var p = new Ping();
+                        isAlive = p.Send(name).Status == IPStatus.Success;
+                    } catch(Exception e) { }
 
-            mySearcher.Dispose();
-            entry.Dispose();
-            return ComputerNames;
+                    Computers.Add(new Computer() {
+                        name = name,
+                        domain = domain,
+                        description = desc,
+                        os = os,
+                        version = version,
+                        lastLogOn = lastLogOn,
+                        lastChange = lastChange,
+                        creation = creation,
+                        isAlive = isAlive
+                    });
+                }
+
+                mySearcher.Dispose();
+                entry.Dispose();
+                return Computers;
+            });
         }
 
         private static DateTime GetDateTimeFromLargeInteger(IADsLargeInteger largeIntValue) {

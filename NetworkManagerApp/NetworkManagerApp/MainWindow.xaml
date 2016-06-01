@@ -4,11 +4,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NetworkManager"
-        Title="Network Manager" Height="805.637" Width="1042.856" Background="LightGray">
-    <!-- Installed softwares -->
+        Title="Network Manager" Height="810" Width="1080" Background="LightGray">
     <Window.Resources>
+        <Storyboard x:Key="Storyboard1" RepeatBehavior="Forever">
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="LoadingSpinner" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)">
+                <SplineDoubleKeyFrame KeyTime="00:00:02" Value="360"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
         <RoutedUICommand x:Key="CopyLine" Text="Copy the line" />
     </Window.Resources>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
+        </EventTrigger>
+    </Window.Triggers>
+    <!-- Binded commands -->
     <Window.CommandBindings>
         <CommandBinding Command="{StaticResource CopyLine}" Executed="CommandBinding_CopyLine" />
     </Window.CommandBindings>
@@ -152,5 +162,21 @@
             </DataGrid.ContextMenu>
         </DataGrid>
         <CheckBox x:Name="checkBox_ShowAllInstalledSofwareColumns" Content="Show More Information" HorizontalAlignment="Left" Margin="253,0,0,7" Click="checkBox_ShowAllInstalledSofwareColumns_Click" Height="22" VerticalAlignment="Bottom"/>
+
+        <Ellipse x:Name="LoadingSpinner" Margin="1040,748,6,6" StrokeThickness="3" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed">
+            <Ellipse.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                </TransformGroup>
+            </Ellipse.RenderTransform>
+            <Ellipse.Stroke>
+                <LinearGradientBrush EndPoint="0.445,0.997" StartPoint="0.555,0.003">
+                    <GradientStop Color="LightGray" Offset="0"/>
+                    <GradientStop Color="#555555" Offset="1"/>
+                </LinearGradientBrush>
+            </Ellipse.Stroke>
+        </Ellipse>
     </Grid>
 </Window>

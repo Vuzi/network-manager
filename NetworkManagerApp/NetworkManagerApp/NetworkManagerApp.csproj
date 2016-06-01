@@ -129,8 +129,7 @@
     <Resource Include="resource\start.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="resource\9e0373c2b4410c49439dfd822c5fd16e_ajax_loader.gif" />
-    <Resource Include="resource\spinner.gif" />
+    <Resource Include="resource\spinnermask2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

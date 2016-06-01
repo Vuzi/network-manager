@@ -19,11 +19,6 @@ namespace NetworkManager {
         /// </summary>
         private Computer computer;
 
-        /// <summary>
-        /// Async task cancellation token
-        /// </summary>
-        CancellationTokenSource ts;
-
         public MainWindow() {
             InitializeComponent();
         }
@@ -52,11 +47,14 @@ namespace NetworkManager {
             }
         }
 
-        private void List_Machine_Loaded(object sender, RoutedEventArgs e) {
+        private async void List_Machine_Loaded(object sender, RoutedEventArgs e) {
             var tree = sender as TreeView;
+
+            showLoading();
 
             // Only one domain for now
             Domain.Domain domain = new Domain.Domain();
+            await domain.fill();
             DomainModel domainModel = new DomainModel() {
                 name = domain.name,
                 computers = new ObservableCollection<ComputerModel>(
@@ -64,11 +62,13 @@ namespace NetworkManager {
             };
 
             tree.Items.Add(domainModel);
+
+            hideLoading();
         }
         
         CancellationTokenSource loggedUserToken;
 
-        private async void updateLoggedUsers() {
+        private async Task updateLoggedUsers() {
             if (loggedUserToken != null)
                 loggedUserToken.Cancel();
             
@@ -103,7 +103,7 @@ namespace NetworkManager {
 
         CancellationTokenSource installedSofwaresToken;
 
-        private async void updateInstalledSoftwares() {
+        private async Task updateInstalledSoftwares() {
             if (installedSofwaresToken != null)
                 installedSofwaresToken.Cancel();
 
@@ -130,8 +130,9 @@ namespace NetworkManager {
                     show ? Visibility.Visible : Visibility.Hidden;
         }
 
-        private void List_Computer_Selected(object sender, RoutedEventArgs e) {
+        private async void List_Computer_Selected(object sender, RoutedEventArgs e) {
             TreeViewItem tvi = e.OriginalSource as TreeViewItem;
+
             if (tvi.DataContext is ComputerModel) {
                 this.computer = (tvi.DataContext as ComputerModel).computer;
 
@@ -139,18 +140,31 @@ namespace NetworkManager {
                 textBox_OperatingSystem.Text = computer.os;
                 textBox_OperatingSystemVersion.Text = computer.version;
                 
-                //showLoading();
+                showLoading();
 
-                updateLoggedUsers();
-                updateInstalledSoftwares();
+                await Task.WhenAll(updateLoggedUsers(), updateInstalledSoftwares());
 
-                //hideLoading();
+                hideLoading();
             }
 
         }
 
-        private void checkBox_ShowAllUsers_Click(object sender, RoutedEventArgs e) {
-            updateLoggedUsers();
+        int loadingWaiting = 0;
+
+        private void showLoading() {
+            loadingWaiting++;
+            LoadingSpinner.Visibility = Visibility.Visible;
+        }
+
+        private void hideLoading() {
+            if(--loadingWaiting == 0)
+                LoadingSpinner.Visibility = Visibility.Collapsed;
+        }
+
+        private async void checkBox_ShowAllUsers_Click(object sender, RoutedEventArgs e) {
+            showLoading();
+            await updateLoggedUsers();
+            hideLoading();
         }
 
         private void checkBox_ShowAllColumnsUser_Click(object sender, RoutedEventArgs e) {
