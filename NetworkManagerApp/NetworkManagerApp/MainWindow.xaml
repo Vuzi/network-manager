@@ -171,7 +171,7 @@
         </DataGrid>
         <CheckBox x:Name="checkBox_ShowAllInstalledSofwareColumns" Content="Show More Information" HorizontalAlignment="Left" Margin="253,0,0,7" Click="checkBox_ShowAllInstalledSofwareColumns_Click" Height="22" VerticalAlignment="Bottom"/>
 
-        <Ellipse x:Name="LoadingSpinner" Margin="1040,748,6,6" StrokeThickness="3" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed">
+        <Ellipse x:Name="LoadingSpinner" Margin="0,0,6,6" StrokeThickness="3" RenderTransformOrigin="0.5,0.5" Height="15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="15">
             <Ellipse.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
