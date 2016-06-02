@@ -129,7 +129,7 @@
     <Resource Include="resource\start.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="resource\spinnermask2.png" />
+    <Resource Include="resource\reload.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

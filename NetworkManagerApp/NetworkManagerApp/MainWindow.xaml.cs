@@ -48,9 +48,13 @@ namespace NetworkManager {
         }
 
         private async void List_Machine_Loaded(object sender, RoutedEventArgs e) {
-            var tree = sender as TreeView;
+            await updateListComputers();
+        }
 
+        private async Task updateListComputers() {
             showLoading();
+
+            List_Computer.Items.Clear();
 
             // Only one domain for now
             Domain.Domain domain = new Domain.Domain();
@@ -61,7 +65,7 @@ namespace NetworkManager {
                     domain.computers.Select(c => new ComputerModel() { computer = c }))
             };
 
-            tree.Items.Add(domainModel);
+            List_Computer.Items.Add(domainModel);
 
             hideLoading();
         }
@@ -69,6 +73,8 @@ namespace NetworkManager {
         CancellationTokenSource loggedUserToken;
 
         private async Task updateLoggedUsers() {
+            showLoading();
+
             if (loggedUserToken != null)
                 loggedUserToken.Cancel();
             
@@ -83,12 +89,16 @@ namespace NetworkManager {
             else
                 loggedUsers = await computer.getLoggedUsers();
 
-            if (localTs != null && localTs.IsCancellationRequested)
+            if (localTs != null && localTs.IsCancellationRequested) {
+                hideLoading();
                 return;
+            }
 
             foreach (var user in loggedUsers) {
                 dataGrid_ConnectedUsers.Items.Add(user);
             }
+
+            hideLoading();
         }
 
         int[] loggedUserCollapsableColumns = { 2, 4, 5, 6 ,7 };
@@ -104,6 +114,8 @@ namespace NetworkManager {
         CancellationTokenSource installedSofwaresToken;
 
         private async Task updateInstalledSoftwares() {
+            showLoading();
+
             if (installedSofwaresToken != null)
                 installedSofwaresToken.Cancel();
 
@@ -114,10 +126,14 @@ namespace NetworkManager {
 
             IEnumerable<Software> installedSoftwares = await computer.getInstalledSofwares();
 
-            if (localTs != null && localTs.IsCancellationRequested)
+            if (localTs != null && localTs.IsCancellationRequested) {
+                hideLoading();
                 return;
+            }
 
             dataGrid_ShowAllInstalledSoftware.ItemsSource = installedSoftwares.ToList();
+
+            hideLoading();
         }
 
         int[] installedSoftwaresCollapsableColumns = { 3, 4 };
@@ -162,9 +178,7 @@ namespace NetworkManager {
         }
 
         private async void checkBox_ShowAllUsers_Click(object sender, RoutedEventArgs e) {
-            showLoading();
             await updateLoggedUsers();
-            hideLoading();
         }
 
         private void checkBox_ShowAllColumnsUser_Click(object sender, RoutedEventArgs e) {
@@ -180,7 +194,25 @@ namespace NetworkManager {
         }
 
         private void CommandBinding_CopyLine(object sender, System.Windows.Input.ExecutedRoutedEventArgs e) {
+            sender.ToString();
+        }
 
+        private async void button_ConnectedUsersReload_Click(object sender, RoutedEventArgs e) {
+            if (computer == null)
+                return;
+            
+            await updateLoggedUsers();
+        }
+
+        private async void button_InstalledSoftwaresReload_Click(object sender, RoutedEventArgs e) {
+            if (computer == null)
+                return;
+            
+            await updateInstalledSoftwares();
+        }
+
+        private async void button_ComputersReload_Click(object sender, RoutedEventArgs e) {
+            await updateListComputers();
         }
     }
 
