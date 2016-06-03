@@ -152,8 +152,17 @@ namespace NetworkManager {
 
             if (tvi.DataContext is ComputerModel) {
                 this.computer = (tvi.DataContext as ComputerModel).computer;
-
-                Dns.GetHostAddresses(this.computer.name).ToList().ForEach(a => Console.WriteLine(a.ToString()));
+                try {
+                    Dns.GetHostAddresses(this.computer.name).ToList().ForEach(a => Console.WriteLine(a.ToString()));
+                    String[] allIPAdress = new string[2];
+                    List<IPAddress> ips = Dns.GetHostAddresses(this.computer.name).ToList();
+                    textBox_IPAdress6.Text = ips[0].ToString();
+                    textBox_IPAdress4.Text = WebUtility.HtmlDecode(ips[1].ToString());
+                }
+                catch(Exception exception)
+                {
+                    Console.WriteLine(exception.Message);
+                }
 
                 label_ClientName.Content = computer.name;
                 textBox_OperatingSystem.Text = computer.os;

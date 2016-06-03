@@ -97,17 +97,17 @@
             </DockPanel>
         </Button>
 
-        <Label x:Name="label_AdressMac" Content="MAC Address :" Margin="250,92,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox x:Name="textBox_AdressMac" Text="" Margin="255,116,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsReadOnly="True" HorizontalAlignment="Left"/>
+        <Label x:Name="label_AdressMac" Content="MAC Address :" Margin="528,92,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBox x:Name="textBox_AdressMac" Text="" Margin="533,116,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsReadOnly="True" HorizontalAlignment="Left"/>
 
-        <Label x:Name="label_IPAdress" Content="IP Address :" Margin="251,142,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox x:Name="textBox_IPAdress" Text="" Margin="256,167,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsReadOnly="True" HorizontalAlignment="Left"/>
+        <Label x:Name="label_IPAdress4" Content="IPV4 :" Margin="528,142,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBox x:Name="textBox_IPAdress4" Text="" Margin="533,167,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsReadOnly="True" HorizontalAlignment="Left"/>
 
-        <Label x:Name="label_OperatingSystem" Content="Operating System :" Margin="439,91,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox x:Name="textBox_OperatingSystem" IsReadOnly="True" Text="" Margin="440,116,0,0" Width="215" BorderThickness="2" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" />
+        <Label x:Name="label_OperatingSystem" Content="Operating System :" Margin="258,91,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBox x:Name="textBox_OperatingSystem" IsReadOnly="True" Text="" Margin="258,116,0,0" Width="215" BorderThickness="2" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" />
 
-        <Label x:Name="label_OperatingSystem_Copy" Content="Operating System Version :" Margin="441,142,0,0" Width="162" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox x:Name="textBox_OperatingSystemVersion" IsReadOnly="True" Text="" Margin="442,167,0,0" Width="150px" BorderThickness="2" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" />
+        <Label x:Name="label_OperatingSystem_Copy" Content="Operating System Version :" Margin="258,142,0,0" Width="162" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBox x:Name="textBox_OperatingSystemVersion" IsReadOnly="True" Text="" Margin="258,167,0,0" Width="215" BorderThickness="2" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" />
 
         <Rectangle Fill="Gray" Height="9" Margin="240,206,0.2,0" VerticalAlignment="Top"/>
 
@@ -196,5 +196,7 @@
                 <Image DockPanel.Dock="Left"  Source="resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
             </DockPanel>
         </Button>
+        <Label x:Name="label_IPAdress6" Content="IPV6 :" Margin="740,142,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBox x:Name="textBox_IPAdress6" Text="" Margin="745,167,0,0" Width="215" Height="21" BorderThickness="2" VerticalAlignment="Top" IsReadOnly="True" HorizontalAlignment="Left"/>
     </Grid>
 </Window>
