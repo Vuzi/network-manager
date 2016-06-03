@@ -198,5 +198,6 @@
         </Button>
         <Label x:Name="label_IPAdress6" Content="IPV6 :" Margin="740,142,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
         <TextBox x:Name="textBox_IPAdress6" Text="" Margin="745,167,0,0" Width="215" Height="21" BorderThickness="2" VerticalAlignment="Top" IsReadOnly="True" HorizontalAlignment="Left"/>
+        <Button x:Name="button_AppsDeploy" Content="AppsToDeploy" Margin="745,0,119.6,644" VerticalAlignment="Bottom" Height="26" Click="button_AppsDeploy_Click"/>
     </Grid>
 </Window>

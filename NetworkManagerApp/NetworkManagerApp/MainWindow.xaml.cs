@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Net;
+using NetworkManagerApp.views;
 
 namespace NetworkManager {
     /// <summary>
@@ -225,6 +226,12 @@ namespace NetworkManager {
 
         private async void button_ComputersReload_Click(object sender, RoutedEventArgs e) {
             await updateListComputers();
+        }
+
+        private void button_AppsDeploy_Click(object sender, RoutedEventArgs e)
+        {
+            AppsToDeploy test = new AppsToDeploy();
+            test.Show();
         }
     }
 
