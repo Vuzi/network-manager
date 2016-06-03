@@ -93,11 +93,11 @@
         <Button x:Name="button_ShutDown" Margin="250,48,0,0" HorizontalAlignment="Left" Width="150" Height="45" VerticalAlignment="Top" Click="button_ShutDown_Click">
             <DockPanel LastChildFill="True"  Width="135">
                 <Image DockPanel.Dock="Left" Source="resource/shutdown.png" Width="28" Height="32"  Stretch="Uniform"/>
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" >Shut Down</TextBlock>
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" >Shutdown</TextBlock>
             </DockPanel>
         </Button>
 
-        <Label x:Name="label_AdressMac" Content="Adresse mac :" Margin="250,92,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <Label x:Name="label_AdressMac" Content="MAC Address :" Margin="250,92,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
         <TextBox x:Name="textBox_AdressMac" Text="" Margin="255,116,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsReadOnly="True" HorizontalAlignment="Left"/>
 
         <Label x:Name="label_IPAdress" Content="IP Address :" Margin="251,142,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>

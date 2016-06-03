@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Net;
 
 namespace NetworkManager {
     /// <summary>
@@ -151,6 +152,8 @@ namespace NetworkManager {
 
             if (tvi.DataContext is ComputerModel) {
                 this.computer = (tvi.DataContext as ComputerModel).computer;
+
+                Dns.GetHostAddresses(this.computer.name).ToList().ForEach(a => Console.WriteLine(a.ToString()));
 
                 label_ClientName.Content = computer.name;
                 textBox_OperatingSystem.Text = computer.os;
