@@ -26,6 +26,11 @@
     <Grid>
         <!-- AD Computer treeview -->
         <Label x:Name="label_Computers" Content="Computers" VerticalAlignment="Top" Margin="10,8,0,0" HorizontalAlignment="Left" Width="246" FontWeight="Bold" FontSize="18"/>
+        <Button x:Name="button_ComputersReload" Margin="116,18,0,0" HorizontalAlignment="Left" Width="16" Height="18" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ComputersReload_Click">
+            <DockPanel LastChildFill="True"  Width="15" Height="15">
+                <Image DockPanel.Dock="Left"  Source="resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
+            </DockPanel>
+        </Button>
         <TreeView x:Name="List_Computer" Loaded="List_Machine_Loaded"  Margin="10,48,0,10" HorizontalAlignment="Left" Width="230" TreeViewItem.Selected="List_Computer_Selected">
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type local:DomainModel}" ItemsSource="{Binding computers}">
@@ -113,8 +118,11 @@
 
         <!-- Connected users -->
         <Label x:Name="label_ConnectedUsers" Content="Connected Users" HorizontalAlignment="Left" Margin="249,213,0,0" VerticalAlignment="Top" Width="150px" Height="30px" FontWeight="Bold" FontSize="14"/>
-
-
+        <Button Name="button_ConnectedUsersReload" Margin="367,220,0,0" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ConnectedUsersReload_Click">
+            <DockPanel LastChildFill="True"  Width="15" Height="15">
+                <Image DockPanel.Dock="Left" Source="resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
+            </DockPanel>
+        </Button>
         <DataGrid x:Name="dataGrid_ConnectedUsers" Margin="251,240,10,0"
           CanUserReorderColumns="True" CanUserResizeColumns="True" SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
           CanUserResizeRows="False" CanUserSortColumns="True" AutoGenerateColumns="False" Height="207" VerticalAlignment="Top">
@@ -140,16 +148,15 @@
         <CheckBox x:Name="checkBox_ShowAllUsers" Content="Show All Users" HorizontalAlignment="Left" Margin="252,452,0,0" VerticalAlignment="Top" Height="21" Click="checkBox_ShowAllUsers_Click"/>
         <CheckBox x:Name="checkBox_ShowAllColumnsUsers" Content="Show More Information" HorizontalAlignment="Left" Margin="354,452,0,0" VerticalAlignment="Top" Height="21" Click="checkBox_ShowAllColumnsUsers_Click"/>
 
-
-        <Button Name="button_ConnectedUsersReload" Margin="367,220,0,0" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ConnectedUsersReload_Click">
-            <DockPanel LastChildFill="True"  Width="15" Height="15">
-                <Image DockPanel.Dock="Left" Source="resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
-            </DockPanel>
-        </Button>
         <Rectangle Fill="Gray" Height="9" Margin="240,474,-0.8,0" VerticalAlignment="Top"/>
 
         <!-- Installed sofwares -->
         <Label x:Name="label_InstalledSoftware" Content="Installed Softwares" HorizontalAlignment="Left" Margin="251,487,0,0" VerticalAlignment="Top" Width="150px" Height="30px" FontWeight="Bold" FontSize="14"/>
+        <Button x:Name="button_InstalledSoftwaresReload" Margin="384,494,0,0" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_InstalledSoftwaresReload_Click">
+            <DockPanel LastChildFill="True"  Width="15" Height="15">
+                <Image DockPanel.Dock="Left" Source="resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
+            </DockPanel>
+        </Button>
         <DataGrid x:Name="dataGrid_ShowAllInstalledSoftware" Margin="253,516,10,34" 
           CanUserReorderColumns="True" CanUserResizeColumns="True" SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
           CanUserResizeRows="False" CanUserSortColumns="True" AutoGenerateColumns="False">
@@ -171,6 +178,7 @@
         </DataGrid>
         <CheckBox x:Name="checkBox_ShowAllInstalledSofwareColumns" Content="Show More Information" HorizontalAlignment="Left" Margin="253,0,0,7" Click="checkBox_ShowAllInstalledSofwareColumns_Click" Height="22" VerticalAlignment="Bottom"/>
 
+        <!-- Loader -->
         <Ellipse x:Name="LoadingSpinner" Margin="0,0,6,6" StrokeThickness="3" RenderTransformOrigin="0.5,0.5" Height="15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="15">
             <Ellipse.RenderTransform>
                 <TransformGroup>
@@ -186,14 +194,11 @@
                 </LinearGradientBrush>
             </Ellipse.Stroke>
         </Ellipse>
-        <Button x:Name="button_InstalledSoftwaresReload" Margin="384,494,0,0" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_InstalledSoftwaresReload_Click">
-            <DockPanel LastChildFill="True"  Width="15" Height="15">
-                <Image DockPanel.Dock="Left" Source="resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
-            </DockPanel>
-        </Button>
-        <Button x:Name="button_ComputersReload" Margin="116,18,0,0" HorizontalAlignment="Left" Width="16" Height="18" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ComputersReload_Click">
-            <DockPanel LastChildFill="True"  Width="15" Height="15">
-                <Image DockPanel.Dock="Left"  Source="resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
+
+        <!-- Error indicator -->
+        <Button Name="WarningImage" Margin="0,0,31,5" Visibility="Hidden" HorizontalAlignment="Right" Width="17" Height="16" VerticalAlignment="Bottom" Background="Transparent" BorderThickness="0" Click="WarningImage_Click">
+            <DockPanel Height="14" >
+                <Image DockPanel.Dock="Left"  Source="resource/warning.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant" Margin="0,0,0,-2"/>
             </DockPanel>
         </Button>
     </Grid>

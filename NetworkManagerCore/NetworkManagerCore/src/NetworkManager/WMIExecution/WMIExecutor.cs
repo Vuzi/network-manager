@@ -12,6 +12,7 @@ using System.Globalization;
 
 using NetworkManager.Domain;
 using System.Drawing;
+using System.Windows;
 
 namespace NetworkManager.WMIExecution {
     /// <summary>
@@ -149,6 +150,7 @@ namespace NetworkManager.WMIExecution {
             // Perform the operation asynchronously
             return await Task.Run(() => {
                 Dictionary<string, User> users = new Dictionary<string, User>();
+
                 try {
                     var scopeLocal = new ManagementScope($@"\\127.0.0.1\root\cimv2", getConnectionOptions());
                     var scope = new ManagementScope($@"\\{computer.name}\root\cimv2", getConnectionOptions());

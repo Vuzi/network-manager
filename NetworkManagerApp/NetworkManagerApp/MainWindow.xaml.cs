@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Net;
+using NetworkManagerApp.view;
 
 namespace NetworkManager {
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -19,6 +20,11 @@ namespace NetworkManager {
         /// Selected computer
         /// </summary>
         private Computer computer;
+
+        /// <summary>
+        /// Error handler
+        /// </summary>
+        private ErrorHandler errorHandler;
 
         public MainWindow() {
             InitializeComponent();
@@ -49,24 +55,32 @@ namespace NetworkManager {
         }
 
         private async void List_Machine_Loaded(object sender, RoutedEventArgs e) {
+            // Update error panel
+            errorHandler = new ErrorHandler();
+            errorHandler.warningIndicator = WarningImage;
+
             await updateListComputers();
         }
 
         private async Task updateListComputers() {
             showLoading();
 
-            List_Computer.Items.Clear();
+            try {
+                List_Computer.Items.Clear();
 
-            // Only one domain for now
-            Domain.Domain domain = new Domain.Domain();
-            await domain.fill();
-            DomainModel domainModel = new DomainModel() {
-                name = domain.name,
-                computers = new ObservableCollection<ComputerModel>(
-                    domain.computers.Select(c => new ComputerModel() { computer = c }))
-            };
+                // Only one domain for now
+                Domain.Domain domain = new Domain.Domain();
+                await domain.fill();
+                DomainModel domainModel = new DomainModel() {
+                    name = domain.name,
+                    computers = new ObservableCollection<ComputerModel>(
+                        domain.computers.Select(c => new ComputerModel() { computer = c }))
+                };
 
-            List_Computer.Items.Add(domainModel);
+                List_Computer.Items.Add(domainModel);
+            } catch(Exception e) {
+                errorHandler.addError(e);
+            }
 
             hideLoading();
         }
@@ -85,18 +99,22 @@ namespace NetworkManager {
             dataGrid_ConnectedUsers.Items.Clear();
 
             IEnumerable<User> loggedUsers;
-            if (checkBox_ShowAllUsers.IsChecked.Value)
-                loggedUsers = await computer.getAllLoggedUsers();
-            else
-                loggedUsers = await computer.getLoggedUsers();
+            try {
+                if (checkBox_ShowAllUsers.IsChecked.Value)
+                    loggedUsers = await computer.getAllLoggedUsers();
+                else
+                    loggedUsers = await computer.getLoggedUsers();
 
-            if (localTs != null && localTs.IsCancellationRequested) {
-                hideLoading();
-                return;
-            }
+                if (localTs != null && localTs.IsCancellationRequested) {
+                    hideLoading();
+                    return;
+                }
 
-            foreach (var user in loggedUsers) {
-                dataGrid_ConnectedUsers.Items.Add(user);
+                foreach (var user in loggedUsers) {
+                    dataGrid_ConnectedUsers.Items.Add(user);
+                }
+            } catch(Exception e) {
+                errorHandler.addError(e);
             }
 
             hideLoading();
@@ -124,15 +142,20 @@ namespace NetworkManager {
             var localTs = installedSofwaresToken;
 
             dataGrid_ShowAllInstalledSoftware.ItemsSource = new List<Software>();
+            
+            try {
+                IEnumerable<Software> installedSoftwares = await computer.getInstalledSofwares();
 
-            IEnumerable<Software> installedSoftwares = await computer.getInstalledSofwares();
+                if (localTs != null && localTs.IsCancellationRequested) {
+                    hideLoading();
+                    return;
+                }
 
-            if (localTs != null && localTs.IsCancellationRequested) {
-                hideLoading();
-                return;
+                if(installedSoftwares != null)
+                    dataGrid_ShowAllInstalledSoftware.ItemsSource = installedSoftwares.ToList();
+            } catch (Exception e) {
+                errorHandler.addError(e);
             }
-
-            dataGrid_ShowAllInstalledSoftware.ItemsSource = installedSoftwares.ToList();
 
             hideLoading();
         }
@@ -165,7 +188,6 @@ namespace NetworkManager {
 
                 hideLoading();
             }
-
         }
 
         int loadingWaiting = 0;
@@ -216,6 +238,12 @@ namespace NetworkManager {
 
         private async void button_ComputersReload_Click(object sender, RoutedEventArgs e) {
             await updateListComputers();
+        }
+
+        private void WarningImage_Click(object sender, RoutedEventArgs e) {
+            errorHandler.Left = this.Left + 50;
+            errorHandler.Top = this.Top + 50;
+            errorHandler.Show();
         }
     }
 
