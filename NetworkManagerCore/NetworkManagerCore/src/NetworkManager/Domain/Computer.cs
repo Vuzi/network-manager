@@ -9,6 +9,7 @@ using System.DirectoryServices;
 using System.Collections.Generic;
 
 using NetworkManager.WMIExecution;
+using System.Net;
 
 namespace NetworkManager.Domain {
 
@@ -25,6 +26,66 @@ namespace NetworkManager.Domain {
         public DateTime creation { get; set; }
         public DateTime lastChange { get; set; }
         public bool isAlive { get; set; }
+
+        public IPAddress getIpAddress() {
+            foreach(IPAddress ip in Dns.GetHostAddresses(name).ToList()) {
+                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    return ip;
+            }
+
+            return null; // No ipv4 address
+        }
+
+        public string getMacAddress() {
+            Process p = null;
+            string output = string.Empty;
+            IPAddress ipAddress = getIpAddress();
+
+            if (ipAddress == null)
+                return null;
+
+            try {
+                p = Process.Start(new ProcessStartInfo("arp", "-a " + ipAddress.ToString()) {
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true
+                });
+
+                output = p.StandardOutput.ReadToEnd();
+
+                p.Close();
+            } catch (Exception ex) {
+                throw new Exception("IPInfo: Error Retrieving 'arp -a' Results", ex);
+            } finally {
+                if (p != null) {
+                    p.Close();
+                }
+            }
+
+            return parseArpOutput(output);
+        }
+
+        private static string parseArpOutput(string toParse) {
+            try {
+                foreach (var arp in toParse.Split(new char[] { '\n', '\r' })) {
+                    // Parse out all the MAC / IP Address combinations
+                    if (!string.IsNullOrEmpty(arp)) {
+                        var pieces = (from piece in arp.Split(new char[] { ' ', '\t' })
+                                      where !string.IsNullOrEmpty(piece)
+                                      select piece).ToArray();
+                        if (pieces.Length == 3) {
+                            return pieces[1];
+                        }
+                    }
+                }
+                
+            } catch (Exception ex) {
+                throw new Exception("IPInfo: Error Parsing 'arp -a' results", ex);
+            }
+
+            return null; // Not found
+        }
+        
 
         /// <summary>
         /// Upload a file to the domain computer. The path should either be a full name including partion

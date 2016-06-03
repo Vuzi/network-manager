@@ -176,12 +176,13 @@ namespace NetworkManager {
             if (tvi.DataContext is ComputerModel) {
                 this.computer = (tvi.DataContext as ComputerModel).computer;
 
-                Dns.GetHostAddresses(this.computer.name).ToList().ForEach(a => Console.WriteLine(a.ToString()));
-
                 label_ClientName.Content = computer.name;
                 textBox_OperatingSystem.Text = computer.os;
                 textBox_OperatingSystemVersion.Text = computer.version;
-                
+                textBox_AdressMac.Text = computer.getMacAddress();
+                textBox_IPAdress.Text = computer.getIpAddress().ToString();
+
+
                 showLoading();
 
                 await Task.WhenAll(updateLoggedUsers(), updateInstalledSoftwares());
