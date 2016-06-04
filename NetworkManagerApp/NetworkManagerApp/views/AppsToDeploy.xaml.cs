@@ -17,6 +17,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Windows.Forms;
 using System.Diagnostics;
+using NetworkManager;
 
 namespace NetworkManagerApp.views
 {
@@ -25,6 +26,8 @@ namespace NetworkManagerApp.views
     /// </summary>
     public partial class AppsToDeploy : Window
     {
+        
+
         public AppsToDeploy()
         {
             InitializeComponent();
@@ -34,55 +37,58 @@ namespace NetworkManagerApp.views
         class ListBoxData
         {
             public BitmapSource ItemIcon { get; set; }
-            public string ItemText { get; set; }
-            public string ItemVersion { get; internal set; }
+            public string ItemName { get; set; }
+            public string ItemVersion { get; set; }
+            public string ItemCompany { get; set; }
+            public string ItemSize { get; set; }
         }
 
-        void AppsToDeploy_Loaded(object sender, RoutedEventArgs e)
+        private void ButtonAddApplication_Click(object sender, RoutedEventArgs e)
         {
-            textField.Text = "";
+            var ofd = new Microsoft.Win32.OpenFileDialog() { Filter = "Applications Files (*.exe, *.msi)|*.exe;*.msi" };
+            var result = ofd.ShowDialog();
+            if (result == false) return;
+            File.Copy(ofd.FileName, "c:\\apps\\" + System.IO.Path.GetFileName(ofd.FileName));
+            AppsToDeploy_Loaded(this, null);
         }
-        public Version GetAssemblyVersionFromObjectType(object o)
-        {
-           return o.GetType().Assembly.GetName().Version;
-        }
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var dialog = new FolderBrowserDialog();
-            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
 
-            if (result == System.Windows.Forms.DialogResult.OK)
+        private void AppsToDeploy_Loaded(object sender, RoutedEventArgs e)
+        {
+            string[] dir = Directory.GetFiles("c:\\apps\\");
+            var data = new List<ListBoxData>();
+            foreach (var filePath in dir)
             {
-                textField.Text = dialog.SelectedPath;
+              
+                var sysicon = System.Drawing.Icon.ExtractAssociatedIcon(filePath);
+                var bmpSrc = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(
+                            sysicon.Handle,
+                            System.Windows.Int32Rect.Empty,
+                            System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
+                sysicon.Dispose();
 
-                
-
-                if (textField.Text == "")
-                    return;
-
-                string[] dir = Directory.GetFiles(textField.Text);
-
-                var data = new List<ListBoxData>();
-
-                foreach (var filePath in dir)
-                {
-                    
-                    var sysicon = System.Drawing.Icon.ExtractAssociatedIcon(filePath);
-                    var bmpSrc = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(
-                                sysicon.Handle,
-                                System.Windows.Int32Rect.Empty,
-                                System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
-                    sysicon.Dispose();
-                    FileVersionInfo myFI = FileVersionInfo.GetVersionInfo(filePath);
-                    var itm = new ListBoxData() { ItemIcon = bmpSrc, ItemText = filePath, ItemVersion = myFI.FileVersion };
-
-                    data.Add(itm);
+                FileVersionInfo myFI = FileVersionInfo.GetVersionInfo(filePath);
+                FileInfo fileInfo = new FileInfo(filePath);
+                var itm = new ListBoxData();
+                if (fileInfo.Extension == ".msi") {
+                    itm.ItemIcon = bmpSrc;
+                    itm.ItemName = Utils.GetMsiProperty(filePath,"ProductName");
+                    itm.ItemVersion = Utils.GetMsiProperty(filePath,"ProductVersion");
+                    itm.ItemCompany = Utils.GetMsiProperty(filePath, "Manufacturer");
+                    itm.ItemSize = Utils.GetBytesReadable(fileInfo.Length);
                 }
-
-                lstBox.ItemsSource = data;
+                else
+                {
+                    itm.ItemIcon = bmpSrc;
+                    itm.ItemName = myFI.ProductName;
+                    itm.ItemVersion = myFI.FileVersion;
+                    itm.ItemCompany = myFI.CompanyName;
+                    itm.ItemSize = Utils.GetBytesReadable(fileInfo.Length);
+                }
+                data.Add(itm);
             }
-            else
-                textField.Text = "";
+
+            dataGrid_List_Applications.ItemsSource = data;
         }
+        
     }
 }

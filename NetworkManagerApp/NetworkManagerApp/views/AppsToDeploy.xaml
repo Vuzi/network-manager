@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NetworkManagerApp.views"
         mc:Ignorable="d"
-        Title="AppsToDeploy" Loaded="AppsToDeploy_Loaded" Height="300" Width="300">
+        Title="AppsToDeploy" Loaded="AppsToDeploy_Loaded" Height="400" Width="650">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="428*"/>
@@ -15,23 +15,36 @@
             <RowDefinition Height="31*"/>
             <RowDefinition Height="288*"/>
         </Grid.RowDefinitions>
-        <Button Content="Folder..." RenderTransformOrigin="2.388,-3.917" Grid.Column="1" Click="Button_Click"/>
-        <ListBox x:Name="lstBox" Grid.ColumnSpan="2" Grid.Row="1" ItemTemplate="{DynamicResource ListBoxItemDataTemplate}">
-            <ListBox.Resources>
-                <DataTemplate x:Key="ListBoxItemDataTemplate">
-                    <Grid d:DesignWidth="372" d:DesignHeight="46">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="25"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Image Source="{Binding ItemIcon}" />
-                        <Label Content="{Binding ItemText}" Grid.Column="1"/>
-                        <Label Content="{Binding ItemVersion}" Grid.Column="2"/>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.Resources>
-        </ListBox>
+        <Button x:Name="ButtonAddApplication" Content="Add Application (.exe/.msi)" RenderTransformOrigin="2.388,-3.917" Grid.Column="1" Click="ButtonAddApplication_Click"/>
+
+        <DataGrid x:Name="dataGrid_List_Applications"
+          CanUserReorderColumns="True" CanUserResizeColumns="True" SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
+          CanUserResizeRows="False" CanUserSortColumns="True" AutoGenerateColumns="False" Loaded="AppsToDeploy_Loaded" Grid.ColumnSpan="2" Margin="4,125,4,21" Grid.Row="1" HorizontalGridLinesBrush="#FF8D8A8A" VerticalGridLinesBrush="#FF8D8A8A" GridLinesVisibility="Horizontal" Padding="10">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="Copy">
+                    </MenuItem>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Padding" Value="20"/>
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="" Width="20" IsReadOnly="True" CanUserReorder="False" CanUserResize="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding ItemIcon}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn  Header="Name" Width="Auto" Binding="{Binding ItemName}" IsReadOnly="True" CanUserReorder="True" FontWeight="Bold"/>
+                <DataGridTextColumn  Header="Publisher" Width="Auto" Binding="{Binding ItemCompany}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Version" Width="Auto" Binding="{Binding ItemVersion}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Size" Width="Auto" Binding="{Binding ItemSize}" IsReadOnly="True" CanUserReorder="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
         <TextBlock x:Name="textField" TextWrapping="Wrap" Height="21"  Text="TextBlock"/>
     </Grid>
 
