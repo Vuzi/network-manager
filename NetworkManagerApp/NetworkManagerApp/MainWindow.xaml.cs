@@ -78,6 +78,11 @@ namespace NetworkManager {
                 };
 
                 List_Computer.Items.Add(domainModel);
+
+                // Expand
+                TreeViewItem item = (TreeViewItem)List_Computer.ItemContainerGenerator.ContainerFromItem(domainModel);
+                item.IsExpanded = true;
+
             } catch(Exception e) {
                 errorHandler.addError(e);
             }
