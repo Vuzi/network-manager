@@ -230,8 +230,9 @@ namespace NetworkManager {
 
         private void button_AppsDeploy_Click(object sender, RoutedEventArgs e)
         {
-            AppsToDeploy test = new AppsToDeploy();
-            test.Show();
+            if (this.computer != null)
+                new AppsToDeploy(this.computer).Show();
+            
         }
     }
 

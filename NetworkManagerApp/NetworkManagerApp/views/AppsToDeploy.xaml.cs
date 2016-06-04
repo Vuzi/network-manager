@@ -18,6 +18,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Diagnostics;
 using NetworkManager;
+using NetworkManager.Domain;
 
 namespace NetworkManagerApp.views
 {
@@ -26,12 +27,15 @@ namespace NetworkManagerApp.views
     /// </summary>
     public partial class AppsToDeploy : Window
     {
-        
+        private Computer currentComputer;
 
-        public AppsToDeploy()
+        public AppsToDeploy(Computer computer)
         {
+
             InitializeComponent();
             Loaded += AppsToDeploy_Loaded;
+            this.currentComputer = computer;
+            this.AppViewName.Title = "Install software on "+currentComputer.name;
         }
 
         class ListBoxData
@@ -89,6 +93,10 @@ namespace NetworkManagerApp.views
 
             dataGrid_List_Applications.ItemsSource = data;
         }
-        
+
+        private void label_ComputerName_Loaded(object sender, RoutedEventArgs e)
+        {
+            
+        }
     }
 }
