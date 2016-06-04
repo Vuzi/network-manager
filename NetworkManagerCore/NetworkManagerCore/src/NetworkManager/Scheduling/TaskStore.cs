@@ -67,20 +67,20 @@ namespace NetworkManager.Scheduling {
 
         private TaskResult getTaskResultFromReader(SQLiteDataReader reader, Task task = null) {
             return new TaskResult() {
-                UUID = (string)reader["uuid"],
-                task = task ?? getTaskByUUID((string)reader["task_UUID"]),
-                status = (TaskStatus)(long)reader["status"],
-                computerName = (string)reader["computerName"],
-                domainName = (string)reader["domainName"],
-                start = (DateTime)reader["start"],
-                end = (DateTime)reader["end"],
-                returnValue = (int)(long)reader["returnValue"],
-                output = (string)(reader["output"] != DBNull.Value ? reader["output"] : null),
-                err = (string)(reader["err"] != DBNull.Value ? reader["err"] : null),
+                UUID = (string) reader["uuid"],
+                task = task ?? getTaskByUUID((string) reader["task_UUID"]),
+                status = (TaskStatus) (long) reader["status"],
+                computerName = (string) reader["computerName"],
+                domainName = (string) reader["domainName"],
+                start = (DateTime) reader["start"],
+                end = (DateTime) reader["end"],
+                returnValue = (int) (long) reader["returnValue"],
+                output = (string) (reader["output"] != DBNull.Value ? reader["output"] : null),
+                err = (string) (reader["err"] != DBNull.Value ? reader["err"] : null),
             };
         }
 
-        internal void updateTaskResult(TaskResult taskResult) {
+        public void updateTaskResult(TaskResult taskResult) {
             string sql = @"UPDATE taskResult
                            SET status = ?, start = ?, end = ?,
                                returnValue = ?, output = ?, err = ?

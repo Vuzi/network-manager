@@ -47,23 +47,25 @@ namespace NetworkManager.WMIExecution {
             return connectionOptions;
         }
 
-        private static void genericWMI(Computer computer, string path, string method) {
-            try {
-                // Create the scope
-                var wmiScope = new ManagementScope($@"\\{computer.name}\root\cimv2", getConnectionOptions());
+        private static async Task genericWMI(Computer computer, string path, string method) {
+            await Task.Run(() => {
+                try {
+                    // Create the scope
+                    var wmiScope = new ManagementScope($@"\\{computer.name}\root\cimv2", getConnectionOptions());
 
-                // Get the WMI process
-                var wmiProcess = new ManagementClass(wmiScope, new ManagementPath(path), null);
+                    // Get the WMI process
+                    var wmiProcess = new ManagementClass(wmiScope, new ManagementPath(path), null);
 
-                // Action
-                uint returnValue = (uint)wmiProcess.GetInstances().OfType<ManagementObject>().FirstOrDefault().InvokeMethod(method, new object[] { });
+                    // Action
+                    uint returnValue = (uint)wmiProcess.GetInstances().OfType<ManagementObject>().FirstOrDefault().InvokeMethod(method, new object[] { });
 
-                if (returnValue != 0)
-                    throw new Exception($"Method {method} from {path} failed with code {returnValue}");
+                    if (returnValue != 0)
+                        throw new Exception($"Method {method} from {path} failed with code {returnValue}");
 
-            } catch (Exception e) {
-                throw new WMIException() { error = e };
-            }
+                } catch (Exception e) {
+                    throw new WMIException() { error = e };
+                }
+            });
         }
 
         /// <summary>
@@ -205,16 +207,16 @@ namespace NetworkManager.WMIExecution {
         /// Shutdown the computer
         /// </summary>
         /// <param name="computer">The computer to shutdown</param>
-        public static void shutdown(Computer computer) {
-            genericWMI(computer, "Win32_OperatingSystem", "Shutdown");
+        public static async Task shutdown(Computer computer) {
+            await genericWMI(computer, "Win32_OperatingSystem", "Shutdown");
         }
 
         /// <summary>
         /// Reboot the computer
         /// </summary>
         /// <param name="computer">The computer to reboot</param>
-        public static void reboot(Computer computer) {
-            genericWMI(computer, "Win32_OperatingSystem", "Reboot");
+        public static async Task reboot(Computer computer) {
+            await genericWMI(computer, "Win32_OperatingSystem", "Reboot");
         }
 
         /// <summary>

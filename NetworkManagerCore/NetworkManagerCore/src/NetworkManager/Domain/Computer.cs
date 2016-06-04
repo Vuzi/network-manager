@@ -25,6 +25,10 @@ namespace NetworkManager.Domain {
         public DateTime lastChange { get; set; }
         public bool isAlive { get; set; }
 
+        /// <summary>
+        /// Return the first ipv4 of the computer, or null if not found
+        /// </summary>
+        /// <returns></returns>
         public IPAddress getIpAddress() {
             try {
                 foreach (IPAddress ip in Dns.GetHostAddresses(name).ToList()) {
@@ -36,66 +40,14 @@ namespace NetworkManager.Domain {
             return null; // No ipv4 address
         }
 
+        /// <summary>
+        /// Return the mac address of the computer
+        /// </summary>
+        /// <returns>The mac address</returns>
         public async Task<string> getMacAddress() {
-            if (isAlive) {
-                try {
-                    return await WMIExecutor.getMACAddress(this);
-                } catch (Exception e) {}
-            }
-            
-            return await Task.Run(() => {
-                Process p = null;
-                string output = string.Empty;
-                IPAddress ipAddress = getIpAddress();
-
-                // Unknown computer
-                if (ipAddress == null)
-                    return null;
-
-                try {
-                    p = Process.Start(new ProcessStartInfo("arp", "-a " + ipAddress.ToString()) {
-                        CreateNoWindow = true,
-                        UseShellExecute = false,
-                        RedirectStandardOutput = true
-                    });
-
-                    output = p.StandardOutput.ReadToEnd();
-
-                    p.Close();
-                } catch (Exception ex) {
-                    throw new Exception("IPInfo: Error Retrieving 'arp -a' Results", ex);
-                } finally {
-                    if (p != null) {
-                        p.Close();
-                    }
-                }
-
-                return parseArpOutput(output).ToUpper().Replace('-', ':');
-            });
-        }
-
-        private static string parseArpOutput(string toParse) {
-            try {
-                foreach (var arp in toParse.Split(new char[] { '\n', '\r' })) {
-                    // Parse out all the MAC / IP Address combinations
-                    if (!string.IsNullOrEmpty(arp)) {
-                        var pieces = (from piece in arp.Split(new char[] { ' ', '\t' })
-                                      where !string.IsNullOrEmpty(piece)
-                                      select piece).ToArray();
-                        if (pieces.Length == 3) {
-                            return pieces[1];
-                        }
-                    }
-                }
-                
-            } catch (Exception ex) {
-                throw new Exception("IPInfo: Error Parsing 'arp -a' results", ex);
-            }
-
-            return string.Empty; // Not found
+            return await WMIExecutor.getMACAddress(this);
         }
         
-
         /// <summary>
         /// Upload a file to the domain computer. The path should either be a full name including partion
         /// (i.e. C:\test\file.txt) or include a shared folder (i.e. \shared\file.txt)
@@ -156,15 +108,15 @@ namespace NetworkManager.Domain {
         /// <summary>
         /// Shutdown the computer
         /// </summary>
-        public void shutdown() {
-            WMIExecutor.shutdown(this);
+        public async Task shutdown() {
+            await WMIExecutor.shutdown(this);
         }
 
         /// <summary>
         /// Reboot the computer
         /// </summary>
-        public void reboot() {
-            WMIExecutor.reboot(this);
+        public async Task reboot() {
+            await WMIExecutor.reboot(this);
         }
 
         /// <summary>
@@ -177,18 +129,8 @@ namespace NetworkManager.Domain {
             rdcProcess.Start();
         }
 
-        public void showExplorer() {
-            showExplorer("c");
-        }
-
-        /// <summary>
-        /// Open the file explorer on the C disk of the remote computer
-        /// </summary>
-        public void showExplorer(string letter) {
-            Process rdcProcess = new Process();
-            rdcProcess.StartInfo.FileName = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\system32\explorer.exe");
-            rdcProcess.StartInfo.Arguments = $@"\\{name}\{letter}$";
-            rdcProcess.Start();
+        public string getPath(string path) {
+            return $@"\\{name}\{path.Replace(':', '$')}";
         }
 
         /// <summary>

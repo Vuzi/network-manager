@@ -7,8 +7,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Threading.Tasks;
 using System.Threading;
-using System.Net;
 using NetworkManagerApp.view;
+using System.IO;
+using System.Data.SQLite;
 
 namespace NetworkManager {
 
@@ -26,8 +27,34 @@ namespace NetworkManager {
         /// </summary>
         private ErrorHandler errorHandler;
 
+        private ComputerInfoStore computerInfoStore;
+
         public MainWindow() {
             InitializeComponent();
+
+            // Preapre the database
+            prepareDatabaseConnection();
+
+            // Error panel
+            errorHandler = new ErrorHandler();
+            errorHandler.warningIndicator = WarningImage;
+
+            // App level exception handler
+            Application.Current.DispatcherUnhandledException += (sender, e) => {
+                errorHandler.addError(e.Exception);
+                e.Handled = true;
+            };
+        }
+
+        /// <summary>
+        /// Prepare the SQLite connection
+        /// </summary>
+        private void prepareDatabaseConnection() {
+            if(!File.Exists("NetworkManager.sqlite"))
+                SQLiteConnection.CreateFile("NetworkManager.sqlite");
+            var conn = new SQLiteConnection("Data Source=NetworkManager.sqlite;Version=3;");
+            conn.Open();
+            computerInfoStore = new ComputerInfoStore(conn);
         }
 
         /// <summary>
@@ -42,11 +69,28 @@ namespace NetworkManager {
                 // Only one domain for now
                 Domain.Domain domain = new Domain.Domain();
                 await domain.fill();
+
                 DomainModel domainModel = new DomainModel() {
                     name = domain.name,
-                    computers = new ObservableCollection<ComputerModel>(
-                        domain.computers.Select(c => new ComputerModel() { computer = c }))
+                    computers = new ObservableCollection<ComputerModel>()
                 };
+
+                foreach(Computer c in domain.computers) {
+                    domainModel.computers.Add(new ComputerModel() { computer = c });
+
+                    // If the computer is alive, save its values in the database
+                    if(c.isAlive) {
+                        try {
+                            computerInfoStore.updateOrInsertComputerInfo(new ComputerInfo() {
+                                name = c.name,
+                                ipAddress = c.getIpAddress().ToString(),
+                                macAddress = await c.getMacAddress()
+                            });
+                        } catch(Exception e) {
+                            errorHandler.addError(e);
+                        }
+                    }
+                }
 
                 List_Computer.Items.Add(domainModel);
 
@@ -71,11 +115,17 @@ namespace NetworkManager {
 
             if (loggedUserToken != null)
                 loggedUserToken.Cancel();
-            
-            loggedUserToken = new CancellationTokenSource();
-            var localTs = loggedUserToken;
 
             dataGrid_ConnectedUsers.Items.Clear();
+
+            // If the computer is not alive, quit
+            if (!computer.isAlive) {
+                hideLoading();
+                return;
+            }
+
+            loggedUserToken = new CancellationTokenSource();
+            var localTs = loggedUserToken;
 
             IEnumerable<User> loggedUsers;
             try {
@@ -123,10 +173,16 @@ namespace NetworkManager {
             if (installedSofwaresToken != null)
                 installedSofwaresToken.Cancel();
 
+            dataGrid_ShowAllInstalledSoftware.ItemsSource = new List<Software>();
+            
+            // If the computer is not alive, quit
+            if (!computer.isAlive) {
+                hideLoading();
+                return;
+            }
+
             installedSofwaresToken = new CancellationTokenSource();
             var localTs = installedSofwaresToken;
-
-            dataGrid_ShowAllInstalledSoftware.ItemsSource = new List<Software>();
             
             try {
                 IEnumerable<Software> installedSoftwares = await computer.getInstalledSofwares();
@@ -164,7 +220,7 @@ namespace NetworkManager {
         private async Task updateComputerInformations() {
             showLoading();
 
-            label_ClientName.Content = computer.name;
+            label_ClientName.Content = computer.name + (computer.isAlive ? "" : " (offline)");
             textBox_OperatingSystem.Text = computer.os;
             textBox_OperatingSystemVersion.Text = computer.version;
             textBox_AdressMac.Text = "";
@@ -173,18 +229,27 @@ namespace NetworkManager {
             if(computer.isAlive) {
                 button_ShutDown.Visibility = Visibility.Visible;
                 button_WakeOnLan.Visibility = Visibility.Collapsed;
+
+                try {
+                    // Connected : get the IP from DNS, and the MAC from WMI
+                    textBox_IPAdress.Text = computer.getIpAddress().ToString();
+                    textBox_AdressMac.Text = await computer.getMacAddress();
+                } catch (Exception e) {
+                    errorHandler.addError(e);
+                }
             } else {
                 button_ShutDown.Visibility = Visibility.Collapsed;
                 button_WakeOnLan.Visibility = Visibility.Visible;
-            }
 
-            try {
-                textBox_IPAdress.Text = computer.getIpAddress().ToString();
-                textBox_AdressMac.Text = await computer.getMacAddress();
-            } catch (Exception e) {
-                errorHandler.addError(e);
-            }
+                // Not connected : get the IP and MAC from local database
+                var computerInfo = computerInfoStore.getComputerInfoByName(computer.name);
 
+                if (computerInfo != null) {
+                    textBox_IPAdress.Text = computerInfo.ipAddress;
+                    textBox_AdressMac.Text = computerInfo.macAddress;
+                }
+            }
+            
             hideLoading();
         }
 
@@ -235,15 +300,25 @@ namespace NetworkManager {
             }
         }
 
-        private void button_ShutDown_Click(object sender, RoutedEventArgs e) {
-            if (computer != null) {
-                computer.shutdown();
+        private async void button_ShutDown_Click(object sender, RoutedEventArgs e) {
+            if (computer == null)
+                return;
+
+            try {
+                await computer.shutdown();
+            } catch (Exception ex) {
+                errorHandler.addError(ex);
             }
         }
 
-        private void button_Reboot_Click(object sender, RoutedEventArgs e) {
-            if (computer != null) {
-                computer.reboot();
+        private async void button_Reboot_Click(object sender, RoutedEventArgs e) {
+            if (computer == null || !computer.isAlive)
+                return;
+
+            try {
+                await computer.reboot();
+            } catch (Exception ex) {
+                errorHandler.addError(ex);
             }
         }
 
@@ -254,14 +329,13 @@ namespace NetworkManager {
         }
 
         private async void List_Machine_Loaded(object sender, RoutedEventArgs e) {
-            // Update error panel
-            errorHandler = new ErrorHandler();
-            errorHandler.warningIndicator = WarningImage;
-
             await updateListComputers();
         }
 
         private async void checkBox_ShowAllUsers_Click(object sender, RoutedEventArgs e) {
+            if (computer == null || !computer.isAlive)
+                return;
+
             await updateLoggedUsers();
         }
 
@@ -282,14 +356,14 @@ namespace NetworkManager {
         }
 
         private async void button_ConnectedUsersReload_Click(object sender, RoutedEventArgs e) {
-            if (computer == null)
+            if (computer == null || !computer.isAlive)
                 return;
             
             await updateLoggedUsers();
         }
 
         private async void button_InstalledSoftwaresReload_Click(object sender, RoutedEventArgs e) {
-            if (computer == null)
+            if (computer == null || !computer.isAlive)
                 return;
             
             await updateInstalledSoftwares();
@@ -305,27 +379,44 @@ namespace NetworkManager {
             errorHandler.Show();
         }
 
-        private void button_OpenDiskC_Click(object sender, RoutedEventArgs e) {
-            if (computer != null) {
-                computer.showExplorer("c");
+        private void openDisk(string path) {
+            string remotePath = computer.getPath(path);
+
+            if (Directory.Exists(remotePath)) {
+                Utils.showExplorer(remotePath);
+            } else {
+                MessageBox.Show($"The directory {path} is not accessible for the host {computer.name}", "Disk unavailable");
             }
+        }
+
+        private void button_OpenDiskC_Click(object sender, RoutedEventArgs e) {
+            if (computer == null || !computer.isAlive)
+                return;
+
+            openDisk(@"C:\");
         }
 
         private void button_OpenDiskD_Click(object sender, RoutedEventArgs e) {
-            if (computer != null) {
-                computer.showExplorer("d");
-            }
+            if (computer == null || !computer.isAlive)
+                return;
+
+            openDisk(@"D:\");
         }
 
         private void button_OpenDiskE_Click(object sender, RoutedEventArgs e) {
-            if (computer != null) {
-                computer.showExplorer("e");
-            }
+            if (computer == null || !computer.isAlive)
+                return;
+
+            openDisk(@"E:\");
         }
 
         private void button_WakeOnLan_Click(object sender, RoutedEventArgs e) {
             if(computer != null) {
-                computer.isAlive = !computer.isAlive;
+                var computerInfo = computerInfoStore.getComputerInfoByName(computer.name);
+
+                if (computer != null) {
+                    Utils.wakeOnLan(computerInfo.macAddress);
+                }
             }
         }
     }
