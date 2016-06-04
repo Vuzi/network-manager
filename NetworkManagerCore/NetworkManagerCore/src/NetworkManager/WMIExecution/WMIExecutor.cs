@@ -157,8 +157,7 @@ namespace NetworkManager.WMIExecution {
                     var Query = new SelectQuery("SELECT LogonId FROM Win32_LogonSession");
                     var Searcher = new ManagementObjectSearcher(scope, Query);
                     var regName = new Regex($"(?i)Domain=\"(?<valueDomain>.+)\",Name=\"(?<valueName>.+)\"");
-                    scope.Connect();
-                    scopeLocal.Connect();
+
                     foreach (ManagementObject WmiObject in Searcher.Get()) {
                         foreach (ManagementObject LWmiObject in WmiObject.GetRelationships("Win32_LoggedOnUser")) {
                             Match m = regName.Match(LWmiObject["Antecedent"].ToString());
@@ -175,7 +174,6 @@ namespace NetworkManager.WMIExecution {
 
                                 try {
                                     ManagementObjectCollection test = searcher.Get();
-                                    Console.WriteLine(test);
                                     foreach (ManagementObject mo in test) {
                                         
                                        if (users.ContainsKey(mo["SID"].ToString()))
@@ -194,7 +192,6 @@ namespace NetworkManager.WMIExecution {
                                     }
                                 } catch (Exception e) {
                                     // Ignore not found error
-                                    Console.WriteLine(e.Message);
                                 }
                             }
                         }

@@ -1,11 +1,9 @@
 ﻿
-using ActiveDs;
 using System;
 using System.IO;
 using System.Linq;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using System.DirectoryServices;
 using System.Collections.Generic;
 
 using NetworkManager.WMIExecution;
@@ -28,10 +26,12 @@ namespace NetworkManager.Domain {
         public bool isAlive { get; set; }
 
         public IPAddress getIpAddress() {
-            foreach(IPAddress ip in Dns.GetHostAddresses(name).ToList()) {
-                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                    return ip;
-            }
+            try {
+                foreach (IPAddress ip in Dns.GetHostAddresses(name).ToList()) {
+                    if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                        return ip;
+                }
+            } catch(Exception e) {}
 
             return null; // No ipv4 address
         }

@@ -181,8 +181,7 @@ namespace NetworkManager {
                 textBox_OperatingSystemVersion.Text = computer.version;
                 textBox_AdressMac.Text = computer.getMacAddress();
                 textBox_IPAdress.Text = computer.getIpAddress().ToString();
-
-
+                
                 showLoading();
 
                 await Task.WhenAll(updateLoggedUsers(), updateInstalledSoftwares());
