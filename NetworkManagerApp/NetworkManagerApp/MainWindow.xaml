@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NetworkManager"
-        Title="Network Manager" Height="810" Width="1080" Background="LightGray">
+        Title="Network Manager" Height="810" Width="1080" Background="LightGray" Icon="resource/icon.ico">
     <Window.Resources>
         <Storyboard x:Key="Storyboard1" RepeatBehavior="Forever">
             <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="LoadingSpinner" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)">

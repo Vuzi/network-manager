@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NetworkManagerApp.view"
         mc:Ignorable="d"
-        Title="Network Manager - Errors" Height="300" Width="886.001" Background="LightGray">
+        Title="Network Manager - Errors" Height="300" Width="886.001" Background="LightGray" Icon="../resource/icon.ico">
     <Grid>
         <Label x:Name="label_Errors" Content="Errors" VerticalAlignment="Top" Margin="10,8,0,0" HorizontalAlignment="Left" Width="246" FontWeight="Bold" FontSize="18"/>
         <DataGrid x:Name="dataGrid_Errors" Margin="10,47,10,45" Loaded="dataGrid_ConnectedUsers_Loaded"
