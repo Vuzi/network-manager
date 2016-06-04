@@ -1,8 +1,10 @@
 ﻿<Window x:Class="NetworkManager.MainWindow"
+        TextOptions.TextFormattingMode="Ideal"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:local="clr-namespace:NetworkManager"
         Title="Network Manager" Height="810" Width="1080" Background="LightGray" Icon="resource/icon.ico">
     <Window.Resources>
@@ -40,35 +42,35 @@
                 </HierarchicalDataTemplate>
                 <DataTemplate DataType="{x:Type local:ComputerModel}">
                     <StackPanel Orientation="Horizontal">
+                        <fa:FontAwesome Icon="CheckSquareOutline" FontSize="10px"  VerticalAlignment="Center" Margin="0,0,5,0" >
+                            <TextBlock.Style>
+                                <Style TargetType="fa:FontAwesome">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding computer.isAlive}" Value="true" >
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding computer.isAlive}" Value="false" >
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </fa:FontAwesome>
+                        <fa:FontAwesome Icon="SquareOutline" FontSize="10px"  VerticalAlignment="Center" Margin="0,0,5,0" >
+                            <TextBlock.Style>
+                                <Style TargetType="fa:FontAwesome">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding computer.isAlive}" Value="true" >
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding computer.isAlive}" Value="false" >
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </fa:FontAwesome>
                         <TextBlock Text="{Binding computer.name}" />
-                        <TextBlock Text=" [ON]">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding computer.isAlive}" Value="true" >
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding computer.isAlive}" Value="false" >
-                                            <Setter Property="Visibility" Value="Hidden"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                        <TextBlock Text=" [OFF]">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding computer.isAlive}" Value="true" >
-                                            <Setter Property="Visibility" Value="Hidden"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding computer.isAlive}" Value="false" >
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
                     </StackPanel>
                 </DataTemplate>
             </TreeView.Resources>
@@ -77,28 +79,59 @@
         <!-- Selection computer informations -->
         <Label x:Name="label_ClientName" Content="Machine Name" VerticalAlignment="Top" Margin="246,9,0,0" HorizontalAlignment="Left" Width="225" FontWeight="Bold" FontSize="18"/>
 
-        <Button x:Name="button_CopyReboot" Margin="441,48,0,0" HorizontalAlignment="Left" Width="150" Height="45" VerticalAlignment="Top" Click="button_CopyReboot_Click">
-            <DockPanel LastChildFill="True" Width="135">
-                <Image DockPanel.Dock="Left" Source="resource/reboot.png" Width="30" Height="27"  Stretch="Uniform" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" >Reboot</TextBlock>
+        <Button x:Name="button_ShutDown" Visibility="Collapsed" Margin="250,48,0,0" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_ShutDown_Click">
+            <DockPanel LastChildFill="True" VerticalAlignment="Center" Width="123">
+                <fa:FontAwesome Icon="PowerOff" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Shutdown</TextBlock>
             </DockPanel>
         </Button>
-        <Button x:Name="button_JobSchedule" Margin="625,48,0,0" HorizontalAlignment="Left" Width="150" Height="45" VerticalAlignment="Top" Click="button_JobSchedule_Click">
-            <DockPanel LastChildFill="True" Width="135">
-                <Image DockPanel.Dock="Left" Source="resource/jobschedule.png" Width="27" Height="29"  Stretch="Uniform" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" >Job Schedule</TextBlock>
+        <Button x:Name="button_WakeOnLan" Margin="250,48,0,0" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_WakeOnLan_Click">
+            <DockPanel LastChildFill="True" VerticalAlignment="Center" Width="123">
+                <fa:FontAwesome Icon="Play" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Wake On Lan</TextBlock>
             </DockPanel>
         </Button>
-        <Button x:Name="button_Installsoftware"  Margin="807,48,0,0" Height="45" VerticalAlignment="Top" HorizontalAlignment="Left" Width="145" Click="button_Installsoftware_Click" >
-            <DockPanel LastChildFill="True" Width="135">
-                <Image DockPanel.Dock="Left" Source="resource/installApp.png" Width="26" Height="29"  Stretch="Uniform" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" >Install Software</TextBlock>
+        <Button x:Name="button_Reboot" Margin="384,48,0,0" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_Reboot_Click">
+            <DockPanel LastChildFill="True" Width="120">
+                <fa:FontAwesome Icon="Refresh" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" >Reboot</TextBlock>
             </DockPanel>
         </Button>
-        <Button x:Name="button_ShutDown" Margin="250,48,0,0" HorizontalAlignment="Left" Width="150" Height="45" VerticalAlignment="Top" Click="button_ShutDown_Click">
-            <DockPanel LastChildFill="True"  Width="135">
-                <Image DockPanel.Dock="Left" Source="resource/shutdown.png" Width="28" Height="32"  Stretch="Uniform"/>
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" >Shutdown</TextBlock>
+        <Button x:Name="button_JobSchedule" Margin="517,48,0,0" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_JobSchedule_Click">
+            <DockPanel LastChildFill="True" Width="119">
+                <fa:FontAwesome Icon="Calendar" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" >Job Schedule</TextBlock>
+            </DockPanel>
+        </Button>
+        <Button x:Name="button_Installsoftware"  Margin="650,48,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125" Click="button_Installsoftware_Click" >
+            <DockPanel LastChildFill="True" Width="121">
+                <fa:FontAwesome Icon="Upload" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" >Install Software</TextBlock>
+            </DockPanel>
+        </Button>
+        <Button x:Name="button_StartRemoteDesktop"  Margin="784,48,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125" Click="button_StartRemoteDesktop_Click" >
+            <DockPanel LastChildFill="True" Width="121">
+                <fa:FontAwesome Icon="Desktop" FontSize="16px"  VerticalAlignment="Center" Margin="5,0,0,0" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Text="Remote Desktop" Width="89" />
+            </DockPanel>
+        </Button>
+
+        <Button x:Name="button_OpenDiskC"  Margin="916,48,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125" Click="button_OpenDiskC_Click" >
+            <DockPanel LastChildFill="True" Width="115">
+                <fa:FontAwesome Icon="HddOutline" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Text="Disque C" />
+            </DockPanel>
+        </Button>
+        <Button x:Name="button_OpenDiskD"  Margin="916,83,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125" Click="button_OpenDiskD_Click" >
+            <DockPanel LastChildFill="True" Width="115">
+                <fa:FontAwesome Icon="HddOutline" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" ><Run Text="Disque "/><Run Text="D"/></TextBlock>
+            </DockPanel>
+        </Button>
+        <Button x:Name="button_OpenDiskE"  Margin="916,118,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125" Click="button_OpenDiskE_Click" >
+            <DockPanel LastChildFill="True" Width="115">
+                <fa:FontAwesome Icon="HddOutline" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" ><Run Text="Disque "/><Run Text="E"/></TextBlock>
             </DockPanel>
         </Button>
 
@@ -123,7 +156,7 @@
                 <Image DockPanel.Dock="Left" Source="resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
             </DockPanel>
         </Button>
-        <DataGrid x:Name="dataGrid_ConnectedUsers" Margin="251,240,10,0"
+        <DataGrid x:Name="dataGrid_ConnectedUsers" Margin="251,240,10,0" CanUserAddRows="false"
           CanUserReorderColumns="True" CanUserResizeColumns="True" SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
           CanUserResizeRows="False" CanUserSortColumns="True" AutoGenerateColumns="False" Height="207" VerticalAlignment="Top">
             <DataGrid.ContextMenu>
@@ -146,7 +179,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <CheckBox x:Name="checkBox_ShowAllUsers" Content="Show All Users" HorizontalAlignment="Left" Margin="252,452,0,0" VerticalAlignment="Top" Height="21" Click="checkBox_ShowAllUsers_Click"/>
-        <CheckBox x:Name="checkBox_ShowAllColumnsUsers" Content="Show More Information" HorizontalAlignment="Left" Margin="354,452,0,0" VerticalAlignment="Top" Height="21" Click="checkBox_ShowAllColumnsUsers_Click"/>
+        <CheckBox x:Name="checkBox_ShowAllColumnsUsers" Content="Show More Information" HorizontalAlignment="Left" Margin="360,452,0,0" VerticalAlignment="Top" Height="21" Click="checkBox_ShowAllColumnsUsers_Click"/>
 
         <Rectangle Fill="Gray" Height="9" Margin="240,474,-0.8,0" VerticalAlignment="Top"/>
 
@@ -157,7 +190,7 @@
                 <Image DockPanel.Dock="Left" Source="resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
             </DockPanel>
         </Button>
-        <DataGrid x:Name="dataGrid_ShowAllInstalledSoftware" Margin="253,516,10,34" 
+        <DataGrid x:Name="dataGrid_ShowAllInstalledSoftware" Margin="253,516,10,34" CanUserAddRows="false"
           CanUserReorderColumns="True" CanUserResizeColumns="True" SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
           CanUserResizeRows="False" CanUserSortColumns="True" AutoGenerateColumns="False">
             <DataGrid.Columns>

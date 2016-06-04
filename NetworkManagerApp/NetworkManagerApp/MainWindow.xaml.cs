@@ -30,38 +30,9 @@ namespace NetworkManager {
             InitializeComponent();
         }
 
-        private void button_Installsoftware_Click(object sender, RoutedEventArgs e) {
-            if(computer != null) {
-                computer.showExplorer();
-            }
-        }
-
-        private void button_JobSchedule_Click(object sender, RoutedEventArgs e) {
-            if (computer != null) {
-                computer.startRemoteDesktop();
-            }
-        }
-
-        private void button_ShutDown_Click(object sender, RoutedEventArgs e) {
-            if (computer != null) {
-                computer.shutdown();
-            }
-        }
-
-        private void button_CopyReboot_Click(object sender, RoutedEventArgs e) {
-            if (computer != null) {
-                computer.reboot();
-            }
-        }
-
-        private async void List_Machine_Loaded(object sender, RoutedEventArgs e) {
-            // Update error panel
-            errorHandler = new ErrorHandler();
-            errorHandler.warningIndicator = WarningImage;
-
-            await updateListComputers();
-        }
-
+        /// <summary>
+        /// Update the domain computer list
+        /// </summary>
         private async Task updateListComputers() {
             showLoading();
 
@@ -92,6 +63,9 @@ namespace NetworkManager {
         
         CancellationTokenSource loggedUserToken;
 
+        /// <summary>
+        /// Update the logged users list
+        /// </summary>
         private async Task updateLoggedUsers() {
             showLoading();
 
@@ -127,6 +101,9 @@ namespace NetworkManager {
 
         int[] loggedUserCollapsableColumns = { 2, 4, 5, 6 ,7 };
 
+        /// <summary>
+        /// Update the logged users visibility
+        /// </summary>
         private void updateLoggedUsersVisibility() {
             bool show = checkBox_ShowAllColumnsUsers.IsChecked.Value;
 
@@ -137,6 +114,9 @@ namespace NetworkManager {
 
         CancellationTokenSource installedSofwaresToken;
 
+        /// <summary>
+        /// Update the installed software list
+        /// </summary>
         private async Task updateInstalledSoftwares() {
             showLoading();
 
@@ -167,6 +147,9 @@ namespace NetworkManager {
 
         int[] installedSoftwaresCollapsableColumns = { 3, 4 };
 
+        /// <summary>
+        /// Update the software view visibility
+        /// </summary>
         private void updateInstalledSoftwaresVisibility() {
             bool show = checkBox_ShowAllInstalledSofwareColumns.IsChecked.Value;
 
@@ -175,36 +158,107 @@ namespace NetworkManager {
                     show ? Visibility.Visible : Visibility.Hidden;
         }
 
-        private async void List_Computer_Selected(object sender, RoutedEventArgs e) {
-            TreeViewItem tvi = e.OriginalSource as TreeViewItem;
+        /// <summary>
+        /// Update the computer information panel
+        /// </summary>
+        private async Task updateComputerInformations() {
+            showLoading();
 
-            if (tvi.DataContext is ComputerModel) {
-                this.computer = (tvi.DataContext as ComputerModel).computer;
+            label_ClientName.Content = computer.name;
+            textBox_OperatingSystem.Text = computer.os;
+            textBox_OperatingSystemVersion.Text = computer.version;
+            textBox_AdressMac.Text = "";
+            textBox_IPAdress.Text = "";
 
-                label_ClientName.Content = computer.name;
-                textBox_OperatingSystem.Text = computer.os;
-                textBox_OperatingSystemVersion.Text = computer.version;
-                textBox_AdressMac.Text = computer.getMacAddress();
-                textBox_IPAdress.Text = computer.getIpAddress().ToString();
-                
-                showLoading();
-
-                await Task.WhenAll(updateLoggedUsers(), updateInstalledSoftwares());
-
-                hideLoading();
+            if(computer.isAlive) {
+                button_ShutDown.Visibility = Visibility.Visible;
+                button_WakeOnLan.Visibility = Visibility.Collapsed;
+            } else {
+                button_ShutDown.Visibility = Visibility.Collapsed;
+                button_WakeOnLan.Visibility = Visibility.Visible;
             }
+
+            try {
+                textBox_IPAdress.Text = computer.getIpAddress().ToString();
+                textBox_AdressMac.Text = await computer.getMacAddress();
+            } catch (Exception e) {
+                errorHandler.addError(e);
+            }
+
+            hideLoading();
+        }
+
+        /// <summary>
+        /// Update all the information of the selected computer
+        /// </summary>
+        private async Task updateComputer() {
+            await Task.WhenAll(updateComputerInformations(), updateLoggedUsers(), updateInstalledSoftwares());
         }
 
         int loadingWaiting = 0;
 
+        /// <summary>
+        /// Show the loading icon
+        /// </summary>
         private void showLoading() {
             loadingWaiting++;
             LoadingSpinner.Visibility = Visibility.Visible;
         }
 
+        /// <summary>
+        /// Hide the loading icon
+        /// </summary>
         private void hideLoading() {
             if(--loadingWaiting == 0)
                 LoadingSpinner.Visibility = Visibility.Collapsed;
+        }
+
+        private async void List_Computer_Selected(object sender, RoutedEventArgs eventArgs) {
+            TreeViewItem tvi = eventArgs.OriginalSource as TreeViewItem;
+
+            if (tvi.DataContext is ComputerModel) {
+                this.computer = (tvi.DataContext as ComputerModel).computer;
+
+                await updateComputer();
+            }
+        }
+
+        private void button_Installsoftware_Click(object sender, RoutedEventArgs e) {
+            if (computer != null) {
+                // TODO
+            }
+        }
+
+        private void button_JobSchedule_Click(object sender, RoutedEventArgs e) {
+            if (computer != null) {
+                // TODO
+            }
+        }
+
+        private void button_ShutDown_Click(object sender, RoutedEventArgs e) {
+            if (computer != null) {
+                computer.shutdown();
+            }
+        }
+
+        private void button_Reboot_Click(object sender, RoutedEventArgs e) {
+            if (computer != null) {
+                computer.reboot();
+            }
+        }
+
+        private void button_StartRemoteDesktop_Click(object sender, RoutedEventArgs e) {
+            if (computer != null) {
+                computer.startRemoteDesktop();
+            }
+        }
+
+        private async void List_Machine_Loaded(object sender, RoutedEventArgs e) {
+            // Update error panel
+            errorHandler = new ErrorHandler();
+            errorHandler.warningIndicator = WarningImage;
+
+            await updateListComputers();
         }
 
         private async void checkBox_ShowAllUsers_Click(object sender, RoutedEventArgs e) {
@@ -249,6 +303,30 @@ namespace NetworkManager {
             errorHandler.Left = this.Left + 50;
             errorHandler.Top = this.Top + 50;
             errorHandler.Show();
+        }
+
+        private void button_OpenDiskC_Click(object sender, RoutedEventArgs e) {
+            if (computer != null) {
+                computer.showExplorer("c");
+            }
+        }
+
+        private void button_OpenDiskD_Click(object sender, RoutedEventArgs e) {
+            if (computer != null) {
+                computer.showExplorer("d");
+            }
+        }
+
+        private void button_OpenDiskE_Click(object sender, RoutedEventArgs e) {
+            if (computer != null) {
+                computer.showExplorer("e");
+            }
+        }
+
+        private void button_WakeOnLan_Click(object sender, RoutedEventArgs e) {
+            if(computer != null) {
+                computer.isAlive = !computer.isAlive;
+            }
         }
     }
 

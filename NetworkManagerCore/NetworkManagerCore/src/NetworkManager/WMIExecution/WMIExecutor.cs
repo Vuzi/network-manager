@@ -11,8 +11,6 @@ using System.Threading.Tasks;
 using System.Globalization;
 
 using NetworkManager.Domain;
-using System.Drawing;
-using System.Windows;
 
 namespace NetworkManager.WMIExecution {
     /// <summary>
@@ -173,8 +171,7 @@ namespace NetworkManager.WMIExecution {
                                     searcher = new ManagementObjectSearcher(scope, new SelectQuery($"SELECT * FROM Win32_SystemAccount WHERE Name='{login}'"));
 
                                 try {
-                                    ManagementObjectCollection test = searcher.Get();
-                                    foreach (ManagementObject mo in test) {
+                                    foreach (ManagementObject mo in searcher.Get()) {
                                         
                                        if (users.ContainsKey(mo["SID"].ToString()))
                                             continue;
@@ -260,7 +257,7 @@ namespace NetworkManager.WMIExecution {
                     ManagementBaseObject outParams = wmiProcess.InvokeMethod("Create", inParams, methodOptions);
 
                     // Query for the process id
-                    ObjectQuery query = new ObjectQuery($"select * from Win32_Process Where ProcessId='{outParams["processId"]}'");
+                    ObjectQuery query = new ObjectQuery($"SELECT * FROM Win32_Process WHERE ProcessId='{outParams["processId"]}'");
                     ManagementObjectSearcher searcher = new ManagementObjectSearcher(wmiScope, query);
 
                     // Wait for either the process to terminate or the timeout
@@ -301,6 +298,42 @@ namespace NetworkManager.WMIExecution {
                 } catch (Exception e) {
                     throw new WMIException() { error = e };
                 }
+            });
+        }
+
+        public static async Task<string> getMACAddress(Computer computer) {
+
+            var ipAddressValue = computer.getIpAddress();
+
+            if (ipAddressValue == null)
+                return null; // Could not find any IP
+
+            var ipAddress = ipAddressValue.ToString();
+
+            return await Task.Run(() => {
+                try {
+                    // Create the scope
+                    var wmiScope = new ManagementScope($@"\\{computer.name}\root\cimv2", getConnectionOptions());
+
+                    // Query for all the 
+                    ObjectQuery query = new ObjectQuery($"SELECT * FROM Win32_NetworkAdapterConfiguration");
+                    ManagementObjectSearcher searcher = new ManagementObjectSearcher(wmiScope, query);
+
+                    foreach (ManagementObject mo in searcher.Get()) {
+                        try {
+                            string[] addresses = (string[]) mo["IPAddress"];
+
+                            if (addresses.Contains(ipAddress))
+                                return (string) mo["MacAddress"];
+
+                        } catch (Exception e) { }
+                    }
+
+                } catch (Exception e) {
+                    throw new WMIException() { error = e };
+                }
+
+                return null;
             });
         }
     }

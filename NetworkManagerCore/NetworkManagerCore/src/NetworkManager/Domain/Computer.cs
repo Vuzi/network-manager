@@ -31,38 +31,47 @@ namespace NetworkManager.Domain {
                     if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                         return ip;
                 }
-            } catch(Exception e) {}
+            } catch(Exception e) {} // Ignore errors
 
             return null; // No ipv4 address
         }
 
-        public string getMacAddress() {
-            Process p = null;
-            string output = string.Empty;
-            IPAddress ipAddress = getIpAddress();
-
-            if (ipAddress == null)
-                return null;
-
-            try {
-                p = Process.Start(new ProcessStartInfo("arp", "-a " + ipAddress.ToString()) {
-                    CreateNoWindow = true,
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true
-                });
-
-                output = p.StandardOutput.ReadToEnd();
-
-                p.Close();
-            } catch (Exception ex) {
-                throw new Exception("IPInfo: Error Retrieving 'arp -a' Results", ex);
-            } finally {
-                if (p != null) {
-                    p.Close();
-                }
+        public async Task<string> getMacAddress() {
+            if (isAlive) {
+                try {
+                    return await WMIExecutor.getMACAddress(this);
+                } catch (Exception e) {}
             }
+            
+            return await Task.Run(() => {
+                Process p = null;
+                string output = string.Empty;
+                IPAddress ipAddress = getIpAddress();
 
-            return parseArpOutput(output);
+                // Unknown computer
+                if (ipAddress == null)
+                    return null;
+
+                try {
+                    p = Process.Start(new ProcessStartInfo("arp", "-a " + ipAddress.ToString()) {
+                        CreateNoWindow = true,
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true
+                    });
+
+                    output = p.StandardOutput.ReadToEnd();
+
+                    p.Close();
+                } catch (Exception ex) {
+                    throw new Exception("IPInfo: Error Retrieving 'arp -a' Results", ex);
+                } finally {
+                    if (p != null) {
+                        p.Close();
+                    }
+                }
+
+                return parseArpOutput(output).ToUpper().Replace('-', ':');
+            });
         }
 
         private static string parseArpOutput(string toParse) {
@@ -83,7 +92,7 @@ namespace NetworkManager.Domain {
                 throw new Exception("IPInfo: Error Parsing 'arp -a' results", ex);
             }
 
-            return null; // Not found
+            return string.Empty; // Not found
         }
         
 
@@ -168,13 +177,17 @@ namespace NetworkManager.Domain {
             rdcProcess.Start();
         }
 
+        public void showExplorer() {
+            showExplorer("c");
+        }
+
         /// <summary>
         /// Open the file explorer on the C disk of the remote computer
         /// </summary>
-        public void showExplorer() {
+        public void showExplorer(string letter) {
             Process rdcProcess = new Process();
             rdcProcess.StartInfo.FileName = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\system32\explorer.exe");
-            rdcProcess.StartInfo.Arguments = $@"\\{name}\c$";
+            rdcProcess.StartInfo.Arguments = $@"\\{name}\{letter}$";
             rdcProcess.Start();
         }
 
