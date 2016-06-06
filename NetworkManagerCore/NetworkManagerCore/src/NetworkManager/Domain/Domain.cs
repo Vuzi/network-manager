@@ -1,18 +1,21 @@
 ﻿using ActiveDs;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.DirectoryServices;
+using System.DirectoryServices.ActiveDirectory;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 
 namespace NetworkManager.Domain {
     public class Domain {
 
-        public string name;
+        public string name { get; set;}
         public List<Computer> computers { get; set; }
+        public List<Domain> domains { get; set; }
 
         public Domain() {
-            name = System.Environment.UserDomainName;
+            this.name = getLocalDomainName();
         }
 
         public Domain(string name) {
@@ -21,6 +24,14 @@ namespace NetworkManager.Domain {
 
         public async Task fill() {
             computers = await getComputersInDomain(name);
+            domains = await getDomainsInDomain(name);
+
+            foreach(Domain d in domains)
+                await d.fill();
+        }
+
+        public static string getLocalDomainName() {
+            return IPGlobalProperties.GetIPGlobalProperties().DomainName;
         }
 
         /// <summary>
@@ -28,7 +39,30 @@ namespace NetworkManager.Domain {
         /// </summary>
         /// <returns>All the computers of the local domain</returns>
         public async static Task<List<Computer>> getComputersInDomain() {
-            return await getComputersInDomain(System.Environment.UserDomainName);
+            return await getComputersInDomain(getLocalDomainName());
+        }
+
+        public async static Task<List<Domain>> getDomainsInDomain(string domain) {
+            return await Task.Run(() => {
+                List<Domain> domains = new List<Domain>();
+
+                // For each sub-domain
+                using (var forest = Forest.GetCurrentForest()) {
+                    foreach (System.DirectoryServices.ActiveDirectory.Domain d in forest.Domains) {
+                        if(d.Name.ToLower() == domain.ToLower()) {
+                            foreach (System.DirectoryServices.ActiveDirectory.Domain c in d.Children) {
+                                Domain subDomain = new Domain() { name = c.Name };
+                                domains.Add(subDomain);
+                                Console.WriteLine(c.Name);
+                                c.Dispose();
+                            }
+                        }
+                        d.Dispose();
+                    }
+                }
+
+                return domains;
+            });
         }
 
         /// <summary>
@@ -38,7 +72,7 @@ namespace NetworkManager.Domain {
         /// <returns>All the computer of the domain</returns>
         public async static Task<List<Computer>> getComputersInDomain(string domain) {
             return await Task.Run(() => {
-                List<Computer> Computers = new List<Computer>();
+                List<Computer> computers = new List<Computer>();
 
                 DirectoryEntry entry = new DirectoryEntry("LDAP://" + domain);
                 DirectorySearcher mySearcher = new DirectorySearcher(entry);
@@ -46,11 +80,9 @@ namespace NetworkManager.Domain {
                 mySearcher.SizeLimit = int.MaxValue;
                 mySearcher.PageSize = int.MaxValue;
 
-                var d = System.DirectoryServices.ActiveDirectory.Domain.GetComputerDomain();
-
                 foreach (SearchResult searchResult in mySearcher.FindAll()) {
                     var ds = searchResult.GetDirectoryEntry();
-
+                    
                     string desc = (string)ds.Properties["description"].Value;
                     string os = (string)ds.Properties["operatingsystem"].Value;
                     string version = (string)ds.Properties["operatingsystemversion"].Value;
@@ -65,10 +97,11 @@ namespace NetworkManager.Domain {
                     bool isAlive = false;
                     try {
                         var p = new Ping();
-                        isAlive = p.Send(name).Status == IPStatus.Success;
+                        Console.WriteLine(name + "." + domain);
+                        isAlive = p.Send(name + "." + domain).Status == IPStatus.Success;
                     } catch(Exception e) { }
 
-                    Computers.Add(new Computer() {
+                    computers.Add(new Computer() {
                         name = name,
                         domain = domain,
                         description = desc,
@@ -83,7 +116,8 @@ namespace NetworkManager.Domain {
 
                 mySearcher.Dispose();
                 entry.Dispose();
-                return Computers;
+
+                return computers;
             });
         }
 

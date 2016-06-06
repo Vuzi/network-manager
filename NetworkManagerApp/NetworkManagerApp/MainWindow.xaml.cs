@@ -57,6 +57,36 @@ namespace NetworkManager {
             computerInfoStore = new ComputerInfoStore(conn);
         }
 
+        private async Task<DomainModel> createDomainModel(Domain.Domain domain) {
+
+            DomainModel domainModel = new DomainModel() {
+                name = domain.name
+            };
+
+            foreach (Computer c in domain.computers) {
+                domainModel.computers.Add(new ComputerModel() { computer = c });
+
+                // If the computer is alive, save its values in the database
+                if (c.isAlive) {
+                    try {
+                        computerInfoStore.updateOrInsertComputerInfo(new ComputerInfo() {
+                            name = c.nameLong,
+                            ipAddress = c.getIpAddress().ToString(),
+                            macAddress = await c.getMacAddress()
+                        });
+                    } catch (Exception e) {
+                        errorHandler.addError(e);
+                    }
+                }
+            }
+
+            foreach (Domain.Domain d in domain.domains) {
+                domainModel.domains.Add(await createDomainModel(d));
+            }
+
+            return domainModel;
+        }
+
         /// <summary>
         /// Update the domain computer list
         /// </summary>
@@ -70,27 +100,7 @@ namespace NetworkManager {
                 Domain.Domain domain = new Domain.Domain();
                 await domain.fill();
 
-                DomainModel domainModel = new DomainModel() {
-                    name = domain.name,
-                    computers = new ObservableCollection<ComputerModel>()
-                };
-
-                foreach(Computer c in domain.computers) {
-                    domainModel.computers.Add(new ComputerModel() { computer = c });
-
-                    // If the computer is alive, save its values in the database
-                    if(c.isAlive) {
-                        try {
-                            computerInfoStore.updateOrInsertComputerInfo(new ComputerInfo() {
-                                name = c.name,
-                                ipAddress = c.getIpAddress().ToString(),
-                                macAddress = await c.getMacAddress()
-                            });
-                        } catch(Exception e) {
-                            errorHandler.addError(e);
-                        }
-                    }
-                }
+                DomainModel domainModel = await createDomainModel(domain);
 
                 List_Computer.Items.Add(domainModel);
 
@@ -242,7 +252,7 @@ namespace NetworkManager {
                 button_WakeOnLan.Visibility = Visibility.Visible;
 
                 // Not connected : get the IP and MAC from local database
-                var computerInfo = computerInfoStore.getComputerInfoByName(computer.name);
+                var computerInfo = computerInfoStore.getComputerInfoByName(computer.nameLong);
 
                 if (computerInfo != null) {
                     textBox_IPAdress.Text = computerInfo.ipAddress;
@@ -412,9 +422,9 @@ namespace NetworkManager {
 
         private void button_WakeOnLan_Click(object sender, RoutedEventArgs e) {
             if(computer != null) {
-                var computerInfo = computerInfoStore.getComputerInfoByName(computer.name);
+                var computerInfo = computerInfoStore.getComputerInfoByName(computer.nameLong);
 
-                if (computer != null) {
+                if (computerInfo != null) {
                     Utils.wakeOnLan(computerInfo.macAddress);
                 }
             }
@@ -424,14 +434,27 @@ namespace NetworkManager {
     public class DomainModel {
         public string name { get; set; }
         public ObservableCollection<ComputerModel> computers { get; set; }
+        public ObservableCollection<DomainModel> domains { get; set; }
 
         public DomainModel() {
             this.computers = new ObservableCollection<ComputerModel>();
+            this.domains = new ObservableCollection<DomainModel>();
+        }
+
+        public IList<object> Items {
+            get {
+                IList<object> childNodes = new List<object>();
+                foreach (var group in this.domains)
+                    childNodes.Add(group);
+                foreach (var entry in this.computers)
+                    childNodes.Add(entry);
+
+                return childNodes;
+            }
         }
     }
 
     public class ComputerModel {
         public Computer computer { get; set; }
     }
-
 }

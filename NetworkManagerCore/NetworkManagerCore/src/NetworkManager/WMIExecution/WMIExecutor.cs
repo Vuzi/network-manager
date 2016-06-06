@@ -42,6 +42,7 @@ namespace NetworkManager.WMIExecution {
                 connectionOptions = new ConnectionOptions();
                 connectionOptions.Impersonation = ImpersonationLevel.Impersonate;
                 connectionOptions.EnablePrivileges = true;
+                connectionOptions.Authentication = AuthenticationLevel.Default;
             }
 
             return connectionOptions;
@@ -51,7 +52,7 @@ namespace NetworkManager.WMIExecution {
             await Task.Run(() => {
                 try {
                     // Create the scope
-                    var wmiScope = new ManagementScope($@"\\{computer.name}\root\cimv2", getConnectionOptions());
+                    var wmiScope = new ManagementScope($@"\\{computer.nameLong}\root\cimv2", getConnectionOptions());
 
                     // Get the WMI process
                     var wmiProcess = new ManagementClass(wmiScope, new ManagementPath(path), null);
@@ -83,7 +84,7 @@ namespace NetworkManager.WMIExecution {
                 List<Software> installedSoftwares = new List<Software>();
 
                 // Create the scope
-                var wmiScope = new ManagementScope($@"\\{computer.name}\root\cimv2", getConnectionOptions());
+                var wmiScope = new ManagementScope($@"\\{computer.nameLong}\root\cimv2", getConnectionOptions());
                 wmiScope.Options.Context.Add("__ProviderArchitecture", architecture);
                 wmiScope.Options.Context.Add("__RequiredArchitecture", true);
                 wmiScope.Connect();
@@ -153,7 +154,7 @@ namespace NetworkManager.WMIExecution {
 
                 try {
                     var scopeLocal = new ManagementScope($@"\\127.0.0.1\root\cimv2", getConnectionOptions());
-                    var scope = new ManagementScope($@"\\{computer.name}\root\cimv2", getConnectionOptions());
+                    var scope = new ManagementScope($@"\\{computer.nameLong}\root\cimv2", getConnectionOptions());
                     var Query = new SelectQuery("SELECT LogonId FROM Win32_LogonSession");
                     var Searcher = new ManagementObjectSearcher(scope, Query);
                     var regName = new Regex($"(?i)Domain=\"(?<valueDomain>.+)\",Name=\"(?<valueName>.+)\"");
@@ -238,7 +239,7 @@ namespace NetworkManager.WMIExecution {
                     string errPath = $@"Windows\Temp\{uuid}_err";
 
                     // Create the scope
-                    var wmiScope = new ManagementScope($@"\\{computer.name}\root\cimv2", getConnectionOptions());
+                    var wmiScope = new ManagementScope($@"\\{computer.nameLong}\root\cimv2", getConnectionOptions());
 
                     // Get the WMI process
                     var wmiProcess = new ManagementClass(wmiScope, new ManagementPath("Win32_Process"), new ObjectGetOptions());
@@ -285,8 +286,8 @@ namespace NetworkManager.WMIExecution {
 
                     // Get the outputs (if logging and no timeout has occurred)
                     if (logOutput && !timeout) {
-                        string outputPathLocal = $@"\\{computer.name}\c$\{outputPath}";
-                        string errPathLocal = $@"\\{computer.name}\c$\{errPath}";
+                        string outputPathLocal = $@"\\{computer.nameLong}\c$\{outputPath}";
+                        string errPathLocal = $@"\\{computer.nameLong}\c$\{errPath}";
 
                         result.output = File.ReadAllText(outputPathLocal, Encoding.Unicode);
                         //File.Delete(outputPathLocal);
@@ -315,7 +316,7 @@ namespace NetworkManager.WMIExecution {
             return await Task.Run(() => {
                 try {
                     // Create the scope
-                    var wmiScope = new ManagementScope($@"\\{computer.name}\root\cimv2", getConnectionOptions());
+                    var wmiScope = new ManagementScope($@"\\{computer.nameLong}\root\cimv2", getConnectionOptions());
 
                     // Query for all the 
                     ObjectQuery query = new ObjectQuery($"SELECT * FROM Win32_NetworkAdapterConfiguration");

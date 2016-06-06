@@ -17,6 +17,7 @@ namespace NetworkManager.Domain {
     public class Computer {
         public string name { get; set; }
         public string domain { get; set; }
+        public string nameLong { get { return name + "." + domain; } }
         public string os { get; set; }
         public string version { get; set; }
         public string description { get; set; }
@@ -31,7 +32,7 @@ namespace NetworkManager.Domain {
         /// <returns></returns>
         public IPAddress getIpAddress() {
             try {
-                foreach (IPAddress ip in Dns.GetHostAddresses(name).ToList()) {
+                foreach (IPAddress ip in Dns.GetHostAddresses(nameLong).ToList()) {
                     if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                         return ip;
                 }
@@ -55,7 +56,7 @@ namespace NetworkManager.Domain {
         /// <param name="local">The local filename</param>
         /// <param name="remote">The absolution remote filename</param>
         public void uploadFile(string local, string remote) {
-            File.Copy(local, $@"\\{name}\{remote.Replace(':', '$')}", true);
+            File.Copy(local, $@"\\{nameLong}\{remote.Replace(':', '$')}", true);
         }
 
         /// <summary>
@@ -65,7 +66,7 @@ namespace NetworkManager.Domain {
         /// <param name="remote">The absolution remote filename</param>
         /// <param name="local">The local filename</param>
         public void downloadFile(string remote, string local) {
-            File.Copy($@"\\{name}\{remote.Replace(':', '$')}", local);
+            File.Copy($@"\\{nameLong}\{remote.Replace(':', '$')}", local);
         }
 
         /// <summary>
@@ -74,7 +75,7 @@ namespace NetworkManager.Domain {
         /// </summary>
         /// <param name="file">The absolution remote filename</param>
         public void deleteFile(string file) {
-            File.Delete($@"\\{name}\{file.Replace(':', '$')}");
+            File.Delete($@"\\{nameLong}\{file.Replace(':', '$')}");
         }
 
         /// <summary>
@@ -125,12 +126,12 @@ namespace NetworkManager.Domain {
         public void startRemoteDesktop() {
             Process rdcProcess = new Process();
             rdcProcess.StartInfo.FileName = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\system32\mstsc.exe");
-            rdcProcess.StartInfo.Arguments = $"/v {name} /prompt /admin";
+            rdcProcess.StartInfo.Arguments = $"/v {nameLong} /prompt /admin";
             rdcProcess.Start();
         }
 
         public string getPath(string path) {
-            return $@"\\{name}\{path.Replace(':', '$')}";
+            return $@"\\{nameLong}\{path.Replace(':', '$')}";
         }
 
         /// <summary>
