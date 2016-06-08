@@ -171,7 +171,7 @@ namespace NetworkManager.WMIExecution {
                                 if (domain == computer.domain)
                                     searcher = new ManagementObjectSearcher(scopeLocal, new SelectQuery($"SELECT * FROM Win32_Account WHERE Name='{login}'"));
                                 else
-                                    searcher = new ManagementObjectSearcher(scope, new SelectQuery($"SELECT * FROM Win32_SystemAccount WHERE Name='{login}'"));
+                                    searcher = new ManagementObjectSearcher(scope, new SelectQuery($"SELECT * FROM Win32_Account WHERE Name='{login}'"));
 
                                 try {
                                     foreach (ManagementObject mo in searcher.Get()) {

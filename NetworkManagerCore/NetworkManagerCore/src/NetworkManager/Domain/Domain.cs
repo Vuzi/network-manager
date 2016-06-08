@@ -53,7 +53,6 @@ namespace NetworkManager.Domain {
                             foreach (System.DirectoryServices.ActiveDirectory.Domain c in d.Children) {
                                 Domain subDomain = new Domain() { name = c.Name };
                                 domains.Add(subDomain);
-                                Console.WriteLine(c.Name);
                                 c.Dispose();
                             }
                         }
@@ -97,7 +96,6 @@ namespace NetworkManager.Domain {
                     bool isAlive = false;
                     try {
                         var p = new Ping();
-                        Console.WriteLine(name + "." + domain);
                         isAlive = p.Send(name + "." + domain).Status == IPStatus.Success;
                     } catch(Exception e) { }
 

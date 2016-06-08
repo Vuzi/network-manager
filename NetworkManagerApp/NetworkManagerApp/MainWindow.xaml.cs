@@ -300,7 +300,10 @@ namespace NetworkManager {
 
         private void button_Installsoftware_Click(object sender, RoutedEventArgs e) {
             if (computer != null) {
-                // TODO
+                SoftwareDeployment softwareDeployment = new SoftwareDeployment(errorHandler, computer);
+                softwareDeployment.Left = this.Left + 50;
+                softwareDeployment.Top = this.Top + 50;
+                softwareDeployment.Show();
             }
         }
 

@@ -8,7 +8,7 @@
         Title="Network Manager - Errors" Height="300" Width="886.001" Background="LightGray" Icon="../resource/icon.ico">
     <Grid>
         <Label x:Name="label_Errors" Content="Errors" VerticalAlignment="Top" Margin="10,8,0,0" HorizontalAlignment="Left" Width="246" FontWeight="Bold" FontSize="18"/>
-        <DataGrid x:Name="dataGrid_Errors" Margin="10,47,10,45" Loaded="dataGrid_ConnectedUsers_Loaded"
+        <DataGrid x:Name="dataGrid_Errors" Margin="10,47,10,45"
           CanUserReorderColumns="True" CanUserResizeColumns="True" SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
           CanUserResizeRows="False" CanUserSortColumns="True" AutoGenerateColumns="False">
             <DataGrid.ContextMenu>
@@ -21,6 +21,7 @@
                 <DataGridTextColumn  Header="Type" Width="Auto" Binding="{Binding type}" IsReadOnly="True" CanUserReorder="True"/>
                 <DataGridTextColumn  Header="Date" Width="Auto" Binding="{Binding date}" IsReadOnly="True" CanUserReorder="True"/>
                 <DataGridTextColumn  Header="Message" Width="Auto" Binding="{Binding message}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Source" Width="Auto" Binding="{Binding source}" IsReadOnly="True" CanUserReorder="True"/>
             </DataGrid.Columns>
         </DataGrid>
         <Button x:Name="button_Clear" Margin="0,0,138,10" HorizontalAlignment="Right" Width="123" Click="button_Clear_Click" Height="30" VerticalAlignment="Bottom">

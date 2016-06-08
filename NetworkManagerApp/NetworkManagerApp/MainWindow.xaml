@@ -10,7 +10,7 @@
         Title="Network Manager" Height="810" Width="1080" Background="LightGray" Icon="resource/icon.ico">
     <Window.Resources>
         <Storyboard x:Key="Storyboard1" RepeatBehavior="Forever">
-            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="LoadingSpinner" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)">
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="LoadingSpinner" Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)">
                 <SplineDoubleKeyFrame KeyTime="00:00:02" Value="360"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
@@ -71,14 +71,27 @@
                                 </Style>
                             </TextBlock.Style>
                         </fa:FontAwesome>
-                        <TextBlock Text="{Binding computer.name}" />
+                        <TextBlock Text="{Binding computer.name}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding computer.isAlive}" Value="true" >
+                                            <Setter Property="Foreground" Value="Black"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding computer.isAlive}" Value="false" >
+                                            <Setter Property="Foreground" Value="DarkRed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
                     </StackPanel>
                 </DataTemplate >
             </TreeView.Resources>
         </TreeView>
 
         <!-- Selection computer informations -->
-        <Label x:Name="label_ClientName" Content="Machine Name" VerticalAlignment="Top" Margin="246,9,0,0" HorizontalAlignment="Left" Width="795" FontWeight="Bold" FontSize="18"/>
+        <Label x:Name="label_ClientName" Content="&lt;No Computer Selected&gt;" VerticalAlignment="Top" Margin="246,9,0,0" HorizontalAlignment="Left" Width="795" FontWeight="Bold" FontSize="18"/>
 
         <Button x:Name="button_ShutDown" Visibility="Collapsed" Margin="250,48,0,0" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_ShutDown_Click">
             <DockPanel LastChildFill="True" VerticalAlignment="Center" Width="123">
@@ -213,26 +226,33 @@
         <CheckBox x:Name="checkBox_ShowAllInstalledSofwareColumns" Content="Show More Information" HorizontalAlignment="Left" Margin="253,0,0,7" Click="checkBox_ShowAllInstalledSofwareColumns_Click" Height="22" VerticalAlignment="Bottom"/>
 
         <!-- Loader -->
-        <Ellipse x:Name="LoadingSpinner" Margin="0,0,6,6" StrokeThickness="3" RenderTransformOrigin="0.5,0.5" Height="15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="15">
-            <Ellipse.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                </TransformGroup>
-            </Ellipse.RenderTransform>
-            <Ellipse.Stroke>
-                <LinearGradientBrush EndPoint="0.445,0.997" StartPoint="0.555,0.003">
-                    <GradientStop Color="LightGray" Offset="0"/>
-                    <GradientStop Color="#555555" Offset="1"/>
-                </LinearGradientBrush>
-            </Ellipse.Stroke>
-        </Ellipse>
+        <fa:FontAwesome x:Name="LoadingSpinner" Icon="Gear" Margin="0,0,9,7" Visibility="Hidden" FontSize="20" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="RenderTransformOrigin" Value="0.5 0.5"/>
+                    <Setter Property="RenderTransform">
+                        <Setter.Value>
+                            <RotateTransform Angle="0"/>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                                                     From="0" To="360" Duration="0:0:2" RepeatBehavior="Forever"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </fa:FontAwesome>
 
         <!-- Error indicator -->
-        <Button Name="WarningImage" Margin="0,0,31,5" Visibility="Hidden" HorizontalAlignment="Right" Width="17" Height="16" VerticalAlignment="Bottom" Background="Transparent" BorderThickness="0" Click="WarningImage_Click">
-            <DockPanel Height="14" >
-                <Image DockPanel.Dock="Left"  Source="resource/warning.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant" Margin="0,0,0,-2"/>
+        <Button Name="WarningImage" Margin="0,0,31,3" HorizontalAlignment="Right" Visibility="Hidden" Width="24" Height="25" VerticalAlignment="Bottom" Background="Transparent" BorderThickness="0" Click="WarningImage_Click">
+            <DockPanel>
+                <fa:FontAwesome Icon="ExclamationTriangle" Foreground="DarkRed" FontSize="18" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
             </DockPanel>
         </Button>
     </Grid>

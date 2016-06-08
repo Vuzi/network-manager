@@ -1,0 +1,26 @@
+﻿<Window x:Class="NetworkManagerApp.view.ExecutionReport"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NetworkManagerApp.view"
+        mc:Ignorable="d"
+        Title="Execution Report" Height="424.789" Width="539.792" Background="LightGray" Icon="../resource/icon.ico" >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label x:Name="label_ClientName" Content="Machine Name" VerticalAlignment="Top" Margin="5,10,0,0" HorizontalAlignment="Left" Width="517" FontWeight="Bold" FontSize="18" Height="34"/>
+
+        <Label Content="Duration (ms) :" Margin="187,44,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBox x:Name="textBox_Duration" Text="" Margin="192,68,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsReadOnly="True" HorizontalAlignment="Left"/>
+        <Label Content="Return Value :" Margin="5,44,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBox x:Name="textBox_ReturnValue" Text="" Margin="10,68,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsReadOnly="True" HorizontalAlignment="Left"/>
+        <Label Content="Timeout :" Margin="10,94,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <CheckBox x:Name="checkBox_Timeout" IsHitTestVisible="false" HorizontalAlignment="Left" VerticalAlignment="Top" Height="21" Margin="72,101,0,0" Width="15"/>
+        <Label Content="Output (stdout) :" Margin="10,124,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBox x:Name="textBox_Output" Margin="10,154,10,0" TextWrapping="NoWrap" Height="101" VerticalAlignment="Top" />
+        <Label Content="Output (stderr) :" Margin="10,255,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBox x:Name="textBox_Error" Margin="10,285,10,10" />
+    </Grid>
+</Window>

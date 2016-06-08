@@ -54,6 +54,7 @@
       <HintPath>..\packages\System.Data.SQLite.Core.1.0.101.0\lib\net451\System.Data.SQLite.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -75,6 +76,12 @@
     <Compile Include="view\ErrorHandler.xaml.cs">
       <DependentUpon>ErrorHandler.xaml</DependentUpon>
     </Compile>
+    <Compile Include="view\ExecutionReport.xaml.cs">
+      <DependentUpon>ExecutionReport.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="view\SoftwareDeployment.xaml.cs">
+      <DependentUpon>SoftwareDeployment.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -88,6 +95,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="view\ErrorHandler.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="view\ExecutionReport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="view\SoftwareDeployment.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

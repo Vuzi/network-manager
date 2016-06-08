@@ -17,21 +17,6 @@ namespace NetworkManagerApp.view {
             InitializeComponent();
         }
 
-        private void button_JobSchedule_Click(object sender, RoutedEventArgs e) {
-
-        }
-
-        private void dataGrid_ConnectedUsers_Loaded(object sender, RoutedEventArgs e) {
-            //dataGrid_Errors.Items.Clear();
-
-            ///dataGrid_Errors.Items.Add(new Error() { type = "Type Numero 1", message = "Message d'erreur", date = DateTime.Now });
-            //dataGrid_Errors.Items.Add(new Error() { type = "Type Numero 2", message = "Message d'erreur", date = DateTime.Now });
-            //dataGrid_Errors.Items.Add(new Error() { type = "Type Numero 3", message = "Message d'erreur", date = DateTime.Now });
-            //dataGrid_Errors.Items.Add(new Error() { type = "Type Numero 4", message = "Message d'erreur", date = DateTime.Now });
-
-
-        }
-
         private void button_Clear_Click(object sender, RoutedEventArgs e) {
             dataGrid_Errors.Items.Clear();
             warningIndicator.Visibility = Visibility.Hidden;
@@ -56,7 +41,8 @@ namespace NetworkManagerApp.view {
             dataGrid_Errors.Items.Add(new Error() {
                 type = e.GetType().ToString(),
                 message = e.Message,
-                date = DateTime.Now
+                date = DateTime.Now,
+                source = e.Source
             });
 
             warningIndicator.Visibility = Visibility.Visible;
@@ -66,6 +52,7 @@ namespace NetworkManagerApp.view {
     class Error {
         public string type { get; set; }
         public string message { get; set; }
+        public string source { get; set; }
         public DateTime date { get; set; }
     }
 }
