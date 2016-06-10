@@ -25,7 +25,7 @@ namespace NetworkManagerApp.view {
     /// </summary>
     public partial class SoftwareDeployment : Window {
 
-        private static string path = @"C:\apps";
+        private static string path = @"C:\apps\";
         private Computer currentComputer;
         private ErrorHandler errorHandler;
 
@@ -60,7 +60,8 @@ namespace NetworkManagerApp.view {
         }
 
         private void AppsToDeploy_Loaded(object sender, RoutedEventArgs e) {
-            Console.WriteLine("hey");
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
 
             string[] dir = Directory.GetFiles(path);
             var data = new List<SoftwareModel>();
