@@ -6,6 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:local="clr-namespace:NetworkManager"
+        xmlns:component="clr-namespace:NetworkManager.View.Component"
         xmlns:networkManager="clr-namespace:NetworkManager.Domain;assembly=NetworkManagerCore"
         Title="Network Manager" Height="810" Width="1080" Background="LightGray" Icon="resource/icon.ico">
     <Window.Resources>
@@ -21,20 +22,20 @@
             <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
         </EventTrigger>
     </Window.Triggers>
-    <!-- Binded commands -->
-    <Window.CommandBindings>
-        <CommandBinding Command="{StaticResource CopyLine}" Executed="CommandBinding_CopyLine" />
-    </Window.CommandBindings>
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250*"/>
+            <ColumnDefinition Width="823*"/>
+        </Grid.ColumnDefinitions>
         <!-- AD Computer treeview -->
-        <Label x:Name="label_Computers" Content="Computers" VerticalAlignment="Top" Margin="10,8,0,0" HorizontalAlignment="Left" Width="246" FontWeight="Bold" FontSize="18"/>
+        <Label x:Name="label_Computers" Content="Computers" VerticalAlignment="Top" Margin="10,8,0,0" HorizontalAlignment="Left" Width="246" FontWeight="Bold" FontSize="18" Grid.ColumnSpan="2"/>
         <Button x:Name="button_ComputersReload" Margin="116,18,0,0" HorizontalAlignment="Left" Width="16" Height="18" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ComputersReload_Click">
             <DockPanel LastChildFill="True"  Width="15" Height="15">
                 <Image DockPanel.Dock="Left"  Source="resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
             </DockPanel>
         </Button>
-        <TreeView x:Name="List_Computer" Loaded="List_Machine_Loaded"  Margin="10,48,0,10" HorizontalAlignment="Left" Width="230" TreeViewItem.Selected="List_Computer_Selected">
+        <TreeView x:Name="List_Computer" Loaded="List_Machine_Loaded"  Margin="10,48,10,10" TreeViewItem.Selected="List_Computer_Selected">
             <TreeView.Resources>
 
                 <HierarchicalDataTemplate DataType="{x:Type local:DomainModel}" ItemsSource="{Binding Items}">
@@ -90,143 +91,11 @@
             </TreeView.Resources>
         </TreeView>
 
-        <!-- Selection computer informations -->
-        <Label x:Name="label_ClientName" Content="&lt;No Computer Selected&gt;" VerticalAlignment="Top" Margin="246,9,0,0" HorizontalAlignment="Left" Width="795" FontWeight="Bold" FontSize="18"/>
-
-        <Button x:Name="button_ShutDown" Visibility="Collapsed" Margin="250,48,0,0" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_ShutDown_Click">
-            <DockPanel LastChildFill="True" VerticalAlignment="Center" Width="123">
-                <fa:FontAwesome Icon="PowerOff" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Shutdown</TextBlock>
-            </DockPanel>
-        </Button>
-        <Button x:Name="button_WakeOnLan" Margin="250,48,0,0" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_WakeOnLan_Click">
-            <DockPanel LastChildFill="True" VerticalAlignment="Center" Width="123">
-                <fa:FontAwesome Icon="Play" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Wake On Lan</TextBlock>
-            </DockPanel>
-        </Button>
-        <Button x:Name="button_Reboot" Margin="384,48,0,0" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_Reboot_Click">
-            <DockPanel LastChildFill="True" Width="120">
-                <fa:FontAwesome Icon="Refresh" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" >Reboot</TextBlock>
-            </DockPanel>
-        </Button>
-        <Button x:Name="button_JobSchedule" Margin="517,48,0,0" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_JobSchedule_Click">
-            <DockPanel LastChildFill="True" Width="119">
-                <fa:FontAwesome Icon="Calendar" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" >Job Schedule</TextBlock>
-            </DockPanel>
-        </Button>
-        <Button x:Name="button_Installsoftware"  Margin="650,48,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125" Click="button_Installsoftware_Click" >
-            <DockPanel LastChildFill="True" Width="121">
-                <fa:FontAwesome Icon="Upload" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" >Install Software</TextBlock>
-            </DockPanel>
-        </Button>
-        <Button x:Name="button_StartRemoteDesktop"  Margin="784,48,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125" Click="button_StartRemoteDesktop_Click" >
-            <DockPanel LastChildFill="True" Width="121">
-                <fa:FontAwesome Icon="Desktop" FontSize="16px"  VerticalAlignment="Center" Margin="5,0,0,0" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Text="Remote Desktop" Width="89" />
-            </DockPanel>
-        </Button>
-
-        <Button x:Name="button_OpenDiskC"  Margin="916,48,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125" Click="button_OpenDiskC_Click" >
-            <DockPanel LastChildFill="True" Width="115">
-                <fa:FontAwesome Icon="HddOutline" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Text="Disque C" />
-            </DockPanel>
-        </Button>
-        <Button x:Name="button_OpenDiskD"  Margin="916,83,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125" Click="button_OpenDiskD_Click" >
-            <DockPanel LastChildFill="True" Width="115">
-                <fa:FontAwesome Icon="HddOutline" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" ><Run Text="Disque "/><Run Text="D"/></TextBlock>
-            </DockPanel>
-        </Button>
-        <Button x:Name="button_OpenDiskE"  Margin="916,118,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125" Click="button_OpenDiskE_Click" >
-            <DockPanel LastChildFill="True" Width="115">
-                <fa:FontAwesome Icon="HddOutline" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" ><Run Text="Disque "/><Run Text="E"/></TextBlock>
-            </DockPanel>
-        </Button>
-
-        <Label x:Name="label_AdressMac" Content="MAC Address :" Margin="250,92,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox x:Name="textBox_AdressMac" Text="" Margin="255,116,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsReadOnly="True" HorizontalAlignment="Left"/>
-
-        <Label x:Name="label_IPAdress" Content="IP Address :" Margin="251,142,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox x:Name="textBox_IPAdress" Text="" Margin="256,167,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsReadOnly="True" HorizontalAlignment="Left"/>
-
-        <Label x:Name="label_OperatingSystem" Content="Operating System :" Margin="439,91,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox x:Name="textBox_OperatingSystem" IsReadOnly="True" Text="" Margin="440,116,0,0" Width="215" BorderThickness="2" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" />
-
-        <Label x:Name="label_OperatingSystem_Copy" Content="Operating System Version :" Margin="441,142,0,0" Width="162" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox x:Name="textBox_OperatingSystemVersion" IsReadOnly="True" Text="" Margin="442,167,0,0" Width="150px" BorderThickness="2" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" />
-
-        <Rectangle Fill="Gray" Height="9" Margin="240,206,0.2,0" VerticalAlignment="Top"/>
-
-        <!-- Connected users -->
-        <Label x:Name="label_ConnectedUsers" Content="Connected Users" HorizontalAlignment="Left" Margin="249,213,0,0" VerticalAlignment="Top" Width="150px" Height="30px" FontWeight="Bold" FontSize="14"/>
-        <Button Name="button_ConnectedUsersReload" Margin="367,220,0,0" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ConnectedUsersReload_Click">
-            <DockPanel LastChildFill="True"  Width="15" Height="15">
-                <Image DockPanel.Dock="Left" Source="resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
-            </DockPanel>
-        </Button>
-        <DataGrid x:Name="dataGrid_ConnectedUsers" Margin="251,240,10,0" CanUserAddRows="false"
-          CanUserReorderColumns="True" CanUserResizeColumns="True" SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
-          CanUserResizeRows="False" CanUserSortColumns="True" AutoGenerateColumns="False" Height="207" VerticalAlignment="Top">
-            <DataGrid.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Command="Copy">
-                    </MenuItem>
-                    <MenuItem Command="{StaticResource CopyLine}">
-                    </MenuItem>
-                </ContextMenu>
-            </DataGrid.ContextMenu>
-            <DataGrid.Columns>
-                <DataGridTextColumn  Header="Name" Width="140" Binding="{Binding name}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Domain" Width="140" Binding="{Binding domain}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Caption" Width="300" Binding="{Binding caption}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
-                <DataGridTextColumn  Header="Description" Width="380" Binding="{Binding description}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridCheckBoxColumn  Header="Local Account" Width="90" Binding="{Binding localAccount}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Status" Width="120" Binding="{Binding status}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
-                <DataGridTextColumn  Header="SID Type" Width="100" Binding="{Binding SIDType}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
-                <DataGridTextColumn  Header="SID" Width="400" Binding="{Binding SID}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
-            </DataGrid.Columns>
-        </DataGrid>
-        <CheckBox x:Name="checkBox_ShowAllUsers" Content="Show All Users" HorizontalAlignment="Left" Margin="252,452,0,0" VerticalAlignment="Top" Height="21" Click="checkBox_ShowAllUsers_Click"/>
-        <CheckBox x:Name="checkBox_ShowAllColumnsUsers" Content="Show More Information" HorizontalAlignment="Left" Margin="360,452,0,0" VerticalAlignment="Top" Height="21" Click="checkBox_ShowAllColumnsUsers_Click"/>
-
-        <Rectangle Fill="Gray" Height="9" Margin="240,474,-0.8,0" VerticalAlignment="Top"/>
-
-        <!-- Installed sofwares -->
-        <Label x:Name="label_InstalledSoftware" Content="Installed Softwares" HorizontalAlignment="Left" Margin="251,487,0,0" VerticalAlignment="Top" Width="150px" Height="30px" FontWeight="Bold" FontSize="14"/>
-        <Button x:Name="button_InstalledSoftwaresReload" Margin="384,494,0,0" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_InstalledSoftwaresReload_Click">
-            <DockPanel LastChildFill="True"  Width="15" Height="15">
-                <Image DockPanel.Dock="Left" Source="resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
-            </DockPanel>
-        </Button>
-        <DataGrid x:Name="dataGrid_ShowAllInstalledSoftware" Margin="253,516,10,34" CanUserAddRows="false"
-          CanUserReorderColumns="True" CanUserResizeColumns="True" SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
-          CanUserResizeRows="False" CanUserSortColumns="True" AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn  Header="Name" Width="520" Binding="{Binding displayName}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Version" Width="90" Binding="{Binding displayVersion}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Installation Date" Width="140" Binding="{Binding installDate}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Publisher" Width="140" Visibility="Hidden" Binding="{Binding publisher}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Install Location" Width="140" Visibility="Hidden" Binding="{Binding installLocation}" IsReadOnly="True" CanUserReorder="True"/>
-            </DataGrid.Columns>
-            <DataGrid.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Command="Copy">
-                    </MenuItem>
-                    <MenuItem Command="{StaticResource CopyLine}">
-                    </MenuItem>
-                </ContextMenu>
-            </DataGrid.ContextMenu>
-        </DataGrid>
-        <CheckBox x:Name="checkBox_ShowAllInstalledSofwareColumns" Content="Show More Information" HorizontalAlignment="Left" Margin="253,0,0,7" Click="checkBox_ShowAllInstalledSofwareColumns_Click" Height="22" VerticalAlignment="Bottom"/>
+        <!-- Computer details -->
+        <component:ComputerDetails x:Name="computerDetails" Margin="6,10,12,0" Height="Auto" Width="Auto" Grid.Column="1"/>
 
         <!-- Loader -->
-        <fa:FontAwesome x:Name="LoadingSpinner" Icon="Gear" Margin="0,0,9,7" Visibility="Hidden" FontSize="20" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+        <fa:FontAwesome x:Name="LoadingSpinner" Icon="Gear" Margin="0,0,9,7" Visibility="Hidden" FontSize="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Column="1">
             <TextBlock.Style>
                 <Style TargetType="TextBlock">
                     <Setter Property="RenderTransformOrigin" Value="0.5 0.5"/>
@@ -250,7 +119,7 @@
         </fa:FontAwesome>
 
         <!-- Error indicator -->
-        <Button Name="WarningImage" Margin="0,0,31,3" HorizontalAlignment="Right" Visibility="Hidden" Width="24" Height="25" VerticalAlignment="Bottom" Background="Transparent" BorderThickness="0" Click="WarningImage_Click">
+        <Button Name="WarningImage" Margin="0,0,31,3" HorizontalAlignment="Right" Visibility="Hidden" Width="24" Height="25" VerticalAlignment="Bottom" Background="Transparent" BorderThickness="0" Click="WarningImage_Click" Grid.Column="1">
             <DockPanel>
                 <fa:FontAwesome Icon="ExclamationTriangle" Foreground="DarkRed" FontSize="18" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
             </DockPanel>

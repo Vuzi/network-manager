@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace NetworkManagerApp.view {
+namespace NetworkManager.View {
     /// <summary>
     /// Logique d'interaction pour ErrorHandler.xaml
     /// </summary>

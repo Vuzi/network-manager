@@ -2,7 +2,7 @@
 using NetworkManager.WMIExecution;
 using System.Windows;
 
-namespace NetworkManagerApp.view {
+namespace NetworkManager.View {
     /// <summary>
     /// Logique d'interaction pour ExecutionReport.xaml
     /// </summary>
