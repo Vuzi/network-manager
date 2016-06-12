@@ -94,24 +94,64 @@ namespace NetworkManager.View.Component {
                 dataGrid_Computers.Columns[i].Visibility = 
                     show ? Visibility.Visible : Visibility.Hidden;
         }
-        
-        private void button_Installsoftware_Click(object sender, RoutedEventArgs e) {
 
+        private async void button_ShutDown_Click(object sender, RoutedEventArgs e) {
+            MessageBoxResult result = MessageBox.Show($"Are you sure you want to shutdown these {computers.Count} computers?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.No)
+                return;
+
+            await Task.Factory.StartNew(() => {
+                Parallel.ForEach(computers, computer => {
+                    try {
+                        computer.shutdown().Wait();
+                    } catch (Exception ex) {
+                        mainWindow.errorHandler.addError(ex);
+                    }
+                });
+            });
+        }
+
+        private async void button_Reboot_Click(object sender, RoutedEventArgs e) {
+            MessageBoxResult result = MessageBox.Show($"Are you sure you want to reboot these {computers.Count} computers?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.No)
+                return;
+
+            await Task.Factory.StartNew(() => {
+                Parallel.ForEach(computers, computer => {
+                    try {
+                        computer.reboot().Wait();
+                    } catch (Exception ex) {
+                        mainWindow.errorHandler.addError(ex);
+                    }
+                });
+            });
+        }
+
+        private async void button_WakeOnLan_Click(object sender, RoutedEventArgs e) {
+            MessageBoxResult result = MessageBox.Show($"Are you sure you want to start these {computers.Count} computers?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.No)
+                return;
+
+            await Task.Factory.StartNew(() => {
+                Parallel.ForEach(computers, computer => {
+                    try {
+                        var computerInfo = mainWindow.computerInfoStore.getComputerInfoByName(computer.nameLong);
+
+                        if (computerInfo != null) {
+                            Utils.wakeOnLan(computerInfo.macAddress);
+                        }
+                    } catch (Exception ex) {
+                        mainWindow.errorHandler.addError(ex);
+                    }
+                });
+            });
         }
 
         private void button_JobSchedule_Click(object sender, RoutedEventArgs e) {
 
         }
 
-        private void button_ShutDown_Click(object sender, RoutedEventArgs e) {
-
-        }
-
-        private void button_Reboot_Click(object sender, RoutedEventArgs e) {
-
-        }
-
-        private void button_WakeOnLan_Click(object sender, RoutedEventArgs e) {
+        private void button_Installsoftware_Click(object sender, RoutedEventArgs e) {
 
         }
 
@@ -119,12 +159,8 @@ namespace NetworkManager.View.Component {
 
         }
 
-        private void button_ComputersReload_Click(object sender, RoutedEventArgs e) {
-
-        }
-
-        private void button_ComputersReload_Click_1(object sender, RoutedEventArgs e) {
-
+        private async void button_ComputersReload_Click(object sender, RoutedEventArgs e) {
+            await updateComputers();
         }
     }
 
