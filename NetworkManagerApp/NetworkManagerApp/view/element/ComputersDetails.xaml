@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="NetworkManager.View.Component.ComputersDetails"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:local="clr-namespace:NetworkManager.View.Component"
+             xmlns:networkManager="clr-namespace:NetworkManager.Domain;assembly=NetworkManagerCore" Width="804.256" Height="768.693">
+    <Grid Margin="0,0,0,0">
+
+        <!-- Selection computer informations -->
+        <Label x:Name="label_NumberComputersSelected" Content="&lt;No Computer Selected&gt;" VerticalAlignment="Top" Margin="3,-2,-498,0" HorizontalAlignment="Left" Width="795" FontWeight="Bold" FontSize="18"/>
+
+        <Button x:Name="button_ShutDown" Visibility="Collapsed" Margin="7,37,0,0" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_ShutDown_Click">
+            <DockPanel LastChildFill="True" VerticalAlignment="Center" Width="123">
+                <fa:FontAwesome Icon="PowerOff" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Shutdown</TextBlock>
+            </DockPanel>
+        </Button>
+        <Button x:Name="button_WakeOnLan" Margin="7,37,0,0" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_WakeOnLan_Click">
+            <DockPanel LastChildFill="True" VerticalAlignment="Center" Width="123">
+                <fa:FontAwesome Icon="Play" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Wake On Lan</TextBlock>
+            </DockPanel>
+        </Button>
+        <Button x:Name="button_Reboot" Margin="141,37,0,0" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_Reboot_Click">
+            <DockPanel LastChildFill="True" Width="120">
+                <fa:FontAwesome Icon="Refresh" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" >Reboot</TextBlock>
+            </DockPanel>
+        </Button>
+        <Button x:Name="button_JobSchedule" Margin="274,37,-99,0" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_JobSchedule_Click">
+            <DockPanel LastChildFill="True" Width="119">
+                <fa:FontAwesome Icon="Calendar" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" >Job Schedule</TextBlock>
+            </DockPanel>
+        </Button>
+        <Button x:Name="button_Installsoftware"  Margin="407,37,-232,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125" Click="button_Installsoftware_Click" >
+            <DockPanel LastChildFill="True" Width="121">
+                <fa:FontAwesome Icon="Upload" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" >Install Software</TextBlock>
+            </DockPanel>
+        </Button>
+
+        <Rectangle Fill="Gray" Height="9" Margin="0,81,0,0" VerticalAlignment="Top"/>
+
+        <!-- Connected users -->
+        <Label x:Name="label_Computers" Content="Selected computers" HorizontalAlignment="Left" Margin="7,95,0,0" VerticalAlignment="Top" Width="146" Height="30px" FontWeight="Bold" FontSize="14"/>
+        <Button Name="button_ComputersReload" Margin="153,102,0,0" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ComputersReload_Click">
+            <DockPanel LastChildFill="True"  Width="15" Height="15">
+                <Image DockPanel.Dock="Left" Source="../../resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
+            </DockPanel>
+        </Button>
+        <DataGrid x:Name="dataGrid_Computers" Margin="10,124,10,31" CanUserAddRows="false"
+          CanUserReorderColumns="True" CanUserResizeColumns="True" SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
+          CanUserResizeRows="False" CanUserSortColumns="True" AutoGenerateColumns="False">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="Copy"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            <DataGrid.Columns>
+                <DataGridTextColumn  Header="Name" Width="Auto" Binding="{Binding computer.name}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Domain" Width="Auto" Binding="{Binding computer.domain}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridCheckBoxColumn  Header="Connected" Width="Auto" Binding="{Binding computer.isAlive}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="IP Address" Width="Auto" Binding="{Binding IPAddress}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="MAC Adress" Width="Auto" Binding="{Binding MACAddress}" IsReadOnly="True" CanUserReorder="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <CheckBox x:Name="checkBox_ShowAllColumnsComputers" Content="Show More Information" HorizontalAlignment="Left" Margin="10,0,0,7" Click="checkBox_ShowAllColumnsComputers_Click" Height="19" VerticalAlignment="Bottom"/>
+    </Grid>
+</UserControl>

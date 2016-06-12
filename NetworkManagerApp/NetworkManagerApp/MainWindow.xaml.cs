@@ -30,8 +30,9 @@ namespace NetworkManager {
             // Preapre the database
             prepareDatabaseConnection();
 
-            // Detail panel
+            // Detail panels
             computerDetails.mainWindow = this;
+            computersDetails.mainWindow = this;
 
             // Error panel
             errorHandler = new ErrorHandler();
@@ -103,7 +104,7 @@ namespace NetworkManager {
                 List_Computer.Items.Add(domainModel);
 
                 // Expand
-                TreeViewItem item = (TreeViewItem)List_Computer.ItemContainerGenerator.ContainerFromItem(domainModel);
+                TreeViewExItem item = (TreeViewExItem)List_Computer.ItemContainerGenerator.ContainerFromItem(domainModel);
                 item.IsExpanded = true;
 
             } catch(Exception e) {
@@ -130,15 +131,45 @@ namespace NetworkManager {
             if(--loadingWaiting == 0)
                 LoadingSpinner.Visibility = Visibility.Collapsed;
         }
-        
-        private void List_Computer_Selected(object sender, RoutedEventArgs eventArgs) {
-            TreeViewItem tvi = eventArgs.OriginalSource as TreeViewItem;
 
-            if (tvi.DataContext is ComputerModel) {
-                computerDetails.showDetails((tvi.DataContext as ComputerModel).computer);
+        /// <summary>
+        /// Update the right panel according to the selected computers
+        /// </summary>
+        private void updateSelectedComputers() {
+            List<Computer> selectedComputers = new List<Computer>();
+
+            Console.WriteLine("event !");
+
+            foreach (var selectedItem in List_Computer.SelectedItems) {
+                if (selectedItem is ComputerModel) {
+                    selectedComputers.Add((selectedItem as ComputerModel).computer);
+                }
+            }
+
+            if (selectedComputers.Count == 1) {
+                computersDetails.Visibility = Visibility.Collapsed;
+                computerDetails.Visibility = Visibility.Visible;
+                computerDetails.showDetails(selectedComputers[0]);
+            } else if (selectedComputers.Count > 1) {
+                computerDetails.Visibility = Visibility.Collapsed;
+                computersDetails.Visibility = Visibility.Visible;
+                computersDetails.showDetails(selectedComputers);
             }
         }
         
+        private void List_Computer_KeyUp(object sender, System.Windows.Input.KeyEventArgs e) {
+            switch(e.Key) {
+                case System.Windows.Input.Key.Up:
+                case System.Windows.Input.Key.Down:
+                    updateSelectedComputers();
+                    break;
+            }
+        }
+
+        private void List_Computer_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+            updateSelectedComputers();
+        }
+
         private async void List_Machine_Loaded(object sender, RoutedEventArgs e) {
             await updateListComputers();
         }
@@ -152,7 +183,6 @@ namespace NetworkManager {
             errorHandler.Top = this.Top + 50;
             errorHandler.Show();
         }
-        
     }
 
     public class DomainModel {

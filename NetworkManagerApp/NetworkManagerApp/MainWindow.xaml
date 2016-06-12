@@ -6,6 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:local="clr-namespace:NetworkManager"
+        xmlns:Controls="clr-namespace:System.Windows.Controls;assembly=TreeViewEx"
         xmlns:component="clr-namespace:NetworkManager.View.Component"
         xmlns:networkManager="clr-namespace:NetworkManager.Domain;assembly=NetworkManagerCore"
         Title="Network Manager" Height="810" Width="1080" Background="LightGray" Icon="resource/icon.ico">
@@ -35,9 +36,8 @@
                 <Image DockPanel.Dock="Left"  Source="resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
             </DockPanel>
         </Button>
-        <TreeView x:Name="List_Computer" Loaded="List_Machine_Loaded"  Margin="10,48,10,10" TreeViewItem.Selected="List_Computer_Selected">
-            <TreeView.Resources>
-
+        <Controls:TreeViewEx x:Name="List_Computer" Loaded="List_Machine_Loaded"  Margin="10,48,10,10" MouseLeftButtonUp="List_Computer_MouseLeftButtonUp" KeyUp="List_Computer_KeyUp" >
+            <Controls:TreeViewEx.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type local:DomainModel}" ItemsSource="{Binding Items}">
                     <TextBlock Text="{Binding name}" />
                 </HierarchicalDataTemplate>
@@ -88,11 +88,14 @@
                         </TextBlock>
                     </StackPanel>
                 </DataTemplate >
-            </TreeView.Resources>
-        </TreeView>
+            </Controls:TreeViewEx.Resources>
+        </Controls:TreeViewEx>
 
-        <!-- Computer details -->
+        <!-- Computer details - When one computer is selected -->
         <component:ComputerDetails x:Name="computerDetails" Margin="6,10,12,0" Height="Auto" Width="Auto" Grid.Column="1"/>
+        
+        <!-- Computers details - When multiple computers are selected -->
+        <component:ComputersDetails x:Name="computersDetails" Visibility="Collapsed" Margin="6,10,12,0" Height="Auto" Width="Auto" Grid.Column="1"/>
 
         <!-- Loader -->
         <fa:FontAwesome x:Name="LoadingSpinner" Icon="Gear" Margin="0,0,9,7" Visibility="Hidden" FontSize="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Column="1">
