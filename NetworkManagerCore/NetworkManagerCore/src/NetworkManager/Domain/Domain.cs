@@ -96,7 +96,7 @@ namespace NetworkManager.Domain {
                     bool isAlive = false;
                     try {
                         var p = new Ping();
-                        isAlive = p.Send(name + "." + domain).Status == IPStatus.Success;
+                        isAlive = p.Send(name + "." + domain, 500).Status == IPStatus.Success;
                     } catch(Exception e) { }
 
                     computers.Add(new Computer() {

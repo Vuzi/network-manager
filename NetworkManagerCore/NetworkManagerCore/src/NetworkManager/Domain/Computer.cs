@@ -25,6 +25,11 @@ namespace NetworkManager.Domain {
         public DateTime creation { get; set; }
         public DateTime lastChange { get; set; }
         public bool isAlive { get; set; }
+        public bool isServer {
+            get {
+                return os.ToLower().Contains("server");
+            }
+        }
 
         /// <summary>
         /// Return the first ipv4 of the computer, or null if not found

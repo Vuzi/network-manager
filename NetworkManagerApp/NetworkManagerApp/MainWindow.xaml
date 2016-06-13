@@ -37,6 +37,7 @@
             </DockPanel>
         </Button>
         <Controls:TreeViewEx x:Name="List_Computer" Loaded="List_Machine_Loaded"  Margin="10,48,10,10" MouseLeftButtonUp="List_Computer_MouseLeftButtonUp" KeyUp="List_Computer_KeyUp" >
+
             <Controls:TreeViewEx.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type local:DomainModel}" ItemsSource="{Binding Items}">
                     <TextBlock Text="{Binding name}" />
@@ -44,28 +45,28 @@
 
                 <DataTemplate DataType="{x:Type local:ComputerModel}">
                     <StackPanel Orientation="Horizontal">
-                        <fa:FontAwesome Icon="CheckSquareOutline" FontSize="10px"  VerticalAlignment="Center" Margin="0,0,5,0" >
+                        <fa:FontAwesome Icon="Server" FontSize="10px"  VerticalAlignment="Center" Margin="0,0,5,0" >
                             <TextBlock.Style>
                                 <Style TargetType="fa:FontAwesome">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding computer.isAlive}" Value="true" >
+                                        <DataTrigger Binding="{Binding computer.isServer}" Value="true" >
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding computer.isAlive}" Value="false" >
+                                        <DataTrigger Binding="{Binding computer.isServer}" Value="false" >
                                             <Setter Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
                         </fa:FontAwesome>
-                        <fa:FontAwesome Icon="SquareOutline" FontSize="10px"  VerticalAlignment="Center" Margin="0,0,5,0" >
+                        <fa:FontAwesome Icon="Desktop" FontSize="10px"  VerticalAlignment="Center" Margin="0,0,5,0" >
                             <TextBlock.Style>
                                 <Style TargetType="fa:FontAwesome">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding computer.isAlive}" Value="true" >
+                                        <DataTrigger Binding="{Binding computer.isServer}" Value="true" >
                                             <Setter Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding computer.isAlive}" Value="false" >
+                                        <DataTrigger Binding="{Binding computer.isServer}" Value="false" >
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -77,7 +78,7 @@
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding computer.isAlive}" Value="true" >
-                                            <Setter Property="Foreground" Value="Black"/>
+                                            <Setter Property="Foreground" Value="DarkGreen"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding computer.isAlive}" Value="false" >
                                             <Setter Property="Foreground" Value="DarkRed"/>

@@ -9,6 +9,10 @@ using System.Data.SQLite;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Timers;
+using System.Windows.Threading;
 
 namespace NetworkManager {
 
@@ -43,6 +47,22 @@ namespace NetworkManager {
                 errorHandler.addError(e.Exception);
                 e.Handled = true;
             };
+
+            // Auto updater
+            var timer = new DispatcherTimer();
+            timer.Tick += async (source, e) => {
+                timer.Stop();
+
+                try {
+                    await updateListComputers();
+                } catch (Exception ex) {
+                    errorHandler.addError(ex);
+                } finally {
+                    timer.Start();
+                }
+            };
+            timer.Interval = new TimeSpan(0, 0, 15);
+            timer.Start();
         }
 
         /// <summary>
@@ -63,7 +83,9 @@ namespace NetworkManager {
             };
 
             foreach (Computer c in domain.computers) {
-                domainModel.computers.Add(new ComputerModel() { computer = c });
+                domainModel.addComputer(new ComputerModel() {
+                    computer = c
+                });
 
                 // If the computer is alive, save its values in the database
                 if (c.isAlive) {
@@ -80,10 +102,46 @@ namespace NetworkManager {
             }
 
             foreach (Domain.Domain d in domain.domains) {
-                domainModel.domains.Add(await createDomainModel(d));
+                domainModel.addDomain( await createDomainModel(d));
             }
 
             return domainModel;
+        }
+
+        private void updateDomainModel(DomainModel oldDomainModel, DomainModel domainModel) {
+            // Update & adding of new computers
+            foreach (var computerModel in domainModel.getComputers()) {
+                var oldComputerModel = oldDomainModel.getComputer(computerModel.computer.name);
+
+                if (oldComputerModel != null)
+                    oldComputerModel.computer = computerModel.computer;
+                else
+                    oldDomainModel.addComputer(computerModel);
+            }
+
+            // Update & adding of new models
+            foreach (var subdomainModel in domainModel.getDomains()) {
+                var oldSubdomainModel = oldDomainModel.getDomain(subdomainModel.name);
+
+                if (oldSubdomainModel != null)
+                    updateDomainModel(oldSubdomainModel, subdomainModel);
+                else
+                    oldDomainModel.addDomain(subdomainModel);
+            }
+
+            // Removing of old computers
+            foreach (string computerToRemove in oldDomainModel.getComputers().Select(c => c.computer.name).
+                                                Except(domainModel.getComputers().Select(c => c.computer.name)).
+                                                ToList()) {
+                oldDomainModel.removeComputer(computerToRemove);
+            }
+
+            // Removing of old domains
+            foreach (string domainToRemove in oldDomainModel.getDomains().Select(d => d.name).
+                                                Except(domainModel.getDomains().Select(d => d.name)).
+                                                ToList()) {
+                oldDomainModel.removeDomain(domainToRemove);
+            }
         }
 
         /// <summary>
@@ -93,7 +151,7 @@ namespace NetworkManager {
             showLoading();
 
             try {
-                List_Computer.Items.Clear();
+                //List_Computer.Items.Clear();
 
                 // Only one domain for now
                 Domain.Domain domain = new Domain.Domain();
@@ -101,11 +159,17 @@ namespace NetworkManager {
 
                 DomainModel domainModel = await createDomainModel(domain);
 
-                List_Computer.Items.Add(domainModel);
+                if (!List_Computer.Items.IsEmpty) {
+                    // Update the existing model with the new generated one
+                    updateDomainModel(List_Computer.Items[0] as DomainModel, domainModel);
+                } else {
+                    // Set the new domain model
+                    List_Computer.Items.Add(domainModel);
 
-                // Expand
-                TreeViewExItem item = (TreeViewExItem)List_Computer.ItemContainerGenerator.ContainerFromItem(domainModel);
-                item.IsExpanded = true;
+                    // Expand the root node
+                    TreeViewExItem item = (TreeViewExItem)List_Computer.ItemContainerGenerator.ContainerFromItem(domainModel);
+                    item.IsExpanded = true;
+                }
 
             } catch(Exception e) {
                 errorHandler.addError(e);
@@ -185,30 +249,122 @@ namespace NetworkManager {
         }
     }
 
-    public class DomainModel {
-        public string name { get; set; }
-        public ObservableCollection<ComputerModel> computers { get; set; }
-        public ObservableCollection<DomainModel> domains { get; set; }
+    public class DomainModel : INotifyPropertyChanged {
 
-        public DomainModel() {
-            this.computers = new ObservableCollection<ComputerModel>();
-            this.domains = new ObservableCollection<DomainModel>();
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public string name { get; set; }
+        private Dictionary<string, ComputerModel> computers { get; set; }
+        private Dictionary<string, DomainModel> domains { get; set; }
+
+        internal void notifyPropertyChanged(String info) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
 
-        public IList<object> Items {
-            get {
-                IList<object> childNodes = new List<object>();
-                foreach (var group in this.domains)
-                    childNodes.Add(group);
-                foreach (var entry in this.computers)
-                    childNodes.Add(entry);
+        public DomainModel() {
+            computers = new Dictionary<string, ComputerModel>();
+            domains = new Dictionary<string, DomainModel>();
+        }
 
-                return childNodes;
+        public DomainModel getDomain(string name) {
+            return domains.GetValueOrDefault(name);
+        }
+
+        public ComputerModel getComputer(string name) {
+            return computers.GetValueOrDefault(name);
+        }
+
+        public void addDomain(DomainModel domain) {
+            domains[domain.name] = domain;
+            Items.Insert(computerIndex, domain);
+            computerIndex++;
+
+            notifyPropertyChanged("Domains");
+        }
+
+        public void addComputer(ComputerModel computer) {
+            computers[computer.computer.name] = computer;
+            Items.Add(computer);
+
+            notifyPropertyChanged("Computers");
+        }
+
+        public void removeComputer(ComputerModel computer) {
+            removeComputer(computer.computer.name);
+        }
+
+        public void removeComputer(string computer) {
+            computers.Remove(computer);
+            for (int i = computerIndex; i < Items.Count; i++) {
+                var item = Items[i] as ComputerModel;
+
+                if (item.computer.name == computer) {
+                    Items.RemoveAt(i);
+                    notifyPropertyChanged("Computers");
+                    break;
+                }
+            }
+        }
+
+        public void removeDomain(DomainModel domain) {
+            removeDomain(domain.name);
+        }
+
+        public void removeDomain(string domain) {
+            domains.Remove(domain);
+            for (int i = 0; i < computerIndex; i++) {
+                var item = Items[i] as DomainModel;
+
+                if (item.name == domain) {
+                    Items.RemoveAt(i);
+                    computerIndex--;
+                    notifyPropertyChanged("Domains");
+                    break;
+                }
+            }
+        }
+
+        public IEnumerable<ComputerModel> getComputers() {
+            return computers.Values;
+        }
+
+        public IEnumerable<DomainModel> getDomains() {
+            return domains.Values;
+        }
+
+        private int computerIndex;
+        private ObservableCollection<object> items;
+        public ObservableCollection<object> Items {
+            get {
+                if (items == null) {
+                    items = new ObservableCollection<object>();
+                    computerIndex = 0;
+                }
+
+                return items;
             }
         }
     }
 
-    public class ComputerModel {
-        public Computer computer { get; set; }
+    public class ComputerModel : INotifyPropertyChanged {
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private Computer _computer;
+        public Computer computer {
+            get {
+                return _computer;
+            }
+
+            set {
+                _computer = value;
+                notifyPropertyChanged("computer");
+            }
+        }
+
+        internal void notifyPropertyChanged(String info) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
+        }
+
     }
 }
