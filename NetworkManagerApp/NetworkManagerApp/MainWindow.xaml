@@ -77,10 +77,10 @@
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding computer.isAlive}" Value="true" >
-                                            <Setter Property="Foreground" Value="Black"/>
+                                            <Setter Property="Foreground" Value="Green"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding computer.isAlive}" Value="false" >
-                                            <Setter Property="Foreground" Value="DarkRed"/>
+                                            <Setter Property="Foreground" Value="Red"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
