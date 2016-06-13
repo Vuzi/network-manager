@@ -60,7 +60,7 @@ namespace NetworkManager {
                     timer.Start();
                 }
             };
-            timer.Interval = new TimeSpan(0, 0, 15);
+            timer.Interval = new TimeSpan(0, 0, 20);
             timer.Start();
         }
 
@@ -354,6 +354,8 @@ namespace NetworkManager {
             }
 
             set {
+                if(_computer != null)
+                    value.copyCache(_computer); // Keep in memory the cached values of the computer
                 _computer = value;
                 notifyPropertyChanged("computer");
             }

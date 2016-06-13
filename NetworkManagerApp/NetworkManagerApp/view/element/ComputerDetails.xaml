@@ -85,7 +85,7 @@
 
         <!-- Connected users -->
         <Label x:Name="label_ConnectedUsers" Content="Connected Users" HorizontalAlignment="Left" Margin="10,202,0,0" VerticalAlignment="Top" Width="146" Height="30px" FontWeight="Bold" FontSize="14"/>
-        <Button Name="button_ConnectedUsersReload" Margin="124,209,0,0" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ConnectedUsersReload_Click">
+        <Button Name="button_ConnectedUsersReload" Margin="126,209,0,0" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ConnectedUsersReload_Click">
             <DockPanel LastChildFill="True"  Width="15" Height="15">
                 <Image DockPanel.Dock="Left" Source="../../resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
             </DockPanel>

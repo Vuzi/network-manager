@@ -46,7 +46,7 @@ namespace NetworkManager.View.Component {
         /// <summary>
         /// Update the logged users list
         /// </summary>
-        private async Task updateLoggedUsers() {
+        private async Task updateLoggedUsers(bool force = false) {
             mainWindow.showLoading();
 
             if (loggedUserToken != null)
@@ -66,9 +66,9 @@ namespace NetworkManager.View.Component {
             IEnumerable<User> loggedUsers;
             try {
                 if (checkBox_ShowAllUsers.IsChecked.Value)
-                    loggedUsers = await computer.getAllLoggedUsers();
+                    loggedUsers = await computer.getAllLoggedUsers(force);
                 else
-                    loggedUsers = await computer.getLoggedUsers();
+                    loggedUsers = await computer.getLoggedUsers(force);
 
                 if (localTs != null && localTs.IsCancellationRequested) {
                     mainWindow.hideLoading();
@@ -103,7 +103,7 @@ namespace NetworkManager.View.Component {
         /// <summary>
         /// Update the installed software list
         /// </summary>
-        private async Task updateInstalledSoftwares() {
+        private async Task updateInstalledSoftwares(bool force = false) {
             mainWindow.showLoading();
 
             if (installedSofwaresToken != null)
@@ -121,7 +121,7 @@ namespace NetworkManager.View.Component {
             var localTs = installedSofwaresToken;
             
             try {
-                IEnumerable<Software> installedSoftwares = await computer.getInstalledSofwares();
+                IEnumerable<Software> installedSoftwares = await computer.getInstalledSofwares(force);
 
                 if (localTs != null && localTs.IsCancellationRequested) {
                     mainWindow.hideLoading();
@@ -281,14 +281,14 @@ namespace NetworkManager.View.Component {
             if (computer == null || !computer.isAlive)
                 return;
             
-            await updateLoggedUsers();
+            await updateLoggedUsers(true);
         }
 
         private async void button_InstalledSoftwaresReload_Click(object sender, RoutedEventArgs e) {
             if (computer == null || !computer.isAlive)
                 return;
             
-            await updateInstalledSoftwares();
+            await updateInstalledSoftwares(true);
         }
         
         private void openDisk(string path) {
