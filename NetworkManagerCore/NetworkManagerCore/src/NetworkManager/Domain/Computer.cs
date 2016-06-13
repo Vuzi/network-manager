@@ -167,6 +167,9 @@ namespace NetworkManager.Domain {
                 Task.Run(() => WMIExecutor.getInstalledSoftwares(this, 64)));
             return results.SelectMany(result => result);
         }
-    }
 
+        public bool isLocalComputer() {
+            return Environment.MachineName == name;
+        }
+    }
 }

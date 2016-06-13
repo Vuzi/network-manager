@@ -202,6 +202,12 @@ namespace NetworkManager.View.Component {
             if (computer == null)
                 return;
 
+            if (computer.isLocalComputer()) {
+                MessageBoxResult result = MessageBox.Show($"Are you sure you want to shutdown the local computer ({computer.name}) ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.No)
+                    return;
+            }
+
             try {
                 await computer.shutdown();
             } catch (Exception ex) {
@@ -212,6 +218,12 @@ namespace NetworkManager.View.Component {
         private async void button_Reboot_Click(object sender, RoutedEventArgs e) {
             if (computer == null || !computer.isAlive)
                 return;
+
+            if (computer.isLocalComputer()) {
+                MessageBoxResult result = MessageBox.Show($"Are you sure you want to reboot the local computer ({computer.name}) ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.No)
+                    return;
+            }
 
             try {
                 await computer.reboot();
