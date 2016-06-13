@@ -169,9 +169,9 @@ namespace NetworkManager.WMIExecution {
                                 // Look for user information
                                 ManagementObjectSearcher searcher;
                                 if (domain.ToLower() == computer.domain.Split('.')[0].ToLower())
-                                    searcher = new ManagementObjectSearcher(scopeLocal, new SelectQuery($"SELECT * FROM Win32_Account WHERE Name='{login}'"));
+                                    searcher = new ManagementObjectSearcher(scopeLocal, new SelectQuery($"SELECT * FROM Win32_Account WHERE Name='{login}' AND Domain='{domain}'"));
                                 else
-                                    searcher = new ManagementObjectSearcher(scope, new SelectQuery($"SELECT * FROM Win32_Account WHERE Name='{login}'"));
+                                    searcher = new ManagementObjectSearcher(scope, new SelectQuery($"SELECT * FROM Win32_Account WHERE Name='{login}' AND Domain='{domain}'"));
 
                                 try {
                                     foreach (ManagementObject mo in searcher.Get()) {
