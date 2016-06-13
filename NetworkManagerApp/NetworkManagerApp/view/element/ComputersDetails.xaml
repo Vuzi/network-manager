@@ -12,19 +12,19 @@
         <!-- Selection computer informations -->
         <Label x:Name="label_NumberComputersSelected" Content="&lt;No Computer Selected&gt;" VerticalAlignment="Top" Margin="3,-2,-498,0" HorizontalAlignment="Left" Width="795" FontWeight="Bold" FontSize="18"/>
 
-        <Button x:Name="button_ShutDown" Margin="7,37,0,0" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_ShutDown_Click">
+        <Button x:Name="button_ShutDown" Margin="7,37,0,0" Foreground="DarkRed" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_ShutDown_Click">
             <DockPanel LastChildFill="True" VerticalAlignment="Center" Width="123">
                 <fa:FontAwesome Icon="PowerOff" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Shutdown</TextBlock>
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">OFF</TextBlock>
             </DockPanel>
         </Button>
-        <Button x:Name="button_WakeOnLan" Margin="141,37,0,0" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_WakeOnLan_Click">
+        <Button x:Name="button_WakeOnLan" Margin="141,37,0,0" Foreground="DarkGreen" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_WakeOnLan_Click">
             <DockPanel LastChildFill="True" VerticalAlignment="Center" Width="123">
                 <fa:FontAwesome Icon="Play" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Wake On Lan</TextBlock>
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">ON</TextBlock>
             </DockPanel>
         </Button>
-        <Button x:Name="button_Reboot" Margin="274,37,0,0" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_Reboot_Click">
+        <Button x:Name="button_Reboot" Margin="274,37,0,0" Foreground="#AF7817" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_Reboot_Click">
             <DockPanel LastChildFill="True" Width="120">
                 <fa:FontAwesome Icon="Refresh" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" >Reboot</TextBlock>

@@ -201,9 +201,7 @@ namespace NetworkManager {
         /// </summary>
         private void updateSelectedComputers() {
             List<Computer> selectedComputers = new List<Computer>();
-
-            Console.WriteLine("event !");
-
+            
             foreach (var selectedItem in List_Computer.SelectedItems) {
                 if (selectedItem is ComputerModel) {
                     selectedComputers.Add((selectedItem as ComputerModel).computer);
