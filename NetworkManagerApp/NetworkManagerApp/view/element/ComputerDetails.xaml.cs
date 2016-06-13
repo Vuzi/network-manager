@@ -20,6 +20,19 @@ namespace NetworkManager.View.Component {
 
         public ComputerDetails() {
             InitializeComponent();
+
+            aliveButtons = new Button[] {
+                button_ShutDown,
+                button_Reboot,
+                button_OpenDiskC,
+                button_OpenDiskD,
+                button_OpenDiskE,
+                button_JobSchedule,
+                button_Installsoftware
+            };
+            notAliveButtons = new Button[] {
+                button_WakeOnLan
+            };
         }
 
         public async void showDetails(Computer c) {
@@ -137,6 +150,9 @@ namespace NetworkManager.View.Component {
                     show ? Visibility.Visible : Visibility.Hidden;
         }
 
+        private Button[] aliveButtons;
+        private Button[] notAliveButtons;
+
         /// <summary>
         /// Update the computer information panel
         /// </summary>
@@ -150,8 +166,8 @@ namespace NetworkManager.View.Component {
             textBox_IPAdress.Text = "";
 
             if(computer.isAlive) {
-                button_ShutDown.Visibility = Visibility.Visible;
-                button_WakeOnLan.Visibility = Visibility.Collapsed;
+                aliveButtons.ToList().ForEach(button => button.Visibility = Visibility.Visible);
+                notAliveButtons.ToList().ForEach(button => button.Visibility = Visibility.Collapsed);
 
                 try {
                     // Connected : get the IP from DNS, and the MAC from WMI
@@ -161,8 +177,8 @@ namespace NetworkManager.View.Component {
                     mainWindow.errorHandler.addError(e);
                 }
             } else {
-                button_ShutDown.Visibility = Visibility.Collapsed;
-                button_WakeOnLan.Visibility = Visibility.Visible;
+                aliveButtons.ToList().ForEach(button => button.Visibility = Visibility.Collapsed);
+                notAliveButtons.ToList().ForEach(button => button.Visibility = Visibility.Visible);
 
                 // Not connected : get the IP and MAC from local database
                 var computerInfo = mainWindow.computerInfoStore.getComputerInfoByName(computer.nameLong);
