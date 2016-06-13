@@ -98,14 +98,14 @@
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <DataGridTextColumn  Header="Name" Width="140" Binding="{Binding name}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Domain" Width="140" Binding="{Binding domain}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Caption" Width="300" Binding="{Binding caption}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
-                <DataGridTextColumn  Header="Description" Width="380" Binding="{Binding description}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridCheckBoxColumn  Header="Local Account" Width="90" Binding="{Binding localAccount}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Status" Width="120" Binding="{Binding status}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
-                <DataGridTextColumn  Header="SID Type" Width="100" Binding="{Binding SIDType}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
-                <DataGridTextColumn  Header="SID" Width="400" Binding="{Binding SID}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
+                <DataGridTextColumn  Header="Name" Width="Auto" Binding="{Binding name}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Domain" Width="Auto" Binding="{Binding domain}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Caption" Width="Auto" Binding="{Binding caption}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
+                <DataGridTextColumn  Header="Description" Width="Auto" Binding="{Binding description}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridCheckBoxColumn  Header="Local Account" Width="Auto" Binding="{Binding localAccount}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Status" Width="Auto" Binding="{Binding status}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
+                <DataGridTextColumn  Header="SID Type" Width="Auto" Binding="{Binding SIDType}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
+                <DataGridTextColumn  Header="SID" Width="Auto" Binding="{Binding SID}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
             </DataGrid.Columns>
         </DataGrid>
         <CheckBox x:Name="checkBox_ShowAllUsers" Content="Show All Users" HorizontalAlignment="Left" Margin="9,441,0,-162" VerticalAlignment="Top" Height="21" Click="checkBox_ShowAllUsers_Click"/>
@@ -124,11 +124,11 @@
           CanUserReorderColumns="True" CanUserResizeColumns="True" SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
           CanUserResizeRows="False" CanUserSortColumns="True" AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn  Header="Name" Width="520" Binding="{Binding displayName}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Version" Width="90" Binding="{Binding displayVersion}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Installation Date" Width="140" Binding="{Binding installDate}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Publisher" Width="140" Visibility="Hidden" Binding="{Binding publisher}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Install Location" Width="140" Visibility="Hidden" Binding="{Binding installLocation}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Name" Width="Auto" Binding="{Binding displayName}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Version" Width="Auto" Binding="{Binding displayVersion}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Installation Date" Width="Auto" Binding="{Binding installDate, StringFormat=d, ConverterCulture=fr-FR}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Publisher" Width="Auto" Visibility="Hidden" Binding="{Binding publisher}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Install Location" Width="Auto" Visibility="Hidden" Binding="{Binding installLocation}" IsReadOnly="True" CanUserReorder="True"/>
             </DataGrid.Columns>
             <DataGrid.ContextMenu>
                 <ContextMenu>
