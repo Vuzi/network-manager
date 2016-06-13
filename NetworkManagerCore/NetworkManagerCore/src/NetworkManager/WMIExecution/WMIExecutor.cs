@@ -127,10 +127,14 @@ namespace NetworkManager.WMIExecution {
                             comment = values.GetValueOrDefault("Comment"),
                             installLocation = values.GetValueOrDefault("InstallLocation")
                         };
-
+                        
                         var installDate = values.GetValueOrDefault("InstallDate");
-                        if (installDate != null)
-                            software.installDate = DateTime.ParseExact(installDate, "yyyyMMdd", CultureInfo.InvariantCulture);
+                        try {
+                            if (installDate != null)
+                                software.installDate = DateTime.ParseExact(installDate, "yyyyMMdd", CultureInfo.InvariantCulture);
+                        } catch(Exception e) {
+                            // Ignore invalid dates
+                        }
 
                         installedSoftwares.Add(software);
                     }

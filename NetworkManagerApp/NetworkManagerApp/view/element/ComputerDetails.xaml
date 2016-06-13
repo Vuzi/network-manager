@@ -126,7 +126,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn  Header="Name" Width="Auto" Binding="{Binding displayName}" IsReadOnly="True" CanUserReorder="True"/>
                 <DataGridTextColumn  Header="Version" Width="Auto" Binding="{Binding displayVersion}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Installation Date" Width="Auto" Binding="{Binding installDate, StringFormat=d, ConverterCulture=fr-FR}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Installation Date" Width="Auto" Binding="{Binding installDateFormated}" IsReadOnly="True" CanUserReorder="True"/>
                 <DataGridTextColumn  Header="Publisher" Width="Auto" Visibility="Hidden" Binding="{Binding publisher}" IsReadOnly="True" CanUserReorder="True"/>
                 <DataGridTextColumn  Header="Install Location" Width="Auto" Visibility="Hidden" Binding="{Binding installLocation}" IsReadOnly="True" CanUserReorder="True"/>
             </DataGrid.Columns>
