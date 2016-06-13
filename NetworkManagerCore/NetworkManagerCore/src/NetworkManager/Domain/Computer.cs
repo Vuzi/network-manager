@@ -126,7 +126,7 @@ namespace NetworkManager.Domain {
         public void startRemoteDesktop() {
             Process rdcProcess = new Process();
             rdcProcess.StartInfo.FileName = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\system32\mstsc.exe");
-            rdcProcess.StartInfo.Arguments = $"/v {nameLong} /prompt /admin";
+            rdcProcess.StartInfo.Arguments = $"/v {nameLong} /admin";
             rdcProcess.Start();
         }
 
