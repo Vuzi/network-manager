@@ -9,7 +9,7 @@ namespace NetworkManager.Domain {
                 if (installDate == DateTime.MinValue)
                     return "";
                 else
-                    return string.Format("{0:d/M/yyyy}", installDate);
+                    return string.Format("{0:dd/MM/yyyy}", installDate);
         } }
         public string publisher { get; set; }
         public string comment { get; set; }
