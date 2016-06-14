@@ -74,9 +74,9 @@ namespace NetworkManager.View {
                 } else {
                     FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(filePath);
 
-                    itm.name = fileVersionInfo.ProductName.Trim();
+                    itm.name = fileVersionInfo.ProductName?.Trim();
                     itm.version = fileVersionInfo.FileVersion;
-                    itm.company = fileVersionInfo.CompanyName.Trim();
+                    itm.company = fileVersionInfo.CompanyName?.Trim();
                 }
                 data.Add(itm);
             }
