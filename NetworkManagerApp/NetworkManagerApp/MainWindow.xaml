@@ -17,6 +17,14 @@
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <RoutedUICommand x:Key="CopyLine" Text="Copy the line" />
+        <Style TargetType="Controls:TreeViewExItem">
+
+            <Setter Property="BackgroundSelected" Value="#E6E6E6"/>
+
+            <Setter Property="BackgroundFocused" Value="#B3CCFF"/>
+
+            <Setter Property="BackgroundHovered" Value="#E6EEFF"/>
+        </Style>
     </Window.Resources>
     <Window.Triggers>
         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
@@ -37,7 +45,6 @@
             </DockPanel>
         </Button>
         <Controls:TreeViewEx x:Name="List_Computer" Loaded="List_Machine_Loaded"  Margin="10,48,10,10" MouseLeftButtonUp="List_Computer_MouseLeftButtonUp" KeyUp="List_Computer_KeyUp" >
-
             <Controls:TreeViewEx.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type local:DomainModel}" ItemsSource="{Binding Items}">
                     <TextBlock Text="{Binding name}" />
