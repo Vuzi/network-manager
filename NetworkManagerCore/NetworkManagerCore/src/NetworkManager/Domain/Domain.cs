@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.DirectoryServices;
 using System.DirectoryServices.ActiveDirectory;
+using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 
@@ -93,12 +94,6 @@ namespace NetworkManager.Domain {
                     if (name.StartsWith("CN="))
                         name = name.Remove(0, "CN=".Length);
 
-                    bool isAlive = false;
-                    try {
-                        var p = new Ping();
-                        isAlive = p.Send(name + "." + domain, 500).Status == IPStatus.Success;
-                    } catch(Exception e) { }
-
                     computers.Add(new Computer() {
                         name = name,
                         domain = domain,
@@ -108,12 +103,27 @@ namespace NetworkManager.Domain {
                         lastLogOn = lastLogOn,
                         lastChange = lastChange,
                         creation = creation,
-                        isAlive = isAlive
+                        isAlive = false // Default
                     });
                 }
 
                 mySearcher.Dispose();
                 entry.Dispose();
+
+                // Update alive computers
+                var tasks = computers.Select(computer => {
+                    return Task.Run(() => {
+                        bool isAlive = false;
+
+                        try {
+                            var p = new Ping();
+                            isAlive = p.Send(computer.nameLong, 250).Status == IPStatus.Success;
+                        } catch (Exception) {}
+                        computer.isAlive = isAlive;
+                    });
+                });
+
+                Task.WhenAll(tasks).Wait();
 
                 return computers;
             });

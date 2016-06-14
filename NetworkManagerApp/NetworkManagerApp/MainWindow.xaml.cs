@@ -60,7 +60,7 @@ namespace NetworkManager {
                     timer.Start();
                 }
             };
-            timer.Interval = new TimeSpan(0, 0, 20);
+            timer.Interval = new TimeSpan(0, 0, 30);
             timer.Start();
         }
 
