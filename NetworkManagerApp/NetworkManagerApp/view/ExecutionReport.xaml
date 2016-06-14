@@ -10,17 +10,18 @@
         <Grid.RowDefinitions>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label x:Name="label_ClientName" Content="Machine Name" VerticalAlignment="Top" Margin="5,10,0,0" HorizontalAlignment="Left" Width="517" FontWeight="Bold" FontSize="18" Height="34"/>
+        <Label x:Name="label_ClientName" Content="-" VerticalAlignment="Top" Margin="5,10,0,0" HorizontalAlignment="Left" Width="517" FontWeight="Bold" FontSize="18" Height="34"/>
+        <Label x:Name="label_Status" Content="-" VerticalAlignment="Top" Margin="5,46,0,0" HorizontalAlignment="Left" Width="517" FontWeight="Bold" FontSize="14" Height="29"/>
 
-        <Label Content="Duration (ms) :" Margin="187,44,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox x:Name="textBox_Duration" Text="" Margin="192,68,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsReadOnly="True" HorizontalAlignment="Left"/>
-        <Label Content="Return Value :" Margin="5,44,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox x:Name="textBox_ReturnValue" Text="" Margin="10,68,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsReadOnly="True" HorizontalAlignment="Left"/>
-        <Label Content="Timeout :" Margin="10,94,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <CheckBox x:Name="checkBox_Timeout" IsHitTestVisible="false" HorizontalAlignment="Left" VerticalAlignment="Top" Height="21" Margin="72,101,0,0" Width="15"/>
+        <Label Content="Duration (ms) :" Margin="188,80,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBox x:Name="textBox_Duration" Text="" Margin="193,104,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsReadOnly="True" HorizontalAlignment="Left"/>
+        <Label Content="Return Value :" Margin="6,80,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBox x:Name="textBox_ReturnValue" Text="" Margin="11,104,0,0" Width="150px" Height="21" BorderThickness="2" VerticalAlignment="Top" IsReadOnly="True" HorizontalAlignment="Left"/>
+        <Label Content="Timeout :" Margin="365,97,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <CheckBox x:Name="checkBox_Timeout" IsHitTestVisible="false" HorizontalAlignment="Left" VerticalAlignment="Top" Height="21" Margin="427,104,0,0" Width="15"/>
         <Label Content="Output (stdout) :" Margin="10,124,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox x:Name="textBox_Output" Margin="10,154,10,0" TextWrapping="NoWrap" Height="101" VerticalAlignment="Top" />
+        <TextBox x:Name="textBox_Output" Margin="10,154,10,0" IsReadOnly="True" TextWrapping="NoWrap" Height="101" VerticalAlignment="Top" />
         <Label Content="Output (stderr) :" Margin="10,255,0,0" Width="150px" Height="30px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox x:Name="textBox_Error" Margin="10,285,10,10" />
+        <TextBox x:Name="textBox_Error" Margin="10,285,10,10" IsReadOnly="True" TextWrapping="NoWrap"/>
     </Grid>
 </Window>
