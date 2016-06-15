@@ -35,7 +35,7 @@ namespace NetworkManager.View.Component {
         /// <summary>
         /// Update the logged users list
         /// </summary>
-        private async Task updateComputers() {
+        public async Task updateComputers() {
             mainWindow.showLoading();
 
             if (computersToken != null)
@@ -52,12 +52,23 @@ namespace NetworkManager.View.Component {
                 foreach (Computer computer in computers) {
                     string ipAddress = null;
                     string macAddress = null;
+                    
+                    if (computer.isAlive) {
+                        try {
+                            // Connected : get the IP from DNS, and the MAC from WMI
+                            ipAddress = computer.getIpAddress().ToString();
+                            macAddress = await computer.getMacAddress();
+                        } catch (Exception e) {
+                            mainWindow.errorHandler.addError(e);
+                        }
+                    } else {
+                        // Not connected : get the IP and MAC from local database
+                        var computerInfo = mainWindow.computerInfoStore.getComputerInfoByName(computer.nameLong);
 
-                    try {
-                        ipAddress = computer.getIpAddress().ToString();
-                        macAddress = await computer.getMacAddress();
-                    } catch(Exception e) {
-                        mainWindow.errorHandler.addError(e);
+                        if (computerInfo != null) {
+                            ipAddress = computerInfo.ipAddress;
+                            macAddress = computerInfo.macAddress;
+                        }
                     }
 
                     models.Add(new ComputerDetailModel() {
@@ -82,7 +93,7 @@ namespace NetworkManager.View.Component {
             mainWindow.hideLoading();
         }
 
-        int[] computersCollapsableColumns = {  };
+        int[] computersCollapsableColumns = { 2 };
 
         /// <summary>
         /// Update the computers visibility
@@ -96,12 +107,24 @@ namespace NetworkManager.View.Component {
         }
 
         private async void button_ShutDown_Click(object sender, RoutedEventArgs e) {
-            MessageBoxResult result = MessageBox.Show($"Are you sure you want to shutdown these {computers.Count} computers?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            List<Computer> toShutdown = computers.FindAll(c => c.isAlive);
+
+            // If no computer is alive
+            if (toShutdown.Count == 0) {
+                MessageBox.Show($"There is no computer to stop");
+                return;
+            }
+
+            MessageBoxResult result = MessageBox.Show(
+                toShutdown.Count > 1 ?
+                $"Are you sure you want to shutdown these {toShutdown.Count} computers?" :
+                $"Are you sure you want to shutdown this computer?", "Confirmation",
+                MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.No)
                 return;
 
             await Task.Factory.StartNew(() => {
-                Parallel.ForEach(computers, computer => {
+                Parallel.ForEach(toShutdown, computer => {
                     try {
                         computer.shutdown().Wait();
                     } catch (Exception ex) {
@@ -109,15 +132,28 @@ namespace NetworkManager.View.Component {
                     }
                 });
             });
+            mainWindow.requireReload(10);
         }
 
         private async void button_Reboot_Click(object sender, RoutedEventArgs e) {
-            MessageBoxResult result = MessageBox.Show($"Are you sure you want to reboot these {computers.Count} computers?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            List<Computer> toReboot = computers.FindAll(c => c.isAlive);
+
+            // If no computer is alive
+            if(toReboot.Count == 0) {
+                MessageBox.Show($"There is no computer to reboot");
+                return;
+            }
+
+            MessageBoxResult result = MessageBox.Show(
+                toReboot.Count > 1 ?
+                $"Are you sure you want to reboot these {toReboot.Count} computers?" :
+                $"Are you sure you want to reboot this computer?", "Confirmation",
+                MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.No)
                 return;
 
             await Task.Factory.StartNew(() => {
-                Parallel.ForEach(computers, computer => {
+                Parallel.ForEach(toReboot, computer => {
                     try {
                         computer.reboot().Wait();
                     } catch (Exception ex) {
@@ -125,15 +161,28 @@ namespace NetworkManager.View.Component {
                     }
                 });
             });
+            mainWindow.requireReload(10);
         }
 
         private async void button_WakeOnLan_Click(object sender, RoutedEventArgs e) {
-            MessageBoxResult result = MessageBox.Show($"Are you sure you want to start these {computers.Count} computers?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            List<Computer> toWakeOnLan = computers.FindAll(c => !c.isAlive);
+
+            // If no computer is off
+            if (toWakeOnLan.Count == 0) {
+                MessageBox.Show($"There is no computer to start");
+                return;
+            }
+
+            MessageBoxResult result = MessageBox.Show(
+                toWakeOnLan.Count > 1 ?
+                $"Are you sure you want to start these {toWakeOnLan.Count} computers?" :
+                $"Are you sure you want to start this computer?", "Confirmation",
+                MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.No)
                 return;
 
             await Task.Factory.StartNew(() => {
-                Parallel.ForEach(computers, computer => {
+                Parallel.ForEach(toWakeOnLan, computer => {
                     try {
                         var computerInfo = mainWindow.computerInfoStore.getComputerInfoByName(computer.nameLong);
 
@@ -144,19 +193,20 @@ namespace NetworkManager.View.Component {
                         mainWindow.errorHandler.addError(ex);
                     }
                 });
+                mainWindow.requireReload(15);
             });
         }
 
         private void button_JobSchedule_Click(object sender, RoutedEventArgs e) {
-
+            // TODO
         }
 
         private void button_Installsoftware_Click(object sender, RoutedEventArgs e) {
-
+            // TODO
         }
 
         private void checkBox_ShowAllColumnsComputers_Click(object sender, RoutedEventArgs e) {
-
+            updateComputersVisibility();
         }
 
         private async void button_ComputersReload_Click(object sender, RoutedEventArgs e) {

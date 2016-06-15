@@ -107,14 +107,25 @@ namespace NetworkManager {
             return domainModel;
         }
 
-        private void updateDomainModel(DomainModel oldDomainModel, DomainModel domainModel) {
+        private bool updateDomainModel(DomainModel oldDomainModel, DomainModel domainModel) {
+            bool needRefresh = false;
+
             // Update & adding of new computers
             foreach (var computerModel in domainModel.getComputers()) {
                 var oldComputerModel = oldDomainModel.getComputer(computerModel.computer.name);
 
-                if (oldComputerModel != null)
+                if (oldComputerModel != null) {
+                    // If an update is needed
+                    if (oldComputerModel.computer.isAlive != computerModel.computer.isAlive) {
+                        foreach (var item in List_Computer.SelectedItems) {
+                            if (item is ComputerModel && (item as ComputerModel).computer.nameLong == computerModel.computer.nameLong) {
+                                needRefresh = true;
+                            }
+                        }
+                    }
+
                     oldComputerModel.computer = computerModel.computer;
-                else
+                } else
                     oldDomainModel.addComputer(computerModel);
             }
 
@@ -123,7 +134,7 @@ namespace NetworkManager {
                 var oldSubdomainModel = oldDomainModel.getDomain(subdomainModel.name);
 
                 if (oldSubdomainModel != null)
-                    updateDomainModel(oldSubdomainModel, subdomainModel);
+                    needRefresh = needRefresh || updateDomainModel(oldSubdomainModel, subdomainModel);
                 else
                     oldDomainModel.addDomain(subdomainModel);
             }
@@ -141,17 +152,17 @@ namespace NetworkManager {
                                                 ToList()) {
                 oldDomainModel.removeDomain(domainToRemove);
             }
+
+            return needRefresh;
         }
 
         /// <summary>
         /// Update the domain computer list
         /// </summary>
-        private async Task updateListComputers() {
+        public async Task updateListComputers() {
             showLoading();
 
             try {
-                //List_Computer.Items.Clear();
-
                 // Only one domain for now
                 Domain.Domain domain = new Domain.Domain();
                 await domain.fill();
@@ -160,7 +171,11 @@ namespace NetworkManager {
 
                 if (!List_Computer.Items.IsEmpty) {
                     // Update the existing model with the new generated one
-                    updateDomainModel(List_Computer.Items[0] as DomainModel, domainModel);
+                    var needRefresh = updateDomainModel(List_Computer.Items[0] as DomainModel, domainModel);
+
+                    if(needRefresh) // If an update is needed
+                        updateSelectedComputers();
+
                 } else {
                     // Set the new domain model
                     List_Computer.Items.Add(domainModel);
@@ -217,7 +232,17 @@ namespace NetworkManager {
                 computersDetails.showDetails(selectedComputers);
             }
         }
-        
+
+        public void requireReload(int inSeconds) {
+            var timer = new DispatcherTimer();
+            timer.Tick += async (source, e) => {
+                timer.Stop();
+                await updateListComputers();
+            };
+            timer.Interval = new TimeSpan(0, 0, 5);
+            timer.Start();
+        }
+
         private void List_Computer_KeyUp(object sender, System.Windows.Input.KeyEventArgs e) {
             switch(e.Key) {
                 case System.Windows.Input.Key.Up:

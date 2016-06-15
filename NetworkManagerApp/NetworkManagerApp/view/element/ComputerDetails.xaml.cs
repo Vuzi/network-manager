@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows;
 using System.IO;
+using System.Windows.Threading;
 
 namespace NetworkManager.View.Component {
     /// <summary>
@@ -46,7 +47,7 @@ namespace NetworkManager.View.Component {
         /// <summary>
         /// Update the logged users list
         /// </summary>
-        private async Task updateLoggedUsers(bool force = false) {
+        public async Task updateLoggedUsers(bool force = false) {
             mainWindow.showLoading();
 
             if (loggedUserToken != null)
@@ -103,7 +104,7 @@ namespace NetworkManager.View.Component {
         /// <summary>
         /// Update the installed software list
         /// </summary>
-        private async Task updateInstalledSoftwares(bool force = false) {
+        public async Task updateInstalledSoftwares(bool force = false) {
             mainWindow.showLoading();
 
             if (installedSofwaresToken != null)
@@ -156,7 +157,7 @@ namespace NetworkManager.View.Component {
         /// <summary>
         /// Update the computer information panel
         /// </summary>
-        private async Task updateComputerInformations() {
+        public async Task updateComputerInformations() {
             mainWindow.showLoading();
 
             label_ClientName.Content = computer.name + (computer.isAlive ? "" : " (offline)");
@@ -195,7 +196,7 @@ namespace NetworkManager.View.Component {
         /// <summary>
         /// Update all the information of the selected computer
         /// </summary>
-        private async Task updateComputer() {
+        public async Task updateComputer() {
             await Task.WhenAll(updateComputerInformations(), updateLoggedUsers(), updateInstalledSoftwares());
         }
         
@@ -226,6 +227,7 @@ namespace NetworkManager.View.Component {
 
             try {
                 await computer.shutdown();
+                mainWindow.requireReload(10);
             } catch (Exception ex) {
                 mainWindow.errorHandler.addError(ex);
             }
@@ -243,6 +245,7 @@ namespace NetworkManager.View.Component {
 
             try {
                 await computer.reboot();
+                mainWindow.requireReload(10);
             } catch (Exception ex) {
                 mainWindow.errorHandler.addError(ex);
             }
@@ -328,6 +331,7 @@ namespace NetworkManager.View.Component {
 
                 if (computerInfo != null) {
                     Utils.wakeOnLan(computerInfo.macAddress);
+                    mainWindow.requireReload(15);
                 }
             }
         }
