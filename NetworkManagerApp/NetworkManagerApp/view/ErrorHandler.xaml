@@ -11,6 +11,16 @@
         <DataGrid x:Name="dataGrid_Errors" Margin="10,47,10,45"
           CanUserReorderColumns="True" CanUserResizeColumns="True" SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
           CanUserResizeRows="False" CanUserSortColumns="True" AutoGenerateColumns="False">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding severity}" Value="1">
+                            <Setter Property="Background" Value="#FA5858"/>
+                            <Setter Property="FontWeight" Value="DemiBold"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Command="Copy">

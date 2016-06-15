@@ -34,10 +34,12 @@ namespace NetworkManager.View {
 
         public void addError(Exception e) {
             string computer = "-";
+            int severity = 1;
 
             if(e is WMIException) {
                 WMIException we = (WMIException)e;
                 computer = we.computer;
+                severity = 0;
                 e = we.error != null ? we.error : e;
             }
 
@@ -46,7 +48,8 @@ namespace NetworkManager.View {
                 message = e.Message,
                 date = DateTime.Now,
                 computer = computer,
-                source = e.Source
+                source = e.Source,
+                severity = severity
             });
 
             warningIndicator.Visibility = Visibility.Visible;
@@ -59,5 +62,6 @@ namespace NetworkManager.View {
         public string source { get; set; }
         public DateTime date { get; set; }
         public string computer { get; set; }
+        public int severity { get; internal set; }
     }
 }
