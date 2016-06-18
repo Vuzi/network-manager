@@ -9,11 +9,11 @@ namespace NetworkManager.View {
     /// <summary>
     /// Logique d'interaction pour ErrorHandler.xaml
     /// </summary>
-    public partial class ErrorHandler : Window {
+    public partial class ErrorHandlerWindow : Window {
 
         public Button warningIndicator { get; set; }
 
-        public ErrorHandler() {
+        public ErrorHandlerWindow() {
             InitializeComponent();
         }
 

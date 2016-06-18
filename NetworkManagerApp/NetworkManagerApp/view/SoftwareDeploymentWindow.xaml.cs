@@ -13,13 +13,13 @@ namespace NetworkManager.View {
     /// <summary>
     /// Logique d'interaction pour SoftwareDeployment.xaml
     /// </summary>
-    public partial class SoftwareDeployment : Window {
+    public partial class SoftwareDeploymentWindow : Window {
 
         private static string path = @"C:\apps\";
         private Computer currentComputer;
-        private ErrorHandler errorHandler;
+        private ErrorHandlerWindow errorHandler;
 
-        public SoftwareDeployment(ErrorHandler errorHandler, Computer computer) {
+        public SoftwareDeploymentWindow(ErrorHandlerWindow errorHandler, Computer computer) {
             InitializeComponent();
 
             this.errorHandler = errorHandler;

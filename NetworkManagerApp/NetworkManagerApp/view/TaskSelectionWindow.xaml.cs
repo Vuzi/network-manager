@@ -6,12 +6,12 @@ namespace NetworkManager.View {
     /// <summary>
     /// Logique d'interaction pour SelectTask.xaml
     /// </summary>
-    public partial class SelectTask : Window {
-        public SelectTask() {
+    public partial class TaskSelectionWindow : Window {
+        public TaskSelectionWindow() {
             InitializeComponent();
         }
 
-        public Planning mainWindow { get; set; }
+        public JobSchedulerWindow mainWindow { get; set; }
 
         private void cancel_Click(object sender, RoutedEventArgs e) {
             this.Close();
@@ -21,7 +21,9 @@ namespace NetworkManager.View {
             ComboBoxItem item = taskList.SelectedItem as ComboBoxItem;
 
             if(item != null) {
-                mainWindow.tasksPanel.Children.Add((UIElement) Activator.CreateInstance(item.val as Type));
+                dynamic element = Activator.CreateInstance(item.val as Type);
+                element.mainWindow = mainWindow;
+                mainWindow.tasksPanel.Children.Add(element);
             }
         }
 

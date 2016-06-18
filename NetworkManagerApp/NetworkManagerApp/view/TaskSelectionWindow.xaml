@@ -1,4 +1,4 @@
-﻿<Window x:Class="NetworkManager.View.SelectTask"
+﻿<Window x:Class="NetworkManager.View.TaskSelectionWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,10 +7,12 @@
         mc:Ignorable="d"
         Background="LightGray"
         ResizeMode="NoResize"
-        Title="SelectTask" Height="150" Width="300">
+        Icon="../resource/icon.ico"
+        Title="Network Manager - Task Selector" Height="150" Width="300">
     <Grid>
+        
+        <Label x:Name="label" Content="Task type :" HorizontalAlignment="Left" Margin="7,5,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="taskList" Margin="10,31,10,0" VerticalAlignment="Top" Loaded="taskList_Loaded" >
-
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -19,9 +21,9 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <Button x:Name="select" Content="Select" HorizontalAlignment="Left" Click="select_Click" Margin="10,73,0,13" Width="128"/>
-        <Button x:Name="cancel" Content="Cancel" Margin="0,73,10,13" Click="cancel_Click" HorizontalAlignment="Right" Width="128"/>
-        <Label x:Name="label" Content="New task :" HorizontalAlignment="Left" Margin="7,5,0,0" VerticalAlignment="Top"/>
+        
+        <Button x:Name="select" Content="Add" HorizontalAlignment="Left" Click="select_Click" Margin="10,73,0,13" Width="128"/>
+        <Button x:Name="cancel" Content="Close" Margin="0,73,10,13" Click="cancel_Click" HorizontalAlignment="Right" Width="128"/>
 
     </Grid>
 </Window>

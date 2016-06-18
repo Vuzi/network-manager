@@ -23,12 +23,12 @@ namespace NetworkManager.Domain {
             this.name = name;
         }
 
-        public async Task fill() {
-            computers = await getComputersInDomain(name);
+        public async Task fill(bool getStatus = true) {
+            computers = await getComputersInDomain(name, getStatus);
             domains = await getDomainsInDomain(name);
 
             foreach(Domain d in domains)
-                await d.fill();
+                await d.fill(getStatus);
         }
 
         public static string getLocalDomainName() {
@@ -70,7 +70,7 @@ namespace NetworkManager.Domain {
         /// </summary>
         /// <param name="domain">The domain to use</param>
         /// <returns>All the computer of the domain</returns>
-        public async static Task<List<Computer>> getComputersInDomain(string domain) {
+        public async static Task<List<Computer>> getComputersInDomain(string domain, bool getStatus = true) {
             return await Task.Run(() => {
                 List<Computer> computers = new List<Computer>();
 
@@ -111,19 +111,21 @@ namespace NetworkManager.Domain {
                 entry.Dispose();
 
                 // Update alive computers
-                var tasks = computers.Select(computer => {
-                    return Task.Run(() => {
-                        bool isAlive = false;
+                if (getStatus) {
+                    var tasks = computers.Select(computer => {
+                        return Task.Run(() => {
+                            bool isAlive = false;
 
-                        try {
-                            var p = new Ping();
-                            isAlive = p.Send(computer.nameLong, 250).Status == IPStatus.Success;
-                        } catch (Exception) {}
-                        computer.isAlive = isAlive;
+                            try {
+                                var p = new Ping();
+                                isAlive = p.Send(computer.nameLong, 250).Status == IPStatus.Success;
+                            } catch (Exception) { }
+                            computer.isAlive = isAlive;
+                        });
                     });
-                });
 
-                Task.WhenAll(tasks).Wait();
+                    Task.WhenAll(tasks).Wait();
+                }
 
                 return computers;
             });

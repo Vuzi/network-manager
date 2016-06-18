@@ -23,7 +23,7 @@ namespace NetworkManager {
         /// <summary>
         /// Error handler
         /// </summary>
-        public ErrorHandler errorHandler { get; private set; }
+        public ErrorHandlerWindow errorHandler { get; private set; }
 
         public ComputerInfoStore computerInfoStore { get; private set; }
 
@@ -38,7 +38,7 @@ namespace NetworkManager {
             computersDetails.mainWindow = this;
 
             // Error panel
-            errorHandler = new ErrorHandler();
+            errorHandler = new ErrorHandlerWindow();
             errorHandler.warningIndicator = WarningImage;
 
             // App level exception handler

@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{0830E338-1181-4645-A4A0-1ADF42663BE9}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NetworkManagerApp</RootNamespace>
     <AssemblyName>NetworkManagerApp</AssemblyName>
@@ -43,8 +43,8 @@
     <ApplicationIcon>resource\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FontAwesome.WPF, Version=4.5.0.32401, Culture=neutral, PublicKeyToken=0758b07a11a4f466, processorArchitecture=MSIL">
-      <HintPath>..\packages\FontAwesome.WPF.4.5.0.7\lib\net40\FontAwesome.WPF.dll</HintPath>
+    <Reference Include="FontAwesome.WPF, Version=4.5.0.37524, Culture=neutral, PublicKeyToken=0758b07a11a4f466, processorArchitecture=MSIL">
+      <HintPath>..\packages\FontAwesome.WPF.4.5.0.8\lib\net40\FontAwesome.WPF.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -95,20 +95,20 @@
     <Compile Include="view\element\job\TaskReboot.xaml.cs">
       <DependentUpon>TaskReboot.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\ErrorHandler.xaml.cs">
-      <DependentUpon>ErrorHandler.xaml</DependentUpon>
+    <Compile Include="view\ErrorHandlerWindow.xaml.cs">
+      <DependentUpon>ErrorHandlerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="view\ExecutionReport.xaml.cs">
       <DependentUpon>ExecutionReport.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\Planning.xaml.cs">
-      <DependentUpon>Planning.xaml</DependentUpon>
+    <Compile Include="view\JobSchedulerWindow.xaml.cs">
+      <DependentUpon>JobSchedulerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\SelectTask.xaml.cs">
-      <DependentUpon>SelectTask.xaml</DependentUpon>
+    <Compile Include="view\TaskSelectionWindow.xaml.cs">
+      <DependentUpon>TaskSelectionWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\SoftwareDeployment.xaml.cs">
-      <DependentUpon>SoftwareDeployment.xaml</DependentUpon>
+    <Compile Include="view\SoftwareDeploymentWindow.xaml.cs">
+      <DependentUpon>SoftwareDeploymentWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -146,7 +146,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="view\ErrorHandler.xaml">
+    <Page Include="view\ErrorHandlerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -154,15 +154,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="view\Planning.xaml">
+    <Page Include="view\JobSchedulerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="view\SelectTask.xaml">
+    <Page Include="view\TaskSelectionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="view\SoftwareDeployment.xaml">
+    <Page Include="view\SoftwareDeploymentWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

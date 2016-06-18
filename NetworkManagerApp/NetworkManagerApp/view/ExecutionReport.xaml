@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NetworkManager.View"
         mc:Ignorable="d"
-        Title="Execution Report" Height="424.789" Width="539.792" Background="LightGray" Icon="../resource/icon.ico" >
+        Title="Network Manager - Execution Report" Height="424.789" Width="539.792" Background="LightGray" Icon="../resource/icon.ico" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>

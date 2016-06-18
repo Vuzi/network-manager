@@ -198,7 +198,11 @@ namespace NetworkManager.View.Component {
         }
 
         private void button_JobSchedule_Click(object sender, RoutedEventArgs e) {
-            // TODO
+            JobSchedulerWindow jobScheduler = new JobSchedulerWindow();
+            jobScheduler.Left = mainWindow.Left + 50;
+            jobScheduler.Top = mainWindow.Top + 50;
+            jobScheduler.selectComputers(computers);
+            jobScheduler.Show();
         }
 
         private void button_Installsoftware_Click(object sender, RoutedEventArgs e) {
