@@ -18,6 +18,11 @@ namespace NetworkManager.View {
             // Set values
             label_ClientName.Content = $"Software Deployment report on {computer.name}";
 
+            if (result.returnValue == 0)
+                label_Status.Content = "Success";
+            else
+                label_Status.Content = "Failure";
+
             textBox_Duration.Text = result.duration.ToString();
             textBox_ReturnValue.Text = result.returnValue.ToString();
             checkBox_Timeout.IsChecked = result.timeout;

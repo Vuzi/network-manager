@@ -25,6 +25,20 @@ namespace NetworkManager.Domain {
         public DateTime creation { get; set; }
         public DateTime lastChange { get; set; }
         public bool isAlive { get; set; }
+        public bool isServer {
+            get {
+                return os.ToLower().Contains("server");
+            }
+        }
+
+        private static double maxCacheLife = 120000; // 2mn
+        private IEnumerable<Software> cachedSoftwares;
+        private DateTime lastSoftwaresFetch;
+        private IEnumerable<User> cachedUsers;
+        private DateTime lastUsersFetch;
+        private string cachedMacAddr;
+        private DateTime lastMacAddrFetch;
+
 
         /// <summary>
         /// Return the first ipv4 of the computer, or null if not found
@@ -44,9 +58,17 @@ namespace NetworkManager.Domain {
         /// <summary>
         /// Return the mac address of the computer
         /// </summary>
+        /// <param name="force">True to ignore any cache</param>
         /// <returns>The mac address</returns>
-        public async Task<string> getMacAddress() {
-            return await WMIExecutor.getMACAddress(this);
+        public async Task<string> getMacAddress(bool force = false) {
+            TimeSpan diff = DateTime.Now - lastMacAddrFetch;
+
+            if (force || diff.TotalMilliseconds > maxCacheLife || cachedMacAddr == null) {
+                cachedMacAddr = await WMIExecutor.getMACAddress(this);
+                lastMacAddrFetch = DateTime.Now;
+            }
+
+            return cachedMacAddr;
         }
         
         /// <summary>
@@ -130,6 +152,11 @@ namespace NetworkManager.Domain {
             rdcProcess.Start();
         }
 
+        /// <summary>
+        /// Get a path transposed for the computer
+        /// </summary>
+        /// <param name="path">The path</param>
+        /// <returns>The network path</returns>
         public string getPath(string path) {
             return $@"\\{nameLong}\{path.Replace(':', '$')}";
         }
@@ -138,30 +165,61 @@ namespace NetworkManager.Domain {
         /// Return the logged users on the computed. Note that only real user accounts will
         /// be returned
         /// </summary>
+        /// <param name="force">True to ignore any cache</param>
         /// <returns>The logged user</returns>
-        public async Task<IEnumerable<User>> getLoggedUsers() {
-            return (await WMIExecutor.getLoggedUsers(this)).Where(u => u.SIDType == 1);
+        public async Task<IEnumerable<User>> getLoggedUsers(bool force = false) {
+            return (await getAllLoggedUsers(force)).Where(u => u.SIDType == 1);
         }
 
         /// <summary>
         /// Return all the logged users on the computer. Note that local system account will
         /// also be returned
         /// </summary>
+        /// <param name="force">True to ignore any cache</param>
         /// <returns>ALl the logged users</returns>
-        public async Task<IEnumerable<User>> getAllLoggedUsers() {
-            return await WMIExecutor.getLoggedUsers(this);
+        public async Task<IEnumerable<User>> getAllLoggedUsers(bool force = false) {
+            TimeSpan diff = DateTime.Now - lastUsersFetch;
+
+            if (force || diff.TotalMilliseconds > maxCacheLife || cachedUsers == null) {
+                cachedUsers = await WMIExecutor.getLoggedUsers(this);
+                lastUsersFetch = DateTime.Now;
+            }
+
+            return cachedUsers;
         }
 
         /// <summary>
         /// Return all the sofwares installed on the computer.
         /// </summary>
+        /// <param name="force">True to ignore any cache</param>
         /// <returns>All the installed sofwares</returns>
-        public async Task<IEnumerable<Software>> getInstalledSofwares() {
-            var results = await Task.WhenAll(
-                Task.Run(() => WMIExecutor.getInstalledSoftwares(this, 32)), 
-                Task.Run(() => WMIExecutor.getInstalledSoftwares(this, 64)));
-            return results.SelectMany(result => result);
+        public async Task<IEnumerable<Software>> getInstalledSofwares(bool force = false) {
+            TimeSpan diff = DateTime.Now - lastSoftwaresFetch;
+
+            if (force || diff.TotalMilliseconds > maxCacheLife || cachedSoftwares == null) {
+                var results = await Task.WhenAll(
+                    Task.Run(() => WMIExecutor.getInstalledSoftwares(this, 32)),
+                    Task.Run(() => WMIExecutor.getInstalledSoftwares(this, 64)));
+                cachedSoftwares = results.SelectMany(result => result);
+                lastSoftwaresFetch = DateTime.Now;
+            }
+
+            return cachedSoftwares;
+        }
+
+        /// <summary>
+        /// Return true if the computer is the local computer, false otherwise
+        /// </summary>
+        /// <returns>True if the computer is the local computer, false otherwise</returns>
+        public bool isLocalComputer() {
+            return Environment.MachineName == name;
+        }
+
+        public void copyCache(Computer c) {
+            cachedSoftwares = c.cachedSoftwares;
+            cachedUsers = c.cachedUsers;
+            lastSoftwaresFetch = c.lastSoftwaresFetch;
+            lastUsersFetch = c.lastUsersFetch;
         }
     }
-
 }

@@ -29,6 +29,7 @@ namespace NetworkManager.WMIExecution {
     /// </summary>
     public class WMIException : Exception {
         public Exception error;
+        public string computer;
     }
 
     /// <summary>
@@ -64,7 +65,7 @@ namespace NetworkManager.WMIExecution {
                         throw new Exception($"Method {method} from {path} failed with code {returnValue}");
 
                 } catch (Exception e) {
-                    throw new WMIException() { error = e };
+                    throw new WMIException() { error = e, computer = computer.nameLong };
                 }
             });
         }
@@ -81,62 +82,71 @@ namespace NetworkManager.WMIExecution {
 
             // Perform the operation asynchronously
             return await Task.Run(() => {
-                List<Software> installedSoftwares = new List<Software>();
+                try {
+                    List<Software> installedSoftwares = new List<Software>();
 
-                // Create the scope
-                var wmiScope = new ManagementScope($@"\\{computer.nameLong}\root\cimv2", getConnectionOptions());
-                wmiScope.Options.Context.Add("__ProviderArchitecture", architecture);
-                wmiScope.Options.Context.Add("__RequiredArchitecture", true);
-                wmiScope.Connect();
+                    // Create the scope
+                    var wmiScope = new ManagementScope($@"\\{computer.nameLong}\root\cimv2", getConnectionOptions());
+                    wmiScope.Options.Context.Add("__ProviderArchitecture", architecture);
+                    wmiScope.Options.Context.Add("__RequiredArchitecture", true);
+                    wmiScope.Connect();
 
-                // Get the WMI process
-                var wmiProcess = new ManagementClass(wmiScope, new ManagementPath("StdRegProv"), null);
+                    // Get the WMI process
+                    var wmiProcess = new ManagementClass(wmiScope, new ManagementPath("StdRegProv"), null);
 
-                // First request to get all the subkeys
-                ManagementBaseObject inParams = wmiProcess.GetMethodParameters("EnumKey");
-                inParams["hDefKey"] = HKEY_LOCAL_MACHINE;
-                inParams["sSubKeyName"] = softwareRegLoc;
+                    // First request to get all the subkeys
+                    ManagementBaseObject inParams = wmiProcess.GetMethodParameters("EnumKey");
+                    inParams["hDefKey"] = HKEY_LOCAL_MACHINE;
+                    inParams["sSubKeyName"] = softwareRegLoc;
 
-                // Read Registry Key Names 
-                ManagementBaseObject outParams = wmiProcess.InvokeMethod("EnumKey", inParams, null);
-                string[] programGuids = outParams["sNames"] as string[];
+                    // Read Registry Key Names 
+                    ManagementBaseObject outParams = wmiProcess.InvokeMethod("EnumKey", inParams, null);
+                    string[] programGuids = outParams["sNames"] as string[];
 
-                // For each subkey
-                foreach (string subKeyName in programGuids) {
-                    Dictionary<string, string> values = new Dictionary<string, string>();
-                    foreach (string valueName in valueNames) {
-                        inParams = wmiProcess.GetMethodParameters("GetStringValue");
-                        inParams["hDefKey"] = HKEY_LOCAL_MACHINE;
-                        inParams["sSubKeyName"] = $@"{softwareRegLoc}\{subKeyName}";
-                        inParams["sValueName"] = valueName;
-                        // Read Registry Value 
-                        outParams = wmiProcess.InvokeMethod("GetStringValue", inParams, null);
+                    // For each subkey
+                    foreach (string subKeyName in programGuids) {
+                        Dictionary<string, string> values = new Dictionary<string, string>();
+                        foreach (string valueName in valueNames) {
+                            inParams = wmiProcess.GetMethodParameters("GetStringValue");
+                            inParams["hDefKey"] = HKEY_LOCAL_MACHINE;
+                            inParams["sSubKeyName"] = $@"{softwareRegLoc}\{subKeyName}";
+                            inParams["sValueName"] = valueName;
+                            // Read Registry Value 
+                            outParams = wmiProcess.InvokeMethod("GetStringValue", inParams, null);
 
-                        if (outParams.Properties["sValue"].Value != null) {
-                            values[valueName] = outParams.Properties["sValue"].Value.ToString();
+                            if (outParams.Properties["sValue"].Value != null) {
+                                values[valueName] = outParams.Properties["sValue"].Value.ToString();
+                            }
+                        }
+
+                        if (!string.IsNullOrEmpty(values.GetValueOrDefault("DisplayName"))
+                        && string.IsNullOrEmpty(values.GetValueOrDefault("ReleaseType"))
+                        && string.IsNullOrEmpty(values.GetValueOrDefault("ParentDisplayName"))) {
+                            var software = new Software() {
+                                displayName = values.GetValueOrDefault("DisplayName"),
+                                displayVersion = values.GetValueOrDefault("DisplayVersion"),
+                                publisher = values.GetValueOrDefault("Publisher"),
+                                comment = values.GetValueOrDefault("Comment"),
+                                installLocation = values.GetValueOrDefault("InstallLocation")
+                            };
+                        
+                            var installDate = values.GetValueOrDefault("InstallDate");
+                            try {
+                                if (installDate != null)
+                                    software.installDate = DateTime.ParseExact(installDate, "yyyyMMdd", CultureInfo.InvariantCulture);
+                            } catch(Exception) {
+                                // Ignore invalid dates
+                            }
+
+                            installedSoftwares.Add(software);
                         }
                     }
 
-                    if (!string.IsNullOrEmpty(values.GetValueOrDefault("DisplayName"))
-                    && string.IsNullOrEmpty(values.GetValueOrDefault("ReleaseType"))
-                    && string.IsNullOrEmpty(values.GetValueOrDefault("ParentDisplayName"))) {
-                        var software = new Software() {
-                            displayName = values.GetValueOrDefault("DisplayName"),
-                            displayVersion = values.GetValueOrDefault("DisplayVersion"),
-                            publisher = values.GetValueOrDefault("Publisher"),
-                            comment = values.GetValueOrDefault("Comment"),
-                            installLocation = values.GetValueOrDefault("InstallLocation")
-                        };
+                    return installedSoftwares;
 
-                        var installDate = values.GetValueOrDefault("InstallDate");
-                        if (installDate != null)
-                            software.installDate = DateTime.ParseExact(installDate, "yyyyMMdd", CultureInfo.InvariantCulture);
-
-                        installedSoftwares.Add(software);
-                    }
+                } catch (Exception e) {
+                    throw new WMIException() { error = e, computer = computer.nameLong };
                 }
-
-                return installedSoftwares;
             });
         }
 
@@ -190,14 +200,14 @@ namespace NetworkManager.WMIExecution {
                                             status = mo["Status"].ToString()
                                         });
                                     }
-                                } catch (Exception e) {
-                                    // Ignore not found error
+                                } catch (Exception) {
+                                    // Ignore not found
                                 }
                             }
                         }
                     }
                 } catch (Exception e) {
-                    throw new WMIException() { error = e };
+                    throw new WMIException() { error = e, computer = computer.nameLong };
                 }
 
                 return users.Values.AsEnumerable();
@@ -299,7 +309,7 @@ namespace NetworkManager.WMIExecution {
                     // Return the values
                     return result;
                 } catch (Exception e) {
-                    throw new WMIException() { error = e };
+                    throw new WMIException() { error = e, computer = computer.nameLong };
                 }
             });
         }
@@ -329,11 +339,11 @@ namespace NetworkManager.WMIExecution {
                             if (addresses.Contains(ipAddress))
                                 return (string) mo["MacAddress"];
 
-                        } catch (Exception e) { }
+                        } catch (Exception) { }
                     }
 
                 } catch (Exception e) {
-                    throw new WMIException() { error = e };
+                    throw new WMIException() { error = e, computer = computer.nameLong };
                 }
 
                 return null;

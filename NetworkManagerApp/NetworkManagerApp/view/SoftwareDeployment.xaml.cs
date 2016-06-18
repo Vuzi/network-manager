@@ -74,9 +74,9 @@ namespace NetworkManager.View {
                 } else {
                     FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(filePath);
 
-                    itm.name = fileVersionInfo.ProductName.Trim();
+                    itm.name = fileVersionInfo.ProductName?.Trim();
                     itm.version = fileVersionInfo.FileVersion;
-                    itm.company = fileVersionInfo.CompanyName.Trim();
+                    itm.company = fileVersionInfo.CompanyName?.Trim();
                 }
                 data.Add(itm);
             }
@@ -108,12 +108,23 @@ namespace NetworkManager.View {
                     throw e;
                 } finally {
                     // Delete the file
-                    currentComputer.deleteFile(path);
+                    try {
+                        currentComputer.deleteFile(path);
+                    } catch(Exception e) {
+                        WarningImage.Visibility = Visibility.Visible;
+                        errorHandler.addError(new WMIException() {
+                            error = e,
+                            computer = currentComputer.nameLong
+                        });
+                    }
                 }
 
             } catch(Exception e) {
                 WarningImage.Visibility = Visibility.Visible;
-                errorHandler.addError(e);
+                errorHandler.addError(new WMIException() {
+                    error = e,
+                    computer = currentComputer.nameLong
+                });
             } finally {
                 hideLoading();
             }

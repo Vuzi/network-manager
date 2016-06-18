@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="NetworkManager.View.Component.Job.TaskInstall"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NetworkManager.View.Component.Job"
+             mc:Ignorable="d" Width="Auto" Height="Auto">
+    <Grid Margin="0 0 0 10">
+        <Border Padding="0 0 0 15" HorizontalAlignment="Left" VerticalAlignment="Top"  BorderBrush="Gray" BorderThickness="0 0 0 2">
+            <Grid>
+
+                <!-- Description -->
+                <Label Content="Install software" VerticalAlignment="Top" Margin="3,-2,0,0" HorizontalAlignment="Left" Width="437" FontWeight="Bold" FontSize="18"/>
+                <TextBlock Text="TODO" Margin="10,37,10,5" TextWrapping="Wrap"/>
+
+                <!-- Parameters -->
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
