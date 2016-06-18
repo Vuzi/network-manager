@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Threading;
+using NetworkManagerApp.view;
 
 namespace NetworkManager {
 
@@ -27,6 +28,8 @@ namespace NetworkManager {
 
         public ComputerInfoStore computerInfoStore { get; private set; }
 
+        public Configuration configurationHandler { get; private set; }
+
         public MainWindow() {
             InitializeComponent();
 
@@ -40,6 +43,9 @@ namespace NetworkManager {
             // Error panel
             errorHandler = new ErrorHandler();
             errorHandler.warningIndicator = WarningImage;
+
+            // Error panel
+            configurationHandler = new Configuration();
 
             // App level exception handler
             Application.Current.DispatcherUnhandledException += (sender, e) => {
@@ -268,6 +274,12 @@ namespace NetworkManager {
             errorHandler.Left = this.Left + 50;
             errorHandler.Top = this.Top + 50;
             errorHandler.Show();
+        }
+        private void button_Configuration_Click(object sender, RoutedEventArgs e)
+        {
+            configurationHandler.Left = this.Left + 50;
+            configurationHandler.Top = this.Top + 50;
+            configurationHandler.Show();
         }
     }
 
