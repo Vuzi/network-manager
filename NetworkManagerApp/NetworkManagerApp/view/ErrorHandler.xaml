@@ -21,6 +21,7 @@
                 <DataGridTextColumn  Header="Type" Width="Auto" Binding="{Binding type}" IsReadOnly="True" CanUserReorder="True"/>
                 <DataGridTextColumn  Header="Date" Width="Auto" Binding="{Binding date}" IsReadOnly="True" CanUserReorder="True"/>
                 <DataGridTextColumn  Header="Message" Width="Auto" Binding="{Binding message}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Computer" Width="Auto" Binding="{Binding computer}" IsReadOnly="True" CanUserReorder="True"/>
                 <DataGridTextColumn  Header="Source" Width="Auto" Binding="{Binding source}" IsReadOnly="True" CanUserReorder="True"/>
             </DataGrid.Columns>
         </DataGrid>

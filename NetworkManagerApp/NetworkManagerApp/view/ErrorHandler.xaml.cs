@@ -33,8 +33,11 @@ namespace NetworkManager.View {
         }
 
         public void addError(Exception e) {
+            string computer = "-";
+
             if(e is WMIException) {
                 WMIException we = (WMIException)e;
+                computer = we.computer;
                 e = we.error != null ? we.error : e;
             }
 
@@ -42,6 +45,7 @@ namespace NetworkManager.View {
                 type = e.GetType().ToString(),
                 message = e.Message,
                 date = DateTime.Now,
+                computer = computer,
                 source = e.Source
             });
 
@@ -54,5 +58,6 @@ namespace NetworkManager.View {
         public string message { get; set; }
         public string source { get; set; }
         public DateTime date { get; set; }
+        public string computer { get; set; }
     }
 }

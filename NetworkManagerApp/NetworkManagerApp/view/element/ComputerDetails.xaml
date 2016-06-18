@@ -11,43 +11,44 @@
 
         <!-- Selection computer informations -->
         <Label x:Name="label_ClientName" Content="&lt;No Computer Selected&gt;" VerticalAlignment="Top" Margin="3,-2,-498,0" HorizontalAlignment="Left" Width="795" FontWeight="Bold" FontSize="18"/>
-
-        <Button x:Name="button_ShutDown" Visibility="Collapsed" Margin="7,37,0,0" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_ShutDown_Click">
-            <DockPanel LastChildFill="True" VerticalAlignment="Center" Width="123">
-                <fa:FontAwesome Icon="PowerOff" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Shutdown</TextBlock>
-            </DockPanel>
-        </Button>
-        <Button x:Name="button_WakeOnLan" Margin="7,37,0,0" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_WakeOnLan_Click">
-            <DockPanel LastChildFill="True" VerticalAlignment="Center" Width="123">
-                <fa:FontAwesome Icon="Play" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Wake On Lan</TextBlock>
-            </DockPanel>
-        </Button>
-        <Button x:Name="button_Reboot" Margin="141,37,0,0" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_Reboot_Click">
-            <DockPanel LastChildFill="True" Width="120">
-                <fa:FontAwesome Icon="Refresh" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" >Reboot</TextBlock>
-            </DockPanel>
-        </Button>
-        <Button x:Name="button_JobSchedule" Margin="274,37,-99,0" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_JobSchedule_Click">
-            <DockPanel LastChildFill="True" Width="119">
-                <fa:FontAwesome Icon="Calendar" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" >Job Schedule</TextBlock>
-            </DockPanel>
-        </Button>
-        <Button x:Name="button_Installsoftware"  Margin="407,37,-232,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125" Click="button_Installsoftware_Click" >
-            <DockPanel LastChildFill="True" Width="121">
-                <fa:FontAwesome Icon="Upload" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" >Install Software</TextBlock>
-            </DockPanel>
-        </Button>
-        <Button x:Name="button_StartRemoteDesktop"  Margin="541,37,-366,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125" Click="button_StartRemoteDesktop_Click" >
-            <DockPanel LastChildFill="True" Width="121">
-                <fa:FontAwesome Icon="Desktop" FontSize="16px"  VerticalAlignment="Center" Margin="5,0,0,0" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Text="Remote Desktop" Width="89" />
-            </DockPanel>
-        </Button>
+        <WrapPanel Orientation="Horizontal" Margin="8,34,0,0" Height="38" VerticalAlignment="Top" HorizontalAlignment="Left" Width="744">
+            <Button x:Name="button_ShutDown" Foreground="DarkRed" Visibility="Collapsed" Margin="3" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_ShutDown_Click">
+                <DockPanel LastChildFill="True" VerticalAlignment="Center" Width="123">
+                    <fa:FontAwesome Icon="PowerOff" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">OFF</TextBlock>
+                </DockPanel>
+            </Button>
+            <Button x:Name="button_WakeOnLan" Foreground="DarkGreen" Margin="3" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_WakeOnLan_Click">
+                <DockPanel LastChildFill="True" VerticalAlignment="Center" Width="123">
+                    <fa:FontAwesome Icon="Play" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" >ON</TextBlock>
+                </DockPanel>
+            </Button>
+            <Button x:Name="button_Reboot" Foreground="#AF7817" Margin="3" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_Reboot_Click">
+                <DockPanel LastChildFill="True" Width="120">
+                    <fa:FontAwesome Icon="Refresh" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" >Reboot</TextBlock>
+                </DockPanel>
+            </Button>
+            <Button x:Name="button_JobSchedule" Margin="3" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_JobSchedule_Click">
+                <DockPanel LastChildFill="True" Width="119">
+                    <fa:FontAwesome Icon="Calendar" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" >Job Schedule</TextBlock>
+                </DockPanel>
+            </Button>
+            <Button x:Name="button_Installsoftware" Margin="3" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125" Click="button_Installsoftware_Click" >
+                <DockPanel LastChildFill="True" Width="121">
+                    <fa:FontAwesome Icon="Upload" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" >Install Software</TextBlock>
+                </DockPanel>
+            </Button>
+            <Button x:Name="button_StartRemoteDesktop" Margin="3" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125" Click="button_StartRemoteDesktop_Click" >
+                <DockPanel LastChildFill="True" Width="121">
+                    <fa:FontAwesome Icon="Desktop" FontSize="16px"  VerticalAlignment="Center" Margin="5,0,0,0" />
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Text="Remote Desktop" Width="89" />
+                </DockPanel>
+            </Button>
+        </WrapPanel>
 
         <Button x:Name="button_OpenDiskC"  Margin="673,37,-498,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125" Click="button_OpenDiskC_Click" >
             <DockPanel LastChildFill="True" Width="115">
@@ -84,7 +85,7 @@
 
         <!-- Connected users -->
         <Label x:Name="label_ConnectedUsers" Content="Connected Users" HorizontalAlignment="Left" Margin="10,202,0,0" VerticalAlignment="Top" Width="146" Height="30px" FontWeight="Bold" FontSize="14"/>
-        <Button Name="button_ConnectedUsersReload" Margin="124,209,0,0" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ConnectedUsersReload_Click">
+        <Button Name="button_ConnectedUsersReload" Margin="126,209,0,0" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ConnectedUsersReload_Click">
             <DockPanel LastChildFill="True"  Width="15" Height="15">
                 <Image DockPanel.Dock="Left" Source="../../resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
             </DockPanel>
@@ -98,14 +99,14 @@
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <DataGridTextColumn  Header="Name" Width="140" Binding="{Binding name}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Domain" Width="140" Binding="{Binding domain}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Caption" Width="300" Binding="{Binding caption}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
-                <DataGridTextColumn  Header="Description" Width="380" Binding="{Binding description}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridCheckBoxColumn  Header="Local Account" Width="90" Binding="{Binding localAccount}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Status" Width="120" Binding="{Binding status}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
-                <DataGridTextColumn  Header="SID Type" Width="100" Binding="{Binding SIDType}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
-                <DataGridTextColumn  Header="SID" Width="400" Binding="{Binding SID}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
+                <DataGridTextColumn  Header="Name" Width="Auto" Binding="{Binding name}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Domain" Width="Auto" Binding="{Binding domain}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Caption" Width="Auto" Binding="{Binding caption}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
+                <DataGridTextColumn  Header="Description" Width="Auto" Binding="{Binding description}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridCheckBoxColumn  Header="Local Account" Width="Auto" Binding="{Binding localAccount}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Status" Width="Auto" Binding="{Binding status}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
+                <DataGridTextColumn  Header="SID Type" Width="Auto" Binding="{Binding SIDType}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
+                <DataGridTextColumn  Header="SID" Width="Auto" Binding="{Binding SID}" IsReadOnly="True" CanUserReorder="True" Visibility="Hidden"/>
             </DataGrid.Columns>
         </DataGrid>
         <CheckBox x:Name="checkBox_ShowAllUsers" Content="Show All Users" HorizontalAlignment="Left" Margin="9,441,0,-162" VerticalAlignment="Top" Height="21" Click="checkBox_ShowAllUsers_Click"/>
@@ -124,11 +125,11 @@
           CanUserReorderColumns="True" CanUserResizeColumns="True" SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
           CanUserResizeRows="False" CanUserSortColumns="True" AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn  Header="Name" Width="520" Binding="{Binding displayName}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Version" Width="90" Binding="{Binding displayVersion}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Installation Date" Width="140" Binding="{Binding installDate}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Publisher" Width="140" Visibility="Hidden" Binding="{Binding publisher}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Install Location" Width="140" Visibility="Hidden" Binding="{Binding installLocation}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Name" Width="Auto" Binding="{Binding displayName}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Version" Width="Auto" Binding="{Binding displayVersion}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Installation Date" Width="Auto" Binding="{Binding installDateFormated}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Publisher" Width="Auto" Visibility="Hidden" Binding="{Binding publisher}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTextColumn  Header="Install Location" Width="Auto" Visibility="Hidden" Binding="{Binding installLocation}" IsReadOnly="True" CanUserReorder="True"/>
             </DataGrid.Columns>
             <DataGrid.ContextMenu>
                 <ContextMenu>

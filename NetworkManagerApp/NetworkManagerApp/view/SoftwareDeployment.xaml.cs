@@ -45,7 +45,7 @@ namespace NetworkManager.View {
             if (result == false)
                 return;
 
-            File.Copy(ofd.FileName, path + System.IO.Path.GetFileName(ofd.FileName));
+            File.Copy(ofd.FileName, path + System.IO.Path.GetFileName(ofd.FileName), true);
             AppsToDeploy_Loaded(this, null);
         }
 
