@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows;
 using System.IO;
-using System.Windows.Threading;
 
 namespace NetworkManager.View.Component {
     /// <summary>
@@ -212,6 +211,7 @@ namespace NetworkManager.View.Component {
         private void button_JobSchedule_Click(object sender, RoutedEventArgs e) {
             if (computer != null) {
                 // TODO
+                new Planning().Show();
             }
         }
 

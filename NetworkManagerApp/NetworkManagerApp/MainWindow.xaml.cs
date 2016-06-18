@@ -239,7 +239,7 @@ namespace NetworkManager {
                 timer.Stop();
                 await updateListComputers();
             };
-            timer.Interval = new TimeSpan(0, 0, 5);
+            timer.Interval = new TimeSpan(0, 0, inSeconds);
             timer.Start();
         }
 

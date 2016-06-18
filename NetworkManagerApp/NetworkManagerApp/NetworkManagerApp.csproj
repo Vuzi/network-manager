@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{0830E338-1181-4645-A4A0-1ADF42663BE9}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NetworkManagerApp</RootNamespace>
     <AssemblyName>NetworkManagerApp</AssemblyName>
@@ -54,6 +54,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -82,11 +83,29 @@
     <Compile Include="view\element\ComputerDetails.xaml.cs">
       <DependentUpon>ComputerDetails.xaml</DependentUpon>
     </Compile>
+    <Compile Include="view\element\job\TaskInstall.xaml.cs">
+      <DependentUpon>TaskInstall.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="view\element\job\TaskShutdown.xaml.cs">
+      <DependentUpon>TaskShutdown.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="view\element\job\TaskWakeOnLan.xaml.cs">
+      <DependentUpon>TaskWakeOnLan.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="view\element\job\TaskReboot.xaml.cs">
+      <DependentUpon>TaskReboot.xaml</DependentUpon>
+    </Compile>
     <Compile Include="view\ErrorHandler.xaml.cs">
       <DependentUpon>ErrorHandler.xaml</DependentUpon>
     </Compile>
     <Compile Include="view\ExecutionReport.xaml.cs">
       <DependentUpon>ExecutionReport.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="view\Planning.xaml.cs">
+      <DependentUpon>Planning.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="view\SelectTask.xaml.cs">
+      <DependentUpon>SelectTask.xaml</DependentUpon>
     </Compile>
     <Compile Include="view\SoftwareDeployment.xaml.cs">
       <DependentUpon>SoftwareDeployment.xaml</DependentUpon>
@@ -111,11 +130,35 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="view\element\job\TaskInstall.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="view\element\job\TaskShutdown.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="view\element\job\TaskWakeOnLan.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="view\element\job\TaskReboot.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="view\ErrorHandler.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="view\ExecutionReport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="view\Planning.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="view\SelectTask.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
