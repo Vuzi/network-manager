@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:local="clr-namespace:NetworkManager.View.Component"
-             xmlns:networkManager="clr-namespace:NetworkManager.Domain;assembly=NetworkManagerCore" Width="804.256" Height="768.693">
+             xmlns:networkManager="clr-namespace:NetworkManager.DomainContent;assembly=NetworkManagerCore" Width="804.256" Height="768.693">
     <Grid Margin="0,0,0,0">
 
         <!-- Selection computer informations -->

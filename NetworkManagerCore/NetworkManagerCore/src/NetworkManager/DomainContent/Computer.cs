@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using NetworkManager.WMIExecution;
 using System.Net;
 
-namespace NetworkManager.Domain {
+namespace NetworkManager.DomainContent {
 
     /// <summary>
     /// A computer in the domain
@@ -50,7 +50,7 @@ namespace NetworkManager.Domain {
                     if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                         return ip;
                 }
-            } catch(Exception e) {} // Ignore errors
+            } catch(Exception) {} // Ignore errors
 
             return null; // No ipv4 address
         }

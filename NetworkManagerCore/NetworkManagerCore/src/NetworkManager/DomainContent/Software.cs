@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NetworkManager.Domain {
+namespace NetworkManager.DomainContent {
     public class Software {
         public string displayName { get; set; }
         public string displayVersion { get; set; }

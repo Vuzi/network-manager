@@ -8,7 +8,7 @@
         xmlns:local="clr-namespace:NetworkManager"
         xmlns:Controls="clr-namespace:System.Windows.Controls;assembly=TreeViewEx"
         xmlns:component="clr-namespace:NetworkManager.View.Component"
-        xmlns:networkManager="clr-namespace:NetworkManager.Domain;assembly=NetworkManagerCore"
+        xmlns:networkManager="clr-namespace:NetworkManager.DomainContent;assembly=NetworkManagerCore"
         Title="Network Manager" Height="810" Width="1080" Background="LightGray" Icon="../resource/icon.ico">
     <Window.Resources>
         <Storyboard x:Key="Storyboard1" RepeatBehavior="Forever">
@@ -45,12 +45,12 @@
 
             <Controls:TreeViewEx.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type local:DomainModel}" ItemsSource="{Binding Items}">
-                    <TextBlock Text="{Binding name}" />
+                    <TextBlock Text="{Binding name}" FontSize="14" FontWeight="DemiBold" />
                 </HierarchicalDataTemplate>
 
                 <DataTemplate DataType="{x:Type local:ComputerModel}">
                     <StackPanel Orientation="Horizontal">
-                        <fa:FontAwesome Icon="Server" FontSize="10px"  VerticalAlignment="Center" Margin="0,0,5,0" >
+                        <fa:FontAwesome Icon="Server" FontSize="14" FontWeight="Normal" VerticalAlignment="Center" Margin="0,0,5,0" >
                             <TextBlock.Style>
                                 <Style TargetType="fa:FontAwesome">
                                     <Style.Triggers>
@@ -60,11 +60,14 @@
                                         <DataTrigger Binding="{Binding computer.isServer}" Value="false" >
                                             <Setter Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
+                                        <DataTrigger Binding="{Binding computer.isAlive}" Value="false" >
+                                            <Setter Property="Opacity" Value="0.5"/>
+                                        </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
                         </fa:FontAwesome>
-                        <fa:FontAwesome Icon="Desktop" FontSize="10px"  VerticalAlignment="Center" Margin="0,0,5,0" >
+                        <fa:FontAwesome Icon="Desktop" FontSize="14" FontWeight="Normal" VerticalAlignment="Center" Margin="0,0,5,0" >
                             <TextBlock.Style>
                                 <Style TargetType="fa:FontAwesome">
                                     <Style.Triggers>
@@ -74,18 +77,23 @@
                                         <DataTrigger Binding="{Binding computer.isServer}" Value="false" >
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
+                                        <DataTrigger Binding="{Binding computer.isAlive}" Value="false" >
+                                            <Setter Property="Opacity" Value="0.5"/>
+                                        </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
                         </fa:FontAwesome>
-                        <TextBlock Text="{Binding computer.name}">
+                        <TextBlock Text="{Binding computer.name}" FontSize="14" FontWeight="DemiBold" >
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding computer.isAlive}" Value="true" >
+                                            <Setter Property="Opacity" Value="1"/>
                                             <Setter Property="Foreground" Value="DarkGreen"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding computer.isAlive}" Value="false" >
+                                            <Setter Property="Opacity" Value="0.5"/>
                                             <Setter Property="Foreground" Value="DarkRed"/>
                                         </DataTrigger>
                                     </Style.Triggers>

@@ -3,17 +3,63 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:local="clr-namespace:NetworkManager.View.Component.Job"
              mc:Ignorable="d" Width="Auto" Height="Auto">
-    <Grid Margin="0 0 0 10">
-        <Border Padding="0 0 0 15" HorizontalAlignment="Left" VerticalAlignment="Top"  BorderBrush="Gray" BorderThickness="0 0 0 2">
-            <Grid>
+    <Grid Margin="0 0 5 10" VerticalAlignment="Stretch">
+        <Border Padding="0 0 0 15" VerticalAlignment="Top"  BorderBrush="Gray" BorderThickness="0 0 0 2">
+            <Grid Height="Auto">
 
                 <!-- Description -->
                 <Label Content="Install software" VerticalAlignment="Top" Margin="3,-2,0,0" HorizontalAlignment="Left" Width="437" FontWeight="Bold" FontSize="18"/>
-                <TextBlock Text="TODO" Margin="10,37,10,5" TextWrapping="Wrap"/>
+                <TextBlock Text="Install the specified software on the selected computers. The installed software must have a silent mode available and specified in the launch arguments field." Margin="10,37,10,72" TextWrapping="Wrap"/>
 
-                <!-- Parameters -->
+                <DataGrid x:Name="DataGrid_softwareList" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" 
+                  CanUserReorderColumns="True" CanUserResizeColumns="True" AutoGenerateColumns="False" CanUserAddRows="false"
+                  CanUserResizeRows="False" CanUserSortColumns="True" Loaded="DataGrid_softwareList_Loaded" Margin="10,78,10,72" HorizontalGridLinesBrush="#FF8D8A8A" VerticalGridLinesBrush="#FF8D8A8A" GridLinesVisibility="Horizontal" >
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="Copy">
+                            </MenuItem>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="" Width="20" IsReadOnly="True" CanUserReorder="False" CanUserResize="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding icon}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn  Header="Name" Width="Auto" Binding="{Binding name}" IsReadOnly="True" CanUserReorder="True" FontWeight="Bold"/>
+                        <DataGridTextColumn  Header="Publisher" Width="Auto" Binding="{Binding company}" IsReadOnly="True" CanUserReorder="True"/>
+                        <DataGridTextColumn  Header="Version" Width="Auto" Binding="{Binding version}" IsReadOnly="True" CanUserReorder="True"/>
+                        <DataGridTextColumn  Header="Size" Width="Auto" Binding="{Binding size}" IsReadOnly="True" CanUserReorder="True"/>
+                        <DataGridTextColumn  Header="Filename" Width="Auto" Binding="{Binding file}" IsReadOnly="True" CanUserReorder="True"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <Label Content="Launch arguments :" Padding="2" HorizontalAlignment="Left" Margin="10,0,0,41" Width="110" Height="21" VerticalAlignment="Bottom"/>
+                <TextBox x:Name="Textbox_launchArgs" HorizontalContentAlignment="Left"  Text="" Margin="120,0,0,41" Width="215" BorderThickness="2" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" Height="21" VerticalAlignment="Bottom" />
+                <Label Content="Timeout (s) :" Padding="2" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="110" Height="21"/>
+                <TextBox x:Name="Textbox_timeout" HorizontalContentAlignment="Left" Text="60" Margin="120,0,0,10" Width="215" BorderThickness="2" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" Height="21" VerticalAlignment="Bottom" />
+
+                <!-- Controls -->
+                <Button x:Name="button_Delete" Margin="0,8,10,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Width="20" Click="button_Delete_Click">
+                    <DockPanel LastChildFill="True" Width="Auto" >
+                        <fa:FontAwesome Icon="Times" FontSize="14px"  VerticalAlignment="Center" Margin="0,0,0,0" Width="16" />
+                    </DockPanel>
+                </Button>
+                <Button x:Name="button_Up" Margin="0,0,10,25" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="20" Click="button_Up_Click">
+                    <DockPanel LastChildFill="True" Width="Auto" >
+                        <fa:FontAwesome Icon="ArrowUp" FontSize="14px"  VerticalAlignment="Center" Margin="0,0,0,0" Width="16" />
+                    </DockPanel>
+                </Button>
+                <Button x:Name="button_Down" Margin="0,0,10,0" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="20" Click="button_Down_Click">
+                    <DockPanel LastChildFill="True" Width="Auto" >
+                        <fa:FontAwesome Icon="ArrowDown" FontSize="14px"  VerticalAlignment="Center" Margin="0,0,0,0" Width="16" />
+                    </DockPanel>
+                </Button>
             </Grid>
         </Border>
     </Grid>

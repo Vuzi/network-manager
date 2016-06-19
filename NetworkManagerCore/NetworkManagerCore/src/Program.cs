@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-using NetworkManager.Domain;
+using NetworkManager.DomainContent;
 using NetworkManager.WMIExecution;
 
 namespace NetworkManager {

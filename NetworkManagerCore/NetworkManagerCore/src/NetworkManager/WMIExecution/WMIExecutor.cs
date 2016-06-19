@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Globalization;
 
-using NetworkManager.Domain;
+using NetworkManager.DomainContent;
 
 namespace NetworkManager.WMIExecution {
     /// <summary>

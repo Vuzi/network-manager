@@ -1,5 +1,5 @@
 ﻿
-using NetworkManager.Domain;
+using NetworkManager.DomainContent;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,7 +63,7 @@ namespace NetworkManager.View.Component {
                         }
                     } else {
                         // Not connected : get the IP and MAC from local database
-                        var computerInfo = mainWindow.computerInfoStore.getComputerInfoByName(computer.nameLong);
+                        var computerInfo = MainWindow.computerInfoStore.getComputerInfoByName(computer.nameLong);
 
                         if (computerInfo != null) {
                             ipAddress = computerInfo.ipAddress;
@@ -184,7 +184,7 @@ namespace NetworkManager.View.Component {
             await Task.Factory.StartNew(() => {
                 Parallel.ForEach(toWakeOnLan, computer => {
                     try {
-                        var computerInfo = mainWindow.computerInfoStore.getComputerInfoByName(computer.nameLong);
+                        var computerInfo = MainWindow.computerInfoStore.getComputerInfoByName(computer.nameLong);
 
                         if (computerInfo != null) {
                             Utils.wakeOnLan(computerInfo.macAddress);
@@ -198,7 +198,11 @@ namespace NetworkManager.View.Component {
         }
 
         private void button_JobSchedule_Click(object sender, RoutedEventArgs e) {
-            // TODO
+            JobSchedulerWindow jobScheduler = new JobSchedulerWindow();
+            jobScheduler.Left = mainWindow.Left + 50;
+            jobScheduler.Top = mainWindow.Top + 50;
+            jobScheduler.selectComputers(computers);
+            jobScheduler.Show();
         }
 
         private void button_Installsoftware_Click(object sender, RoutedEventArgs e) {

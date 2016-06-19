@@ -1,17 +1,19 @@
-﻿using NetworkManager.Domain;
+﻿using NetworkManager.DomainContent;
 using NetworkManager.View;
+
+using SQLite;
 
 using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Data.SQLite;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Threading;
+using NetworkManager.Job;
 
 namespace NetworkManager {
 
@@ -23,14 +25,19 @@ namespace NetworkManager {
         /// <summary>
         /// Error handler
         /// </summary>
-        public ErrorHandler errorHandler { get; private set; }
+        public ErrorHandlerWindow errorHandler { get; private set; }
 
-        public ComputerInfoStore computerInfoStore { get; private set; }
+        public static ComputerInfoStore computerInfoStore { get; private set; }
+        public static JobStore jobStore { get; private set; }
 
         public Configuration configurationHandler { get; private set; }
 
         public MainWindow() {
-            InitializeComponent();
+            try {
+                InitializeComponent();
+            } catch(Exception e) {
+                Console.WriteLine(e);
+            }
 
             // Preapre the database
             prepareDatabaseConnection();
@@ -40,7 +47,7 @@ namespace NetworkManager {
             computersDetails.mainWindow = this;
 
             // Error panel
-            errorHandler = new ErrorHandler();
+            errorHandler = new ErrorHandlerWindow();
             errorHandler.warningIndicator = WarningImage;
 
             // Error panel
@@ -73,14 +80,13 @@ namespace NetworkManager {
         /// Prepare the SQLite connection
         /// </summary>
         private void prepareDatabaseConnection() {
-            if(!File.Exists("NetworkManager.sqlite"))
-                SQLiteConnection.CreateFile("NetworkManager.sqlite");
-            var conn = new SQLiteConnection("Data Source=NetworkManager.sqlite;Version=3;");
-            conn.Open();
+            var conn = new SQLiteConnection("NetworkManager.sqlite");
+
             computerInfoStore = new ComputerInfoStore(conn);
+            jobStore = new JobStore(conn);
         }
 
-        private async Task<DomainModel> createDomainModel(Domain.Domain domain) {
+        private async Task<DomainModel> createDomainModel(DomainContent.Domain domain) {
 
             DomainModel domainModel = new DomainModel() {
                 name = domain.name
@@ -105,7 +111,7 @@ namespace NetworkManager {
                 }
             }
 
-            foreach (Domain.Domain d in domain.domains) {
+            foreach (DomainContent.Domain d in domain.domains) {
                 domainModel.addDomain( await createDomainModel(d));
             }
 
@@ -169,7 +175,7 @@ namespace NetworkManager {
 
             try {
                 // Only one domain for now
-                Domain.Domain domain = new Domain.Domain();
+                DomainContent.Domain domain = new DomainContent.Domain();
                 await domain.fill();
 
                 DomainModel domainModel = await createDomainModel(domain);
