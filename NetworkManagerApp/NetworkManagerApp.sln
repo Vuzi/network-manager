@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkManagerApp", "Networ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkManagerCore", "..\NetworkManagerCore\NetworkManagerCore\NetworkManagerCore.csproj", "{0B1C14AD-EE44-4B90-ADC2-A3BC6F94D44B}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "NetworkManagerSetup", "NetworkManagerSetup\NetworkManagerSetup.vdproj", "{62641FD0-D5C5-446B-888D-27236A6F9A9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,8 @@ Global
 		{0B1C14AD-EE44-4B90-ADC2-A3BC6F94D44B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B1C14AD-EE44-4B90-ADC2-A3BC6F94D44B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B1C14AD-EE44-4B90-ADC2-A3BC6F94D44B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62641FD0-D5C5-446B-888D-27236A6F9A9A}.Debug|Any CPU.ActiveCfg = Debug
+		{62641FD0-D5C5-446B-888D-27236A6F9A9A}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -9,11 +9,10 @@
     <Grid>
         <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding ListConfig}" Margin="2,28,-1.8,60.4">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Width="Auto" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Name" Width="Auto" Binding="{Binding Name}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Value" Width="*" Binding="{Binding Value}"/>
-                
+
             </DataGrid.Columns>
-            
         </DataGrid>
         <Button Content="Add parameter" HorizontalAlignment="Left" Margin="2,4,0,0" VerticalAlignment="Top" Width="97" Height="22" Click="button_Add_Row_Click"/>
         <Button x:Name="button_Close" Margin="0,0,10,10" HorizontalAlignment="Right" Width="123" Click="button_Close_Click" Height="30" VerticalAlignment="Bottom">
