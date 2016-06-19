@@ -1,4 +1,4 @@
-﻿using NetworkManager.Domain;
+﻿using NetworkManager.DomainContent;
 using NetworkManager.WMIExecution;
 using System.Windows;
 

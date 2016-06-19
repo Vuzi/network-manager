@@ -8,7 +8,7 @@
         xmlns:local="clr-namespace:NetworkManager"
         xmlns:Controls="clr-namespace:System.Windows.Controls;assembly=TreeViewEx"
         xmlns:component="clr-namespace:NetworkManager.View.Component"
-        xmlns:networkManager="clr-namespace:NetworkManager.Domain;assembly=NetworkManagerCore"
+        xmlns:networkManager="clr-namespace:NetworkManager.DomainContent;assembly=NetworkManagerCore"
         Title="Network Manager" Height="810" Width="1080" Background="LightGray" Icon="resource/icon.ico">
     <Window.Resources>
         <Storyboard x:Key="Storyboard1" RepeatBehavior="Forever">

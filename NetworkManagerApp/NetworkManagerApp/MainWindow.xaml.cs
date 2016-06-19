@@ -1,4 +1,4 @@
-﻿using NetworkManager.Domain;
+﻿using NetworkManager.DomainContent;
 using NetworkManager.View;
 
 using System;
@@ -75,7 +75,7 @@ namespace NetworkManager {
             computerInfoStore = new ComputerInfoStore(conn);
         }
 
-        private async Task<DomainModel> createDomainModel(Domain.Domain domain) {
+        private async Task<DomainModel> createDomainModel(DomainContent.Domain domain) {
 
             DomainModel domainModel = new DomainModel() {
                 name = domain.name
@@ -100,7 +100,7 @@ namespace NetworkManager {
                 }
             }
 
-            foreach (Domain.Domain d in domain.domains) {
+            foreach (DomainContent.Domain d in domain.domains) {
                 domainModel.addDomain( await createDomainModel(d));
             }
 
@@ -164,7 +164,7 @@ namespace NetworkManager {
 
             try {
                 // Only one domain for now
-                Domain.Domain domain = new Domain.Domain();
+                DomainContent.Domain domain = new DomainContent.Domain();
                 await domain.fill();
 
                 DomainModel domainModel = await createDomainModel(domain);

@@ -1,5 +1,5 @@
 ﻿
-using NetworkManager.Domain;
+using NetworkManager.DomainContent;
 using System;
 using System.Collections.Generic;
 using System.Linq;

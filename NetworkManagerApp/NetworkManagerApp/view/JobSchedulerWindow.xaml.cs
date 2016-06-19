@@ -1,7 +1,10 @@
 ﻿
-using NetworkManager.Domain;
+using NetworkManager.DomainContent;
 using System.Windows;
 using System.Collections.Generic;
+using System;
+using NetworkManager.View.Component.Job;
+using NetworkManager.Job;
 
 namespace NetworkManager.View {
     /// <summary>
@@ -15,13 +18,13 @@ namespace NetworkManager.View {
             InitializeComponent();
 
             // Fill the hours and minutes
-            taskHours.Items.Clear();
+            jobHoursPicker.Items.Clear();
             for (int i = 0; i <= 24; i++)
-                taskHours.Items.Add($"{i}h");
+                jobHoursPicker.Items.Add($"{i}h");
 
-            taskMinutes.Items.Clear();
+            jobMinutesPicker.Items.Clear();
             for (int i = 0; i <= 59; i++)
-                taskMinutes.Items.Add($"{i}mn");
+                jobMinutesPicker.Items.Add($"{i}mn");
         }
 
         private void buttonAddTask_Click(object sender, RoutedEventArgs e) {
@@ -32,48 +35,48 @@ namespace NetworkManager.View {
             selectTask.Show();
         }
 
-        private void taskNow_Click(object sender, RoutedEventArgs e) {
-            taskDate.IsEnabled = taskNow.IsChecked == false;
-            taskHours.IsEnabled = taskNow.IsChecked == false;
-            taskMinutes.IsEnabled = taskNow.IsChecked == false;
+        private void jobNow_Click(object sender, RoutedEventArgs e) {
+            jobDatePicker.IsEnabled = jobNowCheckbox.IsChecked == false;
+            jobHoursPicker.IsEnabled = jobNowCheckbox.IsChecked == false;
+            jobMinutesPicker.IsEnabled = jobNowCheckbox.IsChecked == false;
 
         }
 
-        private void fillComputers(Domain.Domain d) {
+        private void fillComputers(DomainContent.Domain d) {
             foreach(Computer c in d.computers) {
-                selectedComputers.Items.Add(c);
+                selectedComputersGrid.Items.Add(c);
 
                 if(preSelectedComputers.Find(cSelected => cSelected.nameLong == c.nameLong) != null) {
-                    selectedComputers.SelectedItems.Add(c);
+                    selectedComputersGrid.SelectedItems.Add(c);
                 }
             }
 
-            foreach (Domain.Domain subDomain in d.domains) {
+            foreach (DomainContent.Domain subDomain in d.domains) {
                 fillComputers(subDomain);
             }
         }
 
-        private async void selectedComputers_Loaded(object sender, RoutedEventArgs e) {
+        private async void selectedComputersGrid_Loaded(object sender, RoutedEventArgs e) {
             // Fill the computers
-            var domain = new Domain.Domain();
+            var domain = new DomainContent.Domain();
             await domain.fill(false);
 
-            selectedComputers.Items.Clear();
+            selectedComputersGrid.Items.Clear();
             fillComputers(domain);
         }
         
-        private void selectedComputers_SelectedCellsChanged(object sender, System.Windows.Controls.SelectedCellsChangedEventArgs e) {
-            selectedComputersLabel.Content = $"{selectedComputers.SelectedItems.Count} computer{(selectedComputers.SelectedItems.Count > 1 ? "s" : "")} selected";
+        private void selectedComputersGrid_SelectedCellsChanged(object sender, System.Windows.Controls.SelectedCellsChangedEventArgs e) {
+            selectedComputersLabel.Content = $"{selectedComputersGrid.SelectedItems.Count} computer{(selectedComputersGrid.SelectedItems.Count > 1 ? "s" : "")} selected";
         }
 
         private void buttonSelectAll_Click(object sender, RoutedEventArgs e) {
-            selectedComputers.SelectedItems.Clear();
-            foreach (Computer c in selectedComputers.Items)
-                selectedComputers.SelectedItems.Add(c);
+            selectedComputersGrid.SelectedItems.Clear();
+            foreach (Computer c in selectedComputersGrid.Items)
+                selectedComputersGrid.SelectedItems.Add(c);
         }
 
         private void buttonDeselectAll_Click(object sender, RoutedEventArgs e) {
-            selectedComputers.SelectedItems.Clear();
+            selectedComputersGrid.SelectedItems.Clear();
         }
 
         internal void downTask(UIElement element) {
@@ -111,5 +114,62 @@ namespace NetworkManager.View {
         internal void selectComputers(List<Computer> computers) {
             this.preSelectedComputers = computers;
         }
+
+        private static Dictionary<Type, Func<JobTask>> taskCreator = 
+            new Dictionary<Type, Func<JobTask>>() {
+                { typeof(TaskInstall), () => new JobTask() },
+                { typeof(TaskReboot), () => new JobTask() },
+                { typeof(TaskShutdown), () => new JobTask() },
+                { typeof(TaskWakeOnLan), () => new JobTask() }
+            };
+
+        private void buttonCreateJob_Click(object sender, RoutedEventArgs e) {
+
+            // Get the picked date
+            DateTime? jobDateTime = null;
+            if (jobNowCheckbox.IsChecked == true) {
+                jobDateTime = DateTime.Now;
+            } else {
+                jobDateTime = jobDatePicker.SelectedDate;
+
+                if (jobDateTime == null) {
+                    MessageBox.Show("Error: An execution date must be provided to the job", "Job creation error");
+                    return;
+                } else if (jobDateTime < DateTime.Now) {
+                    MessageBox.Show("Error: The specified date can't be in the past", "Job creation error");
+                    return;
+                }
+            }
+
+            // Get the selected computers
+            var computers = selectedComputersGrid.SelectedItems;
+
+            if(computers.Count <= 0) {
+                MessageBox.Show("Error: No computer selected. At least one computer should be selected", "Job creation error");
+                return;
+            }
+
+            // Get the tasks
+            var tasks = new List<JobTask>();
+
+            foreach(var element in tasksPanel.Children) {
+                var jobTask = taskCreator[element.GetType()]?.Invoke();
+
+                if (jobTask == null)
+                    return; // Error during jobtask creation
+
+                Console.WriteLine(element.GetType());
+
+                tasks.Add(jobTask);
+            }
+
+            if(tasks.Count <= 0) {
+                MessageBox.Show("Error: No task defined. At least one taks should be defined", "Job creation error");
+                return;
+            }
+
+            // OK, create the job
+        }
+
     }
 }

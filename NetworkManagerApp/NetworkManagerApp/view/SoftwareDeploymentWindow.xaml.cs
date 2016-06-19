@@ -1,5 +1,5 @@
 ﻿using Microsoft.Win32;
-using NetworkManager.Domain;
+using NetworkManager.DomainContent;
 using NetworkManager.WMIExecution;
 using System;
 using System.Collections.Generic;

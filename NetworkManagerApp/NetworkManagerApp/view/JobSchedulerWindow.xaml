@@ -18,18 +18,17 @@
         <Label Content="Scheduled execution" VerticalAlignment="Top" Margin="241,49,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="15"/>
 
         <Label Content="Planned date :" HorizontalAlignment="Left" Margin="241,78,0,0" VerticalAlignment="Top" Width="149"/>
-        <DatePicker x:Name="taskDate" HorizontalAlignment="Left" Margin="247,104,0,0" VerticalAlignment="Top"/>
+        <DatePicker x:Name="jobDatePicker" HorizontalAlignment="Left" Margin="247,104,0,0" VerticalAlignment="Top"/>
 
         <Label Content="Planned hour :" Padding="2" Margin="416,81,0,0" VerticalAlignment="Top" Height="21" HorizontalAlignment="Left" Width="146"/>
-        <ComboBox x:Name="taskHours" HorizontalAlignment="Left" Margin="416,104,0,0" VerticalAlignment="Top" Width="51"></ComboBox>
-        <ComboBox x:Name="taskMinutes" HorizontalAlignment="Left" Margin="472,104,0,0" VerticalAlignment="Top" Width="63"></ComboBox>
-        <CheckBox x:Name="taskNow" Content="Now" HorizontalAlignment="Left" Margin="568,109,0,0" VerticalAlignment="Top" Click="taskNow_Click"/>
+        <ComboBox x:Name="jobHoursPicker" HorizontalAlignment="Left" Margin="416,104,0,0" VerticalAlignment="Top" Width="51"></ComboBox>
+        <ComboBox x:Name="jobMinutesPicker" HorizontalAlignment="Left" Margin="472,104,0,0" VerticalAlignment="Top" Width="63"></ComboBox>
+        <CheckBox x:Name="jobNowCheckbox" Content="Now" HorizontalAlignment="Left" Margin="568,109,0,0" VerticalAlignment="Top" Click="jobNow_Click"/>
         <Rectangle Fill="Gray" Height="9" Margin="240,145,0,0" VerticalAlignment="Top"/>
 
         <!-- Selected computers -->
         <Label Content="Computers" VerticalAlignment="Top" Margin="241,159,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="15"/>
-        <DataGrid x:Name="selectedComputers" Margin="241,193,10,0" VerticalAlignment="Top" Height="128" Loaded="selectedComputers_Loaded" SelectedCellsChanged="selectedComputers_SelectedCellsChanged" >
-
+        <DataGrid x:Name="selectedComputersGrid" Margin="241,193,10,0" VerticalAlignment="Top" Height="128" Loaded="selectedComputersGrid_Loaded" SelectedCellsChanged="selectedComputersGrid_SelectedCellsChanged" >
             <DataGrid.Columns>
                 <DataGridTextColumn  Header="Name" Width="Auto" Binding="{Binding name}" IsReadOnly="True" CanUserReorder="True"/>
                 <DataGridTextColumn  Header="Domain" Width="Auto" Binding="{Binding domain}" IsReadOnly="True" CanUserReorder="True"/>
@@ -42,11 +41,14 @@
 
         <Rectangle Fill="Gray" Height="9" Margin="240,360,0,0" VerticalAlignment="Top"/>
 
-        <Label x:Name="label_NumberComputersSelected_Copy3" Content="Tasks" VerticalAlignment="Top" Margin="241,374,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="15"/>
-        <ScrollViewer Margin="241,408,10,10">
+        <!-- Tasks -->
+        <Label Content="Tasks" VerticalAlignment="Top" Margin="241,374,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="15"/>
+        <ScrollViewer Margin="241,408,10,42">
             <StackPanel x:Name="tasksPanel" Orientation="Vertical" VerticalAlignment="Stretch" />
         </ScrollViewer>
         <Button x:Name="buttonAddTask" Content="Add Task" HorizontalAlignment="Left" Margin="301,379,0,0" VerticalAlignment="Top" Width="75" Click="buttonAddTask_Click"/>
+
+        <Button x:Name="buttonCreateJob" Content="Create a new job" HorizontalAlignment="Left" Margin="240,0,0,10" Width="140" Height="21" VerticalAlignment="Bottom" Click="buttonCreateJob_Click" />
 
     </Grid>
 </Window>
