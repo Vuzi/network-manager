@@ -262,9 +262,9 @@ namespace NetworkManager.WMIExecution {
                     // then a timeout will wait, and if the process is terminated the two file will be retreived and returned
                     var inParams = wmiProcess.GetMethodParameters("Create");
                     if (logOutput)
-                        inParams["CommandLine"] = $@"CMD /U /S /C {command} {string.Join(" ", args)} > C:\{outputPath} 2> C:\{errPath}";
+                        inParams["CommandLine"] = $"CMD /U /S /C \" {"\"" + command + "\""} {string.Join(" ", args)} > C:\\{outputPath} 2> C:\\{errPath} \" ";
                     else
-                        inParams["CommandLine"] = $@"CMD /U /S /C {command} {string.Join(" ", args)}";
+                        inParams["CommandLine"] = $"CMD /U /S /C \" {"\"" + command + "\""} {string.Join(" ", args)} \" ";
 
                     // Exec
                     ManagementBaseObject outParams = wmiProcess.InvokeMethod("Create", inParams, methodOptions);
