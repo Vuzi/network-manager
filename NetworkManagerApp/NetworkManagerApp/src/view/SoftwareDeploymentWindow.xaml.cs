@@ -14,8 +14,7 @@ namespace NetworkManager.View {
     /// Logique d'interaction pour SoftwareDeployment.xaml
     /// </summary>
     public partial class SoftwareDeploymentWindow : Window {
-
-        private static string path = @"C:\apps\";
+        
         private Computer currentComputer;
         private ErrorHandlerWindow errorHandler;
 
@@ -45,11 +44,13 @@ namespace NetworkManager.View {
             if (result == false)
                 return;
 
-            File.Copy(ofd.FileName, path + System.IO.Path.GetFileName(ofd.FileName), true);
+            File.Copy(ofd.FileName, MainWindow.config.get("softwarepath") + "/" + Path.GetFileName(ofd.FileName), true);
             AppsToDeploy_Loaded(this, null);
         }
 
         private void AppsToDeploy_Loaded(object sender, RoutedEventArgs e) {
+            string path = MainWindow.config.get("softwarepath");
+
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
 

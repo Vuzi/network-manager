@@ -19,11 +19,11 @@ namespace NetworkManager.View {
 
             // Fill the hours and minutes
             jobHoursPicker.Items.Clear();
-            for (int i = 0; i <= 24; i++)
+            for (int i = 0; i < 24; i++)
                 jobHoursPicker.Items.Add($"{i}h");
 
             jobMinutesPicker.Items.Clear();
-            for (int i = 0; i <= 59; i++)
+            for (int i = 0; i < 60; i++)
                 jobMinutesPicker.Items.Add($"{i}mn");
         }
 

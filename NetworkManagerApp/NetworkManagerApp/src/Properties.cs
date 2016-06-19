@@ -15,6 +15,26 @@ namespace NetworkManager {
             return (get(field) == null) ? (defValue) : (get(field));
         }
 
+        public int getInt(string field, int defValue) {
+            int val;
+
+            if (int.TryParse(get(field), out val)) {
+                val = defValue;
+            }
+
+            return val;
+        }
+
+        public float getFloat(string field, float defValue) {
+            float val;
+
+            if (float.TryParse(get(field), out val)) {
+                val = defValue;
+            }
+
+            return val;
+        }
+
         public string get(string field) {
             return (list.ContainsKey(field)) ? (list[field]) : (null);
         }
@@ -26,11 +46,11 @@ namespace NetworkManager {
                 list[field] = value.ToString();
         }
 
-        public void Save() {
-            Save(this.filename);
+        public void save() {
+            save(this.filename);
         }
 
-        public void Save(string filename) {
+        public void save(string filename) {
             this.filename = filename;
 
             if (!System.IO.File.Exists(filename))

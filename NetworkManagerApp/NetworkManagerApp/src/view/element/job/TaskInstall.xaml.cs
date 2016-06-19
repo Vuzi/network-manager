@@ -89,7 +89,7 @@ namespace NetworkManager.View.Component.Job {
             int timeout = 60;
 
             try {
-                timeout = int.Parse(Textbox_launchArgs.Text);
+                timeout = int.Parse(Textbox_timeout.Text);
             } catch (Exception) {
                 MessageBox.Show("Error : Invalid timeout value", "Installation task error");
                 return null;

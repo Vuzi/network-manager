@@ -26,11 +26,16 @@ namespace NetworkManager {
         /// Error handler
         /// </summary>
         public ErrorHandlerWindow errorHandler { get; private set; }
+        
+        /// <summary>
+        /// Configuration
+        /// </summary>
+        public static Properties config { get; private set; } = new Properties(@"config\parameters.properties");
 
         public static ComputerInfoStore computerInfoStore { get; private set; }
         public static JobStore jobStore { get; private set; }
 
-        public Configuration configurationHandler { get; private set; }
+        public ConfigurationWindow configurationHandler { get; private set; }
 
         public MainWindow() {
             try {
@@ -51,7 +56,7 @@ namespace NetworkManager {
             errorHandler.warningIndicator = WarningImage;
 
             // Error panel
-            configurationHandler = new Configuration();
+            configurationHandler = new ConfigurationWindow();
 
             // App level exception handler
             Application.Current.DispatcherUnhandledException += (sender, e) => {
@@ -72,7 +77,7 @@ namespace NetworkManager {
                     timer.Start();
                 }
             };
-            timer.Interval = new TimeSpan(0, 0, 30);
+            timer.Interval = new TimeSpan(0, 0, config.getInt("scantimeout", 30));
             timer.Start();
         }
 
@@ -86,7 +91,7 @@ namespace NetworkManager {
             jobStore = new JobStore(conn);
         }
 
-        private async Task<DomainModel> createDomainModel(DomainContent.Domain domain) {
+        private async Task<DomainModel> createDomainModel(Domain domain) {
 
             DomainModel domainModel = new DomainModel() {
                 name = domain.name
@@ -111,7 +116,7 @@ namespace NetworkManager {
                 }
             }
 
-            foreach (DomainContent.Domain d in domain.domains) {
+            foreach (Domain d in domain.domains) {
                 domainModel.addDomain( await createDomainModel(d));
             }
 
@@ -175,7 +180,7 @@ namespace NetworkManager {
 
             try {
                 // Only one domain for now
-                DomainContent.Domain domain = new DomainContent.Domain();
+                Domain domain = new Domain();
                 await domain.fill();
 
                 DomainModel domainModel = await createDomainModel(domain);

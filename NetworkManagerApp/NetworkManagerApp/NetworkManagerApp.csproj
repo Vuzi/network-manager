@@ -79,8 +79,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="src\Properties.cs" />
-    <Compile Include="src\view\Configuration.xaml.cs">
-      <DependentUpon>Configuration.xaml</DependentUpon>
+    <Compile Include="src\view\ConfigurationWindow.xaml.cs">
+      <DependentUpon>ConfigurationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\view\element\ComputersDetails.xaml.cs">
       <DependentUpon>ComputersDetails.xaml</DependentUpon>
@@ -127,7 +127,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="src\view\Configuration.xaml">
+    <Page Include="src\view\ConfigurationWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

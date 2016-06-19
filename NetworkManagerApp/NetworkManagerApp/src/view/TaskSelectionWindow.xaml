@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Background="LightGray"
         ResizeMode="NoResize"
-        Icon="../resource/icon.ico"
+        Icon="../../resource/icon.ico"
         Title="Network Manager - Task Selector" Height="150" Width="300">
     <Grid>
         
