@@ -181,7 +181,7 @@ namespace NetworkManager.View.Component {
                 notAliveButtons.ToList().ForEach(button => button.Visibility = Visibility.Visible);
 
                 // Not connected : get the IP and MAC from local database
-                var computerInfo = mainWindow.computerInfoStore.getComputerInfoByName(computer.nameLong);
+                var computerInfo = MainWindow.computerInfoStore.getComputerInfoByName(computer.nameLong);
 
                 if (computerInfo != null) {
                     textBox_IPAdress.Text = computerInfo.ipAddress;
@@ -330,7 +330,7 @@ namespace NetworkManager.View.Component {
 
         private void button_WakeOnLan_Click(object sender, RoutedEventArgs e) {
             if(computer != null) {
-                var computerInfo = mainWindow.computerInfoStore.getComputerInfoByName(computer.nameLong);
+                var computerInfo = MainWindow.computerInfoStore.getComputerInfoByName(computer.nameLong);
 
                 if (computerInfo != null) {
                     Utils.wakeOnLan(computerInfo.macAddress);

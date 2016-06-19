@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using NetworkManager.Job;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace NetworkManager.View.Component.Job {
@@ -14,16 +15,26 @@ namespace NetworkManager.View.Component.Job {
             InitializeComponent();
         }
 
-        private void buttonDown_Click(object sender, RoutedEventArgs e) {
+        private void button_Down_Click(object sender, RoutedEventArgs e) {
             mainWindow.downTask(this);
         }
 
-        private void buttonUp_Click(object sender, RoutedEventArgs e) {
+        private void button_Up_Click(object sender, RoutedEventArgs e) {
             mainWindow.upTask(this);
         }
 
-        private void buttonDelete_Click(object sender, RoutedEventArgs e) {
+        private void button_Delete_Click(object sender, RoutedEventArgs e) {
             mainWindow.deleteTask(this);
+        }
+
+        /// <summary>
+        /// Create the task from the panel
+        /// </summary>
+        /// <returns></returns>
+        public JobTask createTask() {
+            return new JobTask() {
+                type = JobTaskType.SHUTDOWN
+            };
         }
     }
 }

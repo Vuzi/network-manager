@@ -152,5 +152,6 @@ namespace NetworkManager.View {
         public string size { get; set; }
         public string file { get; set; }
         public FileInfo fileInfo { get; set; }
+        public string path { get; set; }
     }
 }

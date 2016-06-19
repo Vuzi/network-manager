@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using NetworkManager.Job;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -21,7 +23,7 @@ namespace NetworkManager.View.Component.Job {
             InitializeComponent();
         }
 
-        private void AppsToDeploy_Loaded(object sender, RoutedEventArgs e) {
+        private void DataGrid_softwareList_Loaded(object sender, RoutedEventArgs e) {
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
 
@@ -38,6 +40,7 @@ namespace NetworkManager.View.Component.Job {
                 itm.icon = bmpSrc;
                 itm.fileInfo = fileInfo;
                 itm.size = Utils.getBytesReadable(fileInfo.Length);
+                itm.path = filePath;
                 itm.file = fileInfo.Name;
                 if (fileInfo.Extension == ".msi") {
                     itm.name = Utils.getMsiProperty(filePath, "ProductName");
@@ -53,19 +56,50 @@ namespace NetworkManager.View.Component.Job {
                 data.Add(itm);
             }
 
-            dataGrid_SoftwareList.ItemsSource = data;
+            DataGrid_softwareList.ItemsSource = data;
         }
 
-        private void buttonDown_Click(object sender, RoutedEventArgs e) {
+        private void button_Down_Click(object sender, RoutedEventArgs e) {
             mainWindow.downTask(this);
         }
 
-        private void buttonUp_Click(object sender, RoutedEventArgs e) {
+        private void button_Up_Click(object sender, RoutedEventArgs e) {
             mainWindow.upTask(this);
         }
 
-        private void buttonDelete_Click(object sender, RoutedEventArgs e) {
+        private void button_Delete_Click(object sender, RoutedEventArgs e) {
             mainWindow.deleteTask(this);
+        }
+
+        /// <summary>
+        /// Create the task from the panel
+        /// </summary>
+        /// <returns></returns>
+        public JobTask createTask() {
+
+            // Data
+            if (DataGrid_softwareList.SelectedItem == null) {
+                MessageBox.Show("Error : No software selected", "Installation task error");
+                return null;
+            }
+
+            string data = (DataGrid_softwareList.SelectedItem as SoftwareModel).path + " " + Textbox_launchArgs.Text;
+
+            // Timeout
+            int timeout = 60;
+
+            try {
+                timeout = int.Parse(Textbox_launchArgs.Text);
+            } catch (Exception) {
+                MessageBox.Show("Error : Invalid timeout value", "Installation task error");
+                return null;
+            }
+            
+            return new JobTask() {
+                type = JobTaskType.INSTALL_SOFTWARE,
+                timeout = timeout,
+                data = data
+            };
         }
     }
 }

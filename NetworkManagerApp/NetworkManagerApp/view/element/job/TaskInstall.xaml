@@ -14,9 +14,9 @@
                 <Label Content="Install software" VerticalAlignment="Top" Margin="3,-2,0,0" HorizontalAlignment="Left" Width="437" FontWeight="Bold" FontSize="18"/>
                 <TextBlock Text="Install the specified software on the selected computers. The installed software must have a silent mode available and specified in the launch arguments field." Margin="10,37,10,72" TextWrapping="Wrap"/>
 
-                <DataGrid x:Name="dataGrid_SoftwareList" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" 
+                <DataGrid x:Name="DataGrid_softwareList" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" 
                   CanUserReorderColumns="True" CanUserResizeColumns="True" AutoGenerateColumns="False" CanUserAddRows="false"
-                  CanUserResizeRows="False" CanUserSortColumns="True" Loaded="AppsToDeploy_Loaded" Margin="10,78,10,72" HorizontalGridLinesBrush="#FF8D8A8A" VerticalGridLinesBrush="#FF8D8A8A" GridLinesVisibility="Horizontal" >
+                  CanUserResizeRows="False" CanUserSortColumns="True" Loaded="DataGrid_softwareList_Loaded" Margin="10,78,10,72" HorizontalGridLinesBrush="#FF8D8A8A" VerticalGridLinesBrush="#FF8D8A8A" GridLinesVisibility="Horizontal" >
                     <DataGrid.ContextMenu>
                         <ContextMenu>
                             <MenuItem Command="Copy">
@@ -40,22 +40,22 @@
                 </DataGrid>
 
                 <Label Content="Launch arguments :" Padding="2" HorizontalAlignment="Left" Margin="10,0,0,41" Width="110" Height="21" VerticalAlignment="Bottom"/>
-                <TextBox x:Name="textBox_LaunchArgs" HorizontalContentAlignment="Left"  Text="" Margin="120,0,0,41" Width="215" BorderThickness="2" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" Height="21" VerticalAlignment="Bottom" />
+                <TextBox x:Name="Textbox_launchArgs" HorizontalContentAlignment="Left"  Text="" Margin="120,0,0,41" Width="215" BorderThickness="2" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" Height="21" VerticalAlignment="Bottom" />
                 <Label Content="Timeout (s) :" Padding="2" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="110" Height="21"/>
-                <TextBox x:Name="textBox_Timeout" HorizontalContentAlignment="Left" Text="60" Margin="120,0,0,10" Width="215" BorderThickness="2" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" Height="21" VerticalAlignment="Bottom" />
+                <TextBox x:Name="Textbox_timeout" HorizontalContentAlignment="Left" Text="60" Margin="120,0,0,10" Width="215" BorderThickness="2" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" Height="21" VerticalAlignment="Bottom" />
 
                 <!-- Controls -->
-                <Button x:Name="buttonDelete" Margin="0,8,10,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Width="20" Click="buttonDelete_Click">
+                <Button x:Name="button_Delete" Margin="0,8,10,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Width="20" Click="button_Delete_Click">
                     <DockPanel LastChildFill="True" Width="Auto" >
                         <fa:FontAwesome Icon="Times" FontSize="14px"  VerticalAlignment="Center" Margin="0,0,0,0" Width="16" />
                     </DockPanel>
                 </Button>
-                <Button x:Name="buttonUp" Margin="0,0,10,25" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="20" Click="buttonUp_Click">
+                <Button x:Name="button_Up" Margin="0,0,10,25" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="20" Click="button_Up_Click">
                     <DockPanel LastChildFill="True" Width="Auto" >
                         <fa:FontAwesome Icon="ArrowUp" FontSize="14px"  VerticalAlignment="Center" Margin="0,0,0,0" Width="16" />
                     </DockPanel>
                 </Button>
-                <Button x:Name="buttonDown" Margin="0,0,10,0" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="20" Click="buttonDown_Click">
+                <Button x:Name="button_Down" Margin="0,0,10,0" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="20" Click="button_Down_Click">
                     <DockPanel LastChildFill="True" Width="Auto" >
                         <fa:FontAwesome Icon="ArrowDown" FontSize="14px"  VerticalAlignment="Center" Margin="0,0,0,0" Width="16" />
                     </DockPanel>

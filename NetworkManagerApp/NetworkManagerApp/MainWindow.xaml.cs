@@ -1,17 +1,19 @@
 ﻿using NetworkManager.DomainContent;
 using NetworkManager.View;
 
+using SQLite;
+
 using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Data.SQLite;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Threading;
+using NetworkManager.Job;
 
 namespace NetworkManager {
 
@@ -25,10 +27,15 @@ namespace NetworkManager {
         /// </summary>
         public ErrorHandlerWindow errorHandler { get; private set; }
 
-        public ComputerInfoStore computerInfoStore { get; private set; }
+        public static ComputerInfoStore computerInfoStore { get; private set; }
+        public static JobStore jobStore { get; private set; }
 
         public MainWindow() {
-            InitializeComponent();
+            try {
+                InitializeComponent();
+            } catch(Exception e) {
+                Console.WriteLine(e);
+            }
 
             // Preapre the database
             prepareDatabaseConnection();
@@ -68,11 +75,10 @@ namespace NetworkManager {
         /// Prepare the SQLite connection
         /// </summary>
         private void prepareDatabaseConnection() {
-            if(!File.Exists("NetworkManager.sqlite"))
-                SQLiteConnection.CreateFile("NetworkManager.sqlite");
-            var conn = new SQLiteConnection("Data Source=NetworkManager.sqlite;Version=3;");
-            conn.Open();
+            var conn = new SQLiteConnection("NetworkManager.sqlite");
+
             computerInfoStore = new ComputerInfoStore(conn);
+            jobStore = new JobStore(conn);
         }
 
         private async Task<DomainModel> createDomainModel(DomainContent.Domain domain) {

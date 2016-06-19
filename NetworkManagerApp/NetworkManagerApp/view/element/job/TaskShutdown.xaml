@@ -16,17 +16,17 @@
                 <!-- Parameters -->
 
                 <!-- Controls -->
-                <Button x:Name="buttonDelete" Margin="0,8,10,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Width="20" Click="buttonDelete_Click">
+                <Button x:Name="button_Delete" Margin="0,8,10,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Width="20" Click="button_Delete_Click">
                     <DockPanel LastChildFill="True" Width="Auto" >
                         <fa:FontAwesome Icon="Times" FontSize="14px"  VerticalAlignment="Center" Margin="0,0,0,0" Width="16" />
                     </DockPanel>
                 </Button>
-                <Button x:Name="buttonUp" Margin="0,0,10,25" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="20" Click="buttonUp_Click">
+                <Button x:Name="button_Up" Margin="0,0,10,25" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="20" Click="button_Up_Click">
                     <DockPanel LastChildFill="True" Width="Auto" >
                         <fa:FontAwesome Icon="ArrowUp" FontSize="14px"  VerticalAlignment="Center" Margin="0,0,0,0" Width="16" />
                     </DockPanel>
                 </Button>
-                <Button x:Name="buttonDown" Margin="0,0,10,0" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="20" Click="buttonDown_Click">
+                <Button x:Name="button_Down" Margin="0,0,10,0" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="20" Click="button_Down_Click">
                     <DockPanel LastChildFill="True" Width="Auto" >
                         <fa:FontAwesome Icon="ArrowDown" FontSize="14px"  VerticalAlignment="Center" Margin="0,0,0,0" Width="16" />
                     </DockPanel>

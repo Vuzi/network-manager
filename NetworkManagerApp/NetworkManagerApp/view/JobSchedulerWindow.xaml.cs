@@ -3,7 +3,7 @@ using NetworkManager.DomainContent;
 using System.Windows;
 using System.Collections.Generic;
 using System;
-using NetworkManager.View.Component.Job;
+using System.Linq;
 using NetworkManager.Job;
 
 namespace NetworkManager.View {
@@ -42,7 +42,7 @@ namespace NetworkManager.View {
 
         }
 
-        private void fillComputers(DomainContent.Domain d) {
+        private void fillComputers(Domain d) {
             foreach(Computer c in d.computers) {
                 selectedComputersGrid.Items.Add(c);
 
@@ -51,14 +51,14 @@ namespace NetworkManager.View {
                 }
             }
 
-            foreach (DomainContent.Domain subDomain in d.domains) {
+            foreach (Domain subDomain in d.domains) {
                 fillComputers(subDomain);
             }
         }
 
         private async void selectedComputersGrid_Loaded(object sender, RoutedEventArgs e) {
             // Fill the computers
-            var domain = new DomainContent.Domain();
+            var domain = new Domain();
             await domain.fill(false);
 
             selectedComputersGrid.Items.Clear();
@@ -115,14 +115,6 @@ namespace NetworkManager.View {
             this.preSelectedComputers = computers;
         }
 
-        private static Dictionary<Type, Func<JobTask>> taskCreator = 
-            new Dictionary<Type, Func<JobTask>>() {
-                { typeof(TaskInstall), () => new JobTask() },
-                { typeof(TaskReboot), () => new JobTask() },
-                { typeof(TaskShutdown), () => new JobTask() },
-                { typeof(TaskWakeOnLan), () => new JobTask() }
-            };
-
         private void buttonCreateJob_Click(object sender, RoutedEventArgs e) {
 
             // Get the picked date
@@ -133,27 +125,30 @@ namespace NetworkManager.View {
                 jobDateTime = jobDatePicker.SelectedDate;
 
                 if (jobDateTime == null) {
-                    MessageBox.Show("Error: An execution date must be provided to the job", "Job creation error");
+                    MessageBox.Show("Error : An execution date must be provided to the job", "Job creation error");
                     return;
                 } else if (jobDateTime < DateTime.Now) {
-                    MessageBox.Show("Error: The specified date can't be in the past", "Job creation error");
+                    MessageBox.Show("Error : The specified date can't be in the past", "Job creation error");
                     return;
                 }
             }
 
             // Get the selected computers
-            var computers = selectedComputersGrid.SelectedItems;
-
-            if(computers.Count <= 0) {
-                MessageBox.Show("Error: No computer selected. At least one computer should be selected", "Job creation error");
+            if(selectedComputersGrid.SelectedItems.Count <= 0) {
+                MessageBox.Show("Error : No computer selected. At least one computer should be selected", "Job creation error");
                 return;
+            }
+
+            var computersNames = new List<string>();
+            foreach(Computer c in selectedComputersGrid.SelectedItems) {
+                computersNames.Add(c.nameLong);
             }
 
             // Get the tasks
             var tasks = new List<JobTask>();
 
-            foreach(var element in tasksPanel.Children) {
-                var jobTask = taskCreator[element.GetType()]?.Invoke();
+            foreach(dynamic element in tasksPanel.Children) {
+                JobTask jobTask = element.createTask();
 
                 if (jobTask == null)
                     return; // Error during jobtask creation
@@ -164,11 +159,24 @@ namespace NetworkManager.View {
             }
 
             if(tasks.Count <= 0) {
-                MessageBox.Show("Error: No task defined. At least one taks should be defined", "Job creation error");
+                MessageBox.Show("Error : No task defined. At least one taks should be defined", "Job creation error");
                 return;
             }
 
             // OK, create the job
+            var job = new Job.Job() {
+                scheduledDateTime = jobDateTime.Value,
+                computersNames = computersNames,
+                status = JobStatus.CREATED,
+                tasks = tasks,
+                report = null
+            };
+
+            // Insert into the job store
+            MainWindow.jobStore.insertJob(job);
+
+            // Create a windows task
+            // TODO
         }
 
     }
