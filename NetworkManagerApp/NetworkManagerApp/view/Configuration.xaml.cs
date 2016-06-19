@@ -42,7 +42,7 @@ namespace NetworkManagerApp.view
             this.DataContext = this;
             ListConfig = new ObservableCollection<Parameter>();
             /*load*/
-            config = new Properties(@"C:\Users\Administrateur\Documents\Visual Studio 2015\Projects\NetworkManager\NetworkManagerApp\NetworkManagerApp\config\parameters.properties");
+            config = new Properties(@"config\parameters.properties");
 
             /*set value
             config.set("testParam1", "testValeur1");
@@ -58,11 +58,17 @@ namespace NetworkManagerApp.view
         }
         private void button_Close_Click(object sender, RoutedEventArgs e)
         {
+            System.IO.File.WriteAllText(@"config\parameters.properties", string.Empty);
+            config.list.Clear();
+            foreach (var item in config.list)
+            {
+                ListConfig.Add(new Parameter(item.Key, item.Value));
+            }
             this.Hide();
         }
         private void button_Save_Click(object sender, RoutedEventArgs e)
         {
-            System.IO.File.WriteAllText(@"C:\Users\Administrateur\Documents\Visual Studio 2015\Projects\NetworkManager\NetworkManagerApp\NetworkManagerApp\config\parameters.properties", string.Empty);
+            System.IO.File.WriteAllText(@"config\parameters.properties", string.Empty);
             config.list.Clear();
             foreach (var itemInSoft in ListConfig)
             {
@@ -78,6 +84,12 @@ namespace NetworkManagerApp.view
         
         protected override void OnClosing(CancelEventArgs e)
         {
+            System.IO.File.WriteAllText(@"config\parameters.properties", string.Empty);
+            config.list.Clear();
+            foreach (var item in config.list)
+            {
+                ListConfig.Add(new Parameter(item.Key, item.Value));
+            }
             base.OnClosing(e);
             e.Cancel = true;
             this.Hide();

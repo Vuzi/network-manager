@@ -15,20 +15,44 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_0C3221DA6B29F131DE063F63CD9EF941"
+        "OwnerKey" = "8:_59B8579D57BBC60BFC910720BC3FDD79"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_0C3221DA6B29F131DE063F63CD9EF941"
+        "OwnerKey" = "8:_C38FF2300F2341C9B41A64524520D201"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_224C048C787E43A58CD5F3D6DCF67CDD"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_34F6D4CCBCF0B237922165B21DE07B6C"
         "OwnerKey" = "8:_C38FF2300F2341C9B41A64524520D201"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_9EF3A0D284E16E046C6551DD4CE02F9D"
-        "OwnerKey" = "8:_E9B60B8555A072CFD16E990400918158"
+        "MsmKey" = "8:_59B8579D57BBC60BFC910720BC3FDD79"
+        "OwnerKey" = "8:_C38FF2300F2341C9B41A64524520D201"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_9EF3A0D284E16E046C6551DD4CE02F9D"
-        "OwnerKey" = "8:_C38FF2300F2341C9B41A64524520D201"
+        "MsmKey" = "8:_68C627EF618A4585A1EC642C228386D9"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9BCD80B307B44530B17768176C636960"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -40,7 +64,7 @@
         "Entry"
         {
         "MsmKey" = "8:_A81F4F9C5035D428BCEEA1E1F4F2AFCA"
-        "OwnerKey" = "8:_E9B60B8555A072CFD16E990400918158"
+        "OwnerKey" = "8:_59B8579D57BBC60BFC910720BC3FDD79"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -63,12 +87,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_E9B60B8555A072CFD16E990400918158"
-        "OwnerKey" = "8:_C38FF2300F2341C9B41A64524520D201"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_34F6D4CCBCF0B237922165B21DE07B6C"
         "MsmSig" = "8:_UNDEFINED"
@@ -76,19 +94,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_59B8579D57BBC60BFC910720BC3FDD79"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_0C3221DA6B29F131DE063F63CD9EF941"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_C38FF2300F2341C9B41A64524520D201"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E9B60B8555A072CFD16E990400918158"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_9EF3A0D284E16E046C6551DD4CE02F9D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -172,6 +190,57 @@
         }
         "File"
         {
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_0C3221DA6B29F131DE063F63CD9EF941"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:WakeOnLan, Version=1.6.5090.3410, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_0C3221DA6B29F131DE063F63CD9EF941"
+                    {
+                    "Name" = "8:WakeOnLan.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:WakeOnLan.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_289F391238A04610A7F9B9C6E9D94D94"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_224C048C787E43A58CD5F3D6DCF67CDD"
+            {
+            "SourcePath" = "8:..\\NetworkManagerApp\\bin\\Debug\\x86\\SQLite.Interop.dll"
+            "TargetName" = "8:SQLite.Interop.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_6243865AD862400C9B7B54F90E53223B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_34F6D4CCBCF0B237922165B21DE07B6C"
             {
             "AssemblyRegister" = "3:1"
@@ -203,20 +272,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9EF3A0D284E16E046C6551DD4CE02F9D"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_59B8579D57BBC60BFC910720BC3FDD79"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:WakeOnLan, Version=1.6.5090.3410, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:NetworkManagerCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_9EF3A0D284E16E046C6551DD4CE02F9D"
+                    "_59B8579D57BBC60BFC910720BC3FDD79"
                     {
-                    "Name" = "8:WakeOnLan.dll"
+                    "Name" = "8:NetworkManagerCore.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:WakeOnLan.dll"
+            "SourcePath" = "8:NetworkManagerCore.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_289F391238A04610A7F9B9C6E9D94D94"
@@ -232,6 +301,46 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_68C627EF618A4585A1EC642C228386D9"
+            {
+            "SourcePath" = "8:..\\NetworkManagerApp\\config\\parameters.properties"
+            "TargetName" = "8:parameters.properties"
+            "Tag" = "8:"
+            "Folder" = "8:_05B9238146664842996CF9C0791426B7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9BCD80B307B44530B17768176C636960"
+            {
+            "SourcePath" = "8:..\\NetworkManagerApp\\bin\\Debug\\x64\\SQLite.Interop.dll"
+            "TargetName" = "8:SQLite.Interop.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_727DB45F6DDF4FBA9AA1736F78A0123A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A81F4F9C5035D428BCEEA1E1F4F2AFCA"
@@ -327,37 +436,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E9B60B8555A072CFD16E990400918158"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NetworkManagerCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_E9B60B8555A072CFD16E990400918158"
-                    {
-                    "Name" = "8:NetworkManagerCore.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:NetworkManagerCore.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_289F391238A04610A7F9B9C6E9D94D94"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
         }
         "FileType"
         {
@@ -374,6 +452,39 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_05B9238146664842996CF9C0791426B7"
+                    {
+                    "Name" = "8:config"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_9A68780195814D4EA1FAA2023D6A2F48"
+                        "Folders"
+                        {
+                        }
+                    }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_6243865AD862400C9B7B54F90E53223B"
+                    {
+                    "Name" = "8:x86"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_8B1AB5039A7C4525973582A659FE822E"
+                        "Folders"
+                        {
+                        }
+                    }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_727DB45F6DDF4FBA9AA1736F78A0123A"
+                    {
+                    "Name" = "8:x64"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_A36508D121A142F1B4B1EF8C523045F0"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
             "{1525181F-901A-416C-8A58-119130FE478E}:_57921471575240EFBBB24AFF08F7DCBA"
@@ -426,7 +537,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:NetworkManager"
         "ProductCode" = "8:{A9EC75A4-2B1E-40D8-B44F-32F9A8350D6C}"
-        "PackageCode" = "8:{B2F867F0-CCD2-477C-9CA4-B4B342EDCB52}"
+        "PackageCode" = "8:{97EA4390-F059-465F-8927-FB73596D9BCF}"
         "UpgradeCode" = "8:{AE53F5F8-FC5A-4E1C-A0BD-EA34775D7D0A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -441,7 +552,7 @@
         "Subject" = "8:"
         "ARPCONTACT" = "8:ESGI"
         "Keywords" = "8:"
-        "ARPCOMMENTS" = "8:Gestionnaire de parc informatique"
+        "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:"
         "ARPPRODUCTICON" = "8:"
         "ARPIconIndex" = "3:0"
@@ -975,7 +1086,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C38FF2300F2341C9B41A64524520D201"
             {
-            "SourcePath" = "8:..\\NetworkManagerApp\\obj\\Debug\\NetworkManagerApp.exe"
+            "SourcePath" = "8:..\\NetworkManagerApp\\obj\\Release\\NetworkManagerApp.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_289F391238A04610A7F9B9C6E9D94D94"

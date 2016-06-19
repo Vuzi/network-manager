@@ -31,8 +31,13 @@ namespace NetworkManager {
         public Configuration configurationHandler { get; private set; }
 
         public MainWindow() {
+            try { 
             InitializeComponent();
-
+            }catch(Exception e)
+            {
+                // error
+                Console.WriteLine(e);
+            }
             // Preapre the database
             prepareDatabaseConnection();
 
