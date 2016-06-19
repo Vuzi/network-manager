@@ -18,7 +18,7 @@
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -73,104 +73,104 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <ApplicationDefinition Include="src\App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="view\Configuration.xaml.cs">
+    <Compile Include="src\view\Configuration.xaml.cs">
       <DependentUpon>Configuration.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\element\ComputersDetails.xaml.cs">
+    <Compile Include="src\view\element\ComputersDetails.xaml.cs">
       <DependentUpon>ComputersDetails.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\element\ComputerDetails.xaml.cs">
+    <Compile Include="src\view\element\ComputerDetails.xaml.cs">
       <DependentUpon>ComputerDetails.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\element\job\TaskInstall.xaml.cs">
+    <Compile Include="src\view\element\job\TaskInstall.xaml.cs">
       <DependentUpon>TaskInstall.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\element\job\TaskShutdown.xaml.cs">
+    <Compile Include="src\view\element\job\TaskShutdown.xaml.cs">
       <DependentUpon>TaskShutdown.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\element\job\TaskWakeOnLan.xaml.cs">
+    <Compile Include="src\view\element\job\TaskWakeOnLan.xaml.cs">
       <DependentUpon>TaskWakeOnLan.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\element\job\TaskReboot.xaml.cs">
+    <Compile Include="src\view\element\job\TaskReboot.xaml.cs">
       <DependentUpon>TaskReboot.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\ErrorHandler.xaml.cs">
+    <Compile Include="src\view\ErrorHandler.xaml.cs">
       <DependentUpon>ErrorHandler.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\ExecutionReport.xaml.cs">
+    <Compile Include="src\view\ExecutionReport.xaml.cs">
       <DependentUpon>ExecutionReport.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\Planning.xaml.cs">
+    <Compile Include="src\view\Planning.xaml.cs">
       <DependentUpon>Planning.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\Properties.cs" />
-    <Compile Include="view\SelectTask.xaml.cs">
+    <Compile Include="src\Properties.cs" />
+    <Compile Include="src\view\SelectTask.xaml.cs">
       <DependentUpon>SelectTask.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\SoftwareDeployment.xaml.cs">
+    <Compile Include="src\view\SoftwareDeployment.xaml.cs">
       <DependentUpon>SoftwareDeployment.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow.xaml">
+    <Page Include="src\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="App.xaml.cs">
+    <Compile Include="src\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="src\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="view\Configuration.xaml">
+    <Page Include="src\view\Configuration.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="view\element\ComputersDetails.xaml">
+    <Page Include="src\view\element\ComputersDetails.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="view\element\ComputerDetails.xaml">
+    <Page Include="src\view\element\ComputerDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="view\element\job\TaskInstall.xaml">
+    <Page Include="src\view\element\job\TaskInstall.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="view\element\job\TaskShutdown.xaml">
+    <Page Include="src\view\element\job\TaskShutdown.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="view\element\job\TaskWakeOnLan.xaml">
+    <Page Include="src\view\element\job\TaskWakeOnLan.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="view\element\job\TaskReboot.xaml">
+    <Page Include="src\view\element\job\TaskReboot.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="view\ErrorHandler.xaml">
+    <Page Include="src\view\ErrorHandler.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="view\ExecutionReport.xaml">
+    <Page Include="src\view\ExecutionReport.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="view\Planning.xaml">
+    <Page Include="src\view\Planning.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="view\SelectTask.xaml">
+    <Page Include="src\view\SelectTask.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="view\SoftwareDeployment.xaml">
+    <Page Include="src\view\SoftwareDeployment.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -12,7 +12,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Threading;
-using NetworkManagerApp.view;
 
 namespace NetworkManager {
 
@@ -31,13 +30,8 @@ namespace NetworkManager {
         public Configuration configurationHandler { get; private set; }
 
         public MainWindow() {
-            try { 
             InitializeComponent();
-            }catch(Exception e)
-            {
-                // error
-                Console.WriteLine(e);
-            }
+
             // Preapre the database
             prepareDatabaseConnection();
 

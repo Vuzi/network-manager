@@ -9,7 +9,7 @@
         xmlns:Controls="clr-namespace:System.Windows.Controls;assembly=TreeViewEx"
         xmlns:component="clr-namespace:NetworkManager.View.Component"
         xmlns:networkManager="clr-namespace:NetworkManager.Domain;assembly=NetworkManagerCore"
-        Title="Network Manager" Height="810" Width="1080" Background="LightGray" Icon="resource/icon.ico">
+        Title="Network Manager" Height="810" Width="1080" Background="LightGray" Icon="../resource/icon.ico">
     <Window.Resources>
         <Storyboard x:Key="Storyboard1" RepeatBehavior="Forever">
             <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="LoadingSpinner" Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)">
@@ -33,7 +33,7 @@
         <Label x:Name="label_Computers" Content="Computers" VerticalAlignment="Top" Margin="10,8,0,0" HorizontalAlignment="Left" Width="246" FontWeight="Bold" FontSize="18" Grid.ColumnSpan="2"/>
         <Button x:Name="button_ComputersReload" Margin="116,18,0,0" HorizontalAlignment="Left" Width="16" Height="18" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ComputersReload_Click">
             <DockPanel LastChildFill="True"  Width="15" Height="15">
-                <Image DockPanel.Dock="Left"  Source="resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
+                <Image DockPanel.Dock="Left"  Source="../resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
             </DockPanel>
         </Button>
         <Button x:Name="button_Configuration" Margin="141,14,0,0" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_Configuration_Click" HorizontalAlignment="Left" Width="25">

@@ -6,7 +6,7 @@
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:local="clr-namespace:NetworkManager.View"
         mc:Ignorable="d"
-        Title="Network Manager - Software Deployment" Height="400" Width="600" Background="LightGray" Icon="../resource/icon.ico">
+        Title="Network Manager - Software Deployment" Height="400" Width="600" Background="LightGray" Icon="../../resource/icon.ico">
     <Grid>
         <Button x:Name="ButtonAddApplication" RenderTransformOrigin="2.388,-3.917" Click="ButtonAddApplication_Click" Grid.ColumnSpan="2" Margin="0,6,5,0" HorizontalAlignment="Right" Width="178" Height="36" VerticalAlignment="Top">
             <DockPanel LastChildFill="True" Width="168" >
