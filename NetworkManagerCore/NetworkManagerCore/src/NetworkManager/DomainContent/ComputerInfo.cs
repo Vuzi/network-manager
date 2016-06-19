@@ -1,5 +1,5 @@
 ﻿
-namespace NetworkManager.Domain {
+namespace NetworkManager.DomainContent {
 
     /// <summary>
     /// Saved computer info in the database

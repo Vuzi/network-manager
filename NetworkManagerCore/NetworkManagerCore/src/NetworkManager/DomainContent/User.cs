@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NetworkManager.Domain {
+namespace NetworkManager.DomainContent {
     public class User {
         public string caption { get; set; }
         public string description { get; set; }

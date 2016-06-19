@@ -8,7 +8,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 
-namespace NetworkManager.Domain {
+namespace NetworkManager.DomainContent {
     public class Domain {
 
         public string name { get; set;}

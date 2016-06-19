@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.SQLite;
 
-namespace NetworkManager.Domain {
+namespace NetworkManager.DomainContent {
     public class ComputerInfoStore {
         private SQLiteConnection conn;
 
