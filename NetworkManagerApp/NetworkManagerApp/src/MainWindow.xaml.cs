@@ -105,11 +105,16 @@ namespace NetworkManager {
                 // If the computer is alive, save its values in the database
                 if (c.isAlive) {
                     try {
-                        computerInfoStore.updateOrInsertComputerInfo(new ComputerInfo() {
-                            name = c.nameLong,
-                            ipAddress = c.getIpAddress().ToString(),
-                            macAddress = await c.getMacAddress()
-                        });
+                        var info = computerInfoStore.getComputerInfoByName(c.nameLong);
+
+                        if(info == null || (DateTime.Now - info.lastUpdate).TotalDays > 30) {
+                            computerInfoStore.updateOrInsertComputerInfo(new ComputerInfo() {
+                                name = c.nameLong,
+                                ipAddress = c.getIpAddress().ToString(),
+                                macAddress = await c.getMacAddress(),
+                                lastUpdate = DateTime.Now
+                            });
+                        }
                     } catch (Exception e) {
                         errorHandler.addError(e);
                     }

@@ -87,7 +87,7 @@
         <Label x:Name="label_ConnectedUsers" Content="Connected Users" HorizontalAlignment="Left" Margin="10,202,0,0" VerticalAlignment="Top" Width="146" Height="30px" FontWeight="Bold" FontSize="14"/>
         <Button Name="button_ConnectedUsersReload" Margin="126,209,0,0" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ConnectedUsersReload_Click">
             <DockPanel LastChildFill="True"  Width="15" Height="15">
-                <Image DockPanel.Dock="Left" Source="../../resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
+                <Image DockPanel.Dock="Left" Source="../../../resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
             </DockPanel>
         </Button>
         <DataGrid x:Name="dataGrid_ConnectedUsers" Margin="10,229,10,0" CanUserAddRows="false"
@@ -118,7 +118,7 @@
         <Label x:Name="label_InstalledSoftware" Content="Installed Softwares" HorizontalAlignment="Left" Margin="10,476,0,0" VerticalAlignment="Top" Width="148" Height="30px" FontWeight="Bold" FontSize="14"/>
         <Button x:Name="button_InstalledSoftwaresReload" Margin="141,483,0,-200" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_InstalledSoftwaresReload_Click">
             <DockPanel LastChildFill="True"  Width="15" Height="15">
-                <Image DockPanel.Dock="Left" Source="../../resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
+                <Image DockPanel.Dock="Left" Source="../../../resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
             </DockPanel>
         </Button>
         <DataGrid x:Name="dataGrid_ShowAllInstalledSoftware" Margin="10,505,10,31" CanUserAddRows="false"

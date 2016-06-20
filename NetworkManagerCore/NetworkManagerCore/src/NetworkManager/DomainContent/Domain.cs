@@ -118,7 +118,7 @@ namespace NetworkManager.DomainContent {
 
                             try {
                                 var p = new Ping();
-                                isAlive = p.Send(computer.nameLong, 250).Status == IPStatus.Success;
+                                isAlive = p.Send(computer.nameLong, 200).Status == IPStatus.Success;
                             } catch (Exception) { }
                             computer.isAlive = isAlive;
                         });

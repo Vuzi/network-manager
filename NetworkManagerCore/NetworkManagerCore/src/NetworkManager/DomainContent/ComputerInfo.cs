@@ -1,5 +1,6 @@
 ﻿
 using SQLite;
+using System;
 
 namespace NetworkManager.DomainContent {
 
@@ -13,5 +14,7 @@ namespace NetworkManager.DomainContent {
         public string ipAddress { get; set; }
         [NotNull]
         public string macAddress { get; set; }
+        [NotNull]
+        public DateTime lastUpdate { get; set; }
     }
 }

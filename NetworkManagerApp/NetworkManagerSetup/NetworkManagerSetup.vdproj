@@ -541,7 +541,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Network Manager"
         "ProductCode" = "8:{8C57E653-3075-48AB-9D9C-CA6831751111}"
-        "PackageCode" = "8:{ECA427BF-5246-4ED4-89BB-4E9A6422621E}"
+        "PackageCode" = "8:{383CDE2D-6168-423C-A0E2-1D6C89CA5FDD}"
         "UpgradeCode" = "8:{AE53F5F8-FC5A-4E1C-A0BD-EA34775D7D0A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -663,7 +663,7 @@
         {
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_359ED2D3ABE24F8AA156B3E0E6BF6699"
             {
-            "Name" = "8:Network Manager (Active)"
+            "Name" = "8:Network Manager"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"

@@ -123,6 +123,15 @@ namespace NetworkManager.View.Component {
             if (result == MessageBoxResult.No)
                 return;
 
+            // If local
+            foreach(Computer c in toShutdown) {
+                if (c.isLocalComputer()) {
+                    MessageBoxResult r = MessageBox.Show($"Are you sure you want to shutdown the local computer ({c.name}) ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (r == MessageBoxResult.No)
+                        return;
+                }
+            }
+
             await Task.Factory.StartNew(() => {
                 Parallel.ForEach(toShutdown, computer => {
                     try {
@@ -151,6 +160,15 @@ namespace NetworkManager.View.Component {
                 MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.No)
                 return;
+
+            // If local
+            foreach (Computer c in toReboot) {
+                if (c.isLocalComputer()) {
+                    MessageBoxResult r = MessageBox.Show($"Are you sure you want to reboot the local computer ({c.name}) ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (r == MessageBoxResult.No)
+                        return;
+                }
+            }
 
             await Task.Factory.StartNew(() => {
                 Parallel.ForEach(toReboot, computer => {
