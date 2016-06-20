@@ -50,19 +50,19 @@
             </Button>
         </WrapPanel>
 
-        <Button x:Name="button_OpenDiskC"  Margin="673,37,-498,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125" Click="button_OpenDiskC_Click" >
+        <Button x:Name="button_OpenDiskC"  Margin="666,37,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="126" Click="button_OpenDiskC_Click" >
             <DockPanel LastChildFill="True" Width="115">
                 <fa:FontAwesome Icon="HddOutline" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Text="Disque C" />
             </DockPanel>
         </Button>
-        <Button x:Name="button_OpenDiskD"  Margin="673,72,-498,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125" Click="button_OpenDiskD_Click" >
+        <Button x:Name="button_OpenDiskD"  Margin="666,72,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="126" Click="button_OpenDiskD_Click" >
             <DockPanel LastChildFill="True" Width="115">
                 <fa:FontAwesome Icon="HddOutline" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" ><Run Text="Disque "/><Run Text="D"/></TextBlock>
             </DockPanel>
         </Button>
-        <Button x:Name="button_OpenDiskE"  Margin="673,107,-498,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125" Click="button_OpenDiskE_Click" >
+        <Button x:Name="button_OpenDiskE"  Margin="666,107,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="126" Click="button_OpenDiskE_Click" >
             <DockPanel LastChildFill="True" Width="115">
                 <fa:FontAwesome Icon="HddOutline" FontSize="20px"  VerticalAlignment="Center" Margin="5,0,0,0" />
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" ><Run Text="Disque "/><Run Text="E"/></TextBlock>
@@ -85,9 +85,9 @@
 
         <!-- Connected users -->
         <Label x:Name="label_ConnectedUsers" Content="Connected Users" HorizontalAlignment="Left" Margin="10,202,0,0" VerticalAlignment="Top" Width="146" Height="30px" FontWeight="Bold" FontSize="14"/>
-        <Button Name="button_ConnectedUsersReload" Margin="126,209,0,0" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ConnectedUsersReload_Click">
+        <Button Name="button_ConnectedUsersReload" Margin="128,204,0,0" HorizontalAlignment="Left" Width="25" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ConnectedUsersReload_Click">
             <DockPanel LastChildFill="True"  Width="15" Height="15">
-                <Image DockPanel.Dock="Left" Source="../../../resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
+                <fa:FontAwesome Icon="Refresh" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </DockPanel>
         </Button>
         <DataGrid x:Name="dataGrid_ConnectedUsers" Margin="10,229,10,0" CanUserAddRows="false"
@@ -116,9 +116,9 @@
 
         <!-- Installed sofwares -->
         <Label x:Name="label_InstalledSoftware" Content="Installed Softwares" HorizontalAlignment="Left" Margin="10,476,0,0" VerticalAlignment="Top" Width="148" Height="30px" FontWeight="Bold" FontSize="14"/>
-        <Button x:Name="button_InstalledSoftwaresReload" Margin="141,483,0,-200" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_InstalledSoftwaresReload_Click">
+        <Button x:Name="button_InstalledSoftwaresReload" Margin="144,479,0,0" HorizontalAlignment="Left" Width="25" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_InstalledSoftwaresReload_Click">
             <DockPanel LastChildFill="True"  Width="15" Height="15">
-                <Image DockPanel.Dock="Left" Source="../../../resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
+                <fa:FontAwesome Icon="Refresh" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </DockPanel>
         </Button>
         <DataGrid x:Name="dataGrid_ShowAllInstalledSoftware" Margin="10,505,10,31" CanUserAddRows="false"

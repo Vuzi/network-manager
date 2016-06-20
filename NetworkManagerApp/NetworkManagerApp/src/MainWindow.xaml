@@ -31,14 +31,14 @@
         </Grid.ColumnDefinitions>
         <!-- AD Computer treeview -->
         <Label x:Name="label_Computers" Content="Computers" VerticalAlignment="Top" Margin="10,8,0,0" HorizontalAlignment="Left" Width="246" FontWeight="Bold" FontSize="18" Grid.ColumnSpan="2"/>
-        <Button x:Name="button_ComputersReload" Margin="116,18,0,0" HorizontalAlignment="Left" Width="16" Height="18" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ComputersReload_Click">
+        <Button x:Name="button_ComputersReload" Margin="116,14,0,0" HorizontalAlignment="Left" Width="25" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ComputersReload_Click">
             <DockPanel LastChildFill="True"  Width="15" Height="15">
-                <fa:FontAwesome Icon="Refresh" Foreground="Black" FontSize="15" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+                <fa:FontAwesome Icon="Refresh" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </DockPanel>
         </Button>
-        <Button x:Name="button_Configuration" Margin="141,14,0,0" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_Configuration_Click" HorizontalAlignment="Left" Width="25">
+        <Button x:Name="button_Configuration" Margin="145,14,0,0" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_Configuration_Click" HorizontalAlignment="Left" Width="25">
             <DockPanel LastChildFill="True"  Width="15" Height="15">
-                <fa:FontAwesome Icon="Wrench" Foreground="Black" FontSize="15" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+                <fa:FontAwesome Icon="Wrench" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </DockPanel>
         </Button>
         <Controls:TreeViewEx x:Name="List_Computer" Loaded="List_Machine_Loaded"  Margin="10,48,10,10" MouseLeftButtonUp="List_Computer_MouseLeftButtonUp" KeyUp="List_Computer_KeyUp" >

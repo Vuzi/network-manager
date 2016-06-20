@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using System;
+using SQLite;
 
 namespace NetworkManager.DomainContent {
     public class ComputerInfoStore {
@@ -14,7 +15,7 @@ namespace NetworkManager.DomainContent {
         }
         
         public ComputerInfo getComputerInfoByName(string name) {
-            return conn.Get<ComputerInfo>(name);
+            return conn.Find<ComputerInfo>(name);
         }
 
         public void updateComputerInfo(ComputerInfo computerInfo) {
