@@ -20,5 +20,6 @@ namespace NetworkManager.Job {
         [NotNull]
         public int timeout { get; set; }
         public string data { get; set; }
+        public string data2 { get; set; }
     }
 }

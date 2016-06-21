@@ -102,5 +102,9 @@ namespace NetworkManager {
 
             return retVal;
         }
+
+        public static bool waitFor(Func<bool> test, int each, int timeout) {
+            return false;
+        }
     }
 }

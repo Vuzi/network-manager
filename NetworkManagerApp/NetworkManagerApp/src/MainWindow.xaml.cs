@@ -290,8 +290,8 @@ namespace NetworkManager {
             errorHandler.Top = this.Top + 50;
             errorHandler.Show();
         }
-        private void button_Configuration_Click(object sender, RoutedEventArgs e)
-        {
+
+        private void button_Configuration_Click(object sender, RoutedEventArgs e) {
             configurationHandler.Left = this.Left + 50;
             configurationHandler.Top = this.Top + 50;
             configurationHandler.Show();

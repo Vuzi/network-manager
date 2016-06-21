@@ -8,6 +8,8 @@ using System.Collections.Generic;
 
 using NetworkManager.WMIExecution;
 using System.Net;
+using NetworkManager.Job;
+using System.Net.NetworkInformation;
 
 namespace NetworkManager.DomainContent {
 
@@ -38,8 +40,7 @@ namespace NetworkManager.DomainContent {
         private DateTime lastUsersFetch;
         private string cachedMacAddr;
         private DateTime lastMacAddrFetch;
-
-
+        
         /// <summary>
         /// Return the first ipv4 of the computer, or null if not found
         /// </summary>
@@ -70,7 +71,16 @@ namespace NetworkManager.DomainContent {
 
             return cachedMacAddr;
         }
-        
+
+        public async Task<bool> updateAliveStatus() {
+            try {
+                var p = new Ping();
+                return (isAlive = (await p.SendPingAsync(nameLong, 200)).Status == IPStatus.Success);
+            } catch (Exception) { }
+
+            return (isAlive = false);
+        }
+
         /// <summary>
         /// Upload a file to the domain computer. The path should either be a full name including partion
         /// (i.e. C:\test\file.txt) or include a shared folder (i.e. \shared\file.txt)
@@ -215,6 +225,125 @@ namespace NetworkManager.DomainContent {
             return Environment.MachineName == name;
         }
 
+        public async Task<WMIExecutionResult> installSoftware(string path, string[] args, int timeout) {
+            WMIExecutionResult result = null;
+
+            try {
+                string destPath = $@"C:\Windows\Temp\{Path.GetFileName(path)}";
+
+                // Copy the file
+                uploadFile(path, destPath);
+
+                try {
+                    // Start the install remotely
+                    result = await exec(destPath, args, timeout * 1000);
+                } catch (Exception e) {
+                    throw e;
+                } finally {
+                    // Delete the file
+                    try {
+                        deleteFile(path);
+                    } catch (Exception e) {
+                        throw new WMIException() {
+                            error = e,
+                            computer = nameLong
+                        };
+                    }
+                }
+
+            } catch (Exception e) {
+                if(!(e is WMIException))
+                    throw new WMIException() {
+                        error = e,
+                        computer = nameLong
+                    };
+            }
+
+            return result;
+        }
+
+        public async void performsTasks(List<JobTask> tasks) {
+            foreach (JobTask task in tasks) {
+                bool r;
+
+                switch (task.type) {
+                    case JobTaskType.INSTALL_SOFTWARE:
+                        // Install the software
+                        // TODO handle args (drop data2 or handle data 2 in task creation)
+                        var report = await installSoftware(task.data, new string[] { task.data2 }, task.timeout);
+
+                        // If timeout
+                        if (report.timeout)
+                            goto timeout;
+                        // If installation fail
+                        else if(report.returnValue != 0)
+                            throw new WMIException() {
+                                computer = nameLong,
+                                error = new Exception($"Install task failed with code '{report.returnValue}'")
+                            };
+
+                        break;
+                    case JobTaskType.REBOOT:
+                        // Reboot the computer
+                        await reboot();
+
+                        // Wait for the reboot to be completed
+                        r = Task.Run(async () => {
+                            bool hasShutdown = false;
+
+                            do {
+                                bool alive = await updateAliveStatus();
+
+                                if (!alive && !hasShutdown)
+                                    hasShutdown = true;
+
+                            } while (isAlive && hasShutdown);
+                        }).Wait(task.timeout * 1000);
+
+                        // If timeout
+                        if (!r)
+                            goto timeout;
+
+                        break;
+                    case JobTaskType.SHUTDOWN:
+                        // Shutdown the computer (note : this will cause any task after to fail)
+                        await shutdown();
+                        break;
+                    case JobTaskType.WAKE_ON_LAN:
+                        // TODO : get the database mac address + handle case with no mac address
+                        Utils.wakeOnLan(await getMacAddress());
+
+                        // Wait for the reboot..
+                        r = Task.Run(async () => {
+                            do {
+                                bool alive = await updateAliveStatus();
+                            } while (isAlive);
+                        }).Wait(task.timeout * 1000);
+
+                        // If timeout
+                        if (!r)
+                            goto timeout;
+
+                        break;
+                    default:
+                        throw new WMIException() {
+                            computer = nameLong,
+                            error = new Exception($"Unknown task type to performs '{task.type}'")
+                        };
+                }
+
+                timeout:
+                throw new WMIException() {
+                    computer = nameLong,
+                    error = new Exception($"Task timeout '{task.type}' for '{nameLong}'")
+                };
+            }
+        }
+
+        /// <summary>
+        /// Copy the cached content of the computer to another computer object. Should only be used if the computer stays the same
+        /// </summary>
+        /// <param name="c"></param>
         public void copyCache(Computer c) {
             cachedSoftwares = c.cachedSoftwares;
             cachedUsers = c.cachedUsers;
