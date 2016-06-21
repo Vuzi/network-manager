@@ -8,6 +8,7 @@ using System.Collections.Generic;
 
 using NetworkManager.WMIExecution;
 using System.Net;
+using System.Net.NetworkInformation;
 
 namespace NetworkManager.DomainContent {
 
@@ -71,6 +72,13 @@ namespace NetworkManager.DomainContent {
             return cachedMacAddr;
         }
         
+        public void isAliveUpdate() {
+            try {
+                var p = new Ping();
+                isAlive = p.Send(nameLong, 200).Status == IPStatus.Success;
+            } catch (Exception) { }
+        }
+
         /// <summary>
         /// Upload a file to the domain computer. The path should either be a full name including partion
         /// (i.e. C:\test\file.txt) or include a shared folder (i.e. \shared\file.txt)

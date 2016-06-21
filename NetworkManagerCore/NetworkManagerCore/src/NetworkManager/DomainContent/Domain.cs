@@ -114,13 +114,7 @@ namespace NetworkManager.DomainContent {
                 if (getStatus) {
                     var tasks = computers.Select(computer => {
                         return Task.Run(() => {
-                            bool isAlive = false;
-
-                            try {
-                                var p = new Ping();
-                                isAlive = p.Send(computer.nameLong, 200).Status == IPStatus.Success;
-                            } catch (Exception) { }
-                            computer.isAlive = isAlive;
+                            computer.isAliveUpdate();
                         });
                     });
 
