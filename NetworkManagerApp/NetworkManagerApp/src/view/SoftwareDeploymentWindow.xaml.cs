@@ -104,7 +104,10 @@ namespace NetworkManager.View {
 
                 try {
                     // Start the install remotely
-                    result = await currentComputer.exec(path, options, timeout * 1000);
+                    if(path.EndsWith(".msi")) {
+                        result = await currentComputer.exec("msiexec.exe /i " + path, options, timeout * 1000);
+                    } else
+                        result = await currentComputer.exec(path, options, timeout * 1000);
                 } catch(Exception e) {
                     throw e;
                 } finally {

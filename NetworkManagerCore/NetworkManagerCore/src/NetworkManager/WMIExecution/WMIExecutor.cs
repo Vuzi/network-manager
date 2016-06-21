@@ -261,20 +261,11 @@ namespace NetworkManager.WMIExecution {
                     // Note that since there is no way of getting the output, CMD is invoked and will write its output to the specified files
                     // then a timeout will wait, and if the process is terminated the two file will be retreived and returned
                     var inParams = wmiProcess.GetMethodParameters("Create");
-                    if (command.Contains(".msi"))
-                    {
-                        if (logOutput)
-                            inParams["CommandLine"] = $"CMD /U /S /C \"msiexec.exe /i {"\"" + command + "\""} {string.Join(" ", args)} > C:\\{outputPath} 2> C:\\{errPath} \" ";
-                        else
-                            inParams["CommandLine"] = $"CMD /U /S /C \"msiexec.exe /i {"\"" + command + "\""} {string.Join(" ", args)} \" ";
-                    }
+
+                    if (logOutput)
+                        inParams["CommandLine"] = $"CMD /U /S /C \" {"\"" + command + "\""} {string.Join(" ", args)} > C:\\{outputPath} 2> C:\\{errPath} \" ";
                     else
-                    {
-                        if (logOutput)
-                            inParams["CommandLine"] = $"CMD /U /S /C \" {"\"" + command + "\""} {string.Join(" ", args)} > C:\\{outputPath} 2> C:\\{errPath} \" ";
-                        else
-                            inParams["CommandLine"] = $"CMD /U /S /C \" {"\"" + command + "\""} {string.Join(" ", args)} \" ";
-                    }
+                        inParams["CommandLine"] = $"CMD /U /S /C \" {"\"" + command + "\""} {string.Join(" ", args)} \" ";             
 
                     // Exec
                     ManagementBaseObject outParams = wmiProcess.InvokeMethod("Create", inParams, methodOptions);
@@ -310,10 +301,10 @@ namespace NetworkManager.WMIExecution {
                         string errPathLocal = $@"\\{computer.nameLong}\c$\{errPath}";
 
                         result.output = File.ReadAllText(outputPathLocal, Encoding.Unicode);
-                        //File.Delete(outputPathLocal);
+                        File.Delete(outputPathLocal);
 
                         result.err = File.ReadAllText(errPathLocal, Encoding.Unicode);
-                        //File.Delete(errPathLocal);
+                        File.Delete(errPathLocal);
                     }
 
                     // Return the values
