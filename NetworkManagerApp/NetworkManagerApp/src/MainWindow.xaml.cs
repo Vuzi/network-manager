@@ -322,8 +322,8 @@ namespace NetworkManager {
             configurationHandler.Show();
         }
 
-        public void requireReload(Computer computer, int v) {
-            computer.updateAliveStatus().Wait();
+        public async void requireReload(Computer computer, int v) {
+            await computer.updateAliveStatus();
 
             DomainModel domainModel = List_Computer.Items.First() as DomainModel;
 
