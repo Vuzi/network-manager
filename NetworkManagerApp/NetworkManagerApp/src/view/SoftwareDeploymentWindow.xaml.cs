@@ -57,7 +57,6 @@ namespace NetworkManager.View {
             string[] dir = Directory.GetFiles(path);
             var data = new List<SoftwareModel>();
             foreach (var filePath in dir) {
-
                 var sysicon = System.Drawing.Icon.ExtractAssociatedIcon(filePath);
                 var bmpSrc = Imaging.CreateBitmapSourceFromHIcon(sysicon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
                 sysicon.Dispose();
@@ -68,6 +67,7 @@ namespace NetworkManager.View {
                 itm.fileInfo = fileInfo;
                 itm.size = Utils.getBytesReadable(fileInfo.Length);
                 itm.file = fileInfo.Name;
+                itm.path = filePath;
                 if (fileInfo.Extension == ".msi") {
                     itm.name = Utils.getMsiProperty(filePath, "ProductName");
                     itm.version = Utils.getMsiProperty(filePath, "ProductVersion");
@@ -93,51 +93,20 @@ namespace NetworkManager.View {
 
             showLoading();
 
-            int timeout = int.Parse(textBox_Timeout.Text);
-            string path = $@"C:\Windows\Temp\{soft.fileInfo.Name}";
-            string[] options = new string[] { textBox_LaunchArgs.Text };
-            WMIExecutionResult result = null;
-
             try {
-                // Copy the file
-                currentComputer.uploadFile(soft.fileInfo.FullName, path);
+                // Install on the current computer
+                WMIExecutionResult result = await currentComputer.installSoftware(soft.path, new string[] { textBox_LaunchArgs.Text }, int.Parse(textBox_Timeout.Text));
 
-                try {
-                    // Start the install remotely
-                    if(path.EndsWith(".msi")) {
-                        result = await currentComputer.exec("msiexec.exe /i " + path, options, timeout * 1000);
-                    } else
-                        result = await currentComputer.exec(path, options, timeout * 1000);
-                } catch(Exception e) {
-                    throw e;
-                } finally {
-                    // Delete the file
-                    try {
-                        currentComputer.deleteFile(path);
-                    } catch(Exception e) {
-                        WarningImage.Visibility = Visibility.Visible;
-                        errorHandler.addError(new WMIException() {
-                            error = e,
-                            computer = currentComputer.nameLong
-                        });
-                    }
-                }
-
-            } catch(Exception e) {
-                WarningImage.Visibility = Visibility.Visible;
-                errorHandler.addError(new WMIException() {
-                    error = e,
-                    computer = currentComputer.nameLong
-                });
-            } finally {
-                hideLoading();
-            }
-
-            if (result != null) {
+                // Show report
                 ExecutionReport reporter = new ExecutionReport(currentComputer, result);
                 reporter.Left = this.Left + 50;
                 reporter.Top = this.Top + 50;
                 reporter.Show();
+            } catch (Exception e) {
+                WarningImage.Visibility = Visibility.Visible;
+                errorHandler.addError(e);
+            } finally {
+                hideLoading();
             }
         }
 

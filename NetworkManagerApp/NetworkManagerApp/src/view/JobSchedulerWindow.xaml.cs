@@ -172,8 +172,11 @@ namespace NetworkManager.View {
                 report = null
             };
 
+            // Tests
+            (selectedComputersGrid.SelectedItems[0] as Computer).performsTasks(tasks);
+
             // Insert into the job store
-            MainWindow.jobStore.insertJob(job);
+            //MainWindow.jobStore.insertJob(job);
 
             // Create a windows task
             // TODO

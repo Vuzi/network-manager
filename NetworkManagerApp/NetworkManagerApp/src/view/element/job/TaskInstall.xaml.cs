@@ -83,7 +83,8 @@ namespace NetworkManager.View.Component.Job {
                 return null;
             }
 
-            string data = (DataGrid_softwareList.SelectedItem as SoftwareModel).path + " " + Textbox_launchArgs.Text;
+            string data = (DataGrid_softwareList.SelectedItem as SoftwareModel).path;
+            string data2 = Textbox_launchArgs.Text;
 
             // Timeout
             int timeout = 60;
@@ -98,7 +99,8 @@ namespace NetworkManager.View.Component.Job {
             return new JobTask() {
                 type = JobTaskType.INSTALL_SOFTWARE,
                 timeout = timeout,
-                data = data
+                data = data,
+                data2 = data2 // TODO remove data 2 ?
             };
         }
     }
