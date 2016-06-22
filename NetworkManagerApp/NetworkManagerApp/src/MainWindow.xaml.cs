@@ -4,16 +4,14 @@ using NetworkManager.View;
 using SQLite;
 
 using System;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows.Threading;
 using NetworkManager.Job;
+using NetworkManager.View.Model;
 
 namespace NetworkManager {
 
@@ -90,117 +88,7 @@ namespace NetworkManager {
             computerInfoStore = new ComputerInfoStore(conn);
             jobStore = new JobStore(conn);
         }
-
-        private async Task<DomainModel> createDomainModel(Domain domain) {
-
-            DomainModel domainModel = new DomainModel() {
-                name = domain.name
-            };
-
-            foreach (Computer c in domain.computers) {
-                domainModel.addComputer(new ComputerModel() {
-                    computer = c
-                });
-
-                // If the computer is alive, save its values in the database
-                if (c.isAlive) {
-                    try {
-                        var info = computerInfoStore.getComputerInfoByName(c.nameLong);
-
-                        if(info == null || (DateTime.Now - info.lastUpdate).TotalDays > 30) {
-                            computerInfoStore.updateOrInsertComputerInfo(new ComputerInfo() {
-                                name = c.nameLong,
-                                ipAddress = c.getIpAddress().ToString(),
-                                macAddress = await c.getMacAddress(),
-                                lastUpdate = DateTime.Now
-                            });
-                        }
-                    } catch (Exception e) {
-                        errorHandler.addError(e);
-                    }
-                }
-            }
-
-            foreach (Domain d in domain.domains) {
-                domainModel.addDomain( await createDomainModel(d));
-            }
-
-            return domainModel;
-        }
-
-        private bool updateComputerModel(DomainModel domainModel, Computer computer) {
-            bool needRefresh = false;
-
-            // Update & adding of new computers
-            foreach (var computerModel in domainModel.getComputers()) {
-                if (computerModel.computer.nameLong == computer.nameLong) {
-                    if (computer.isAlive != computerModel.computer.isAlive) {
-                        needRefresh = true;
-                    }
-
-                    computerModel.computer = computer;
-
-                    return needRefresh;
-                }
-            }
-
-            foreach (var subdomainModel in domainModel.getDomains()) {
-                if ((needRefresh = (needRefresh || updateComputerModel(subdomainModel, computer))))
-                    return needRefresh;
-            }
-
-            return needRefresh;
-        }
-
-        private bool updateDomainModel(DomainModel oldDomainModel, DomainModel domainModel) {
-            bool needRefresh = false;
-
-            // Update & adding of new computers
-            foreach (var computerModel in domainModel.getComputers()) {
-                var oldComputerModel = oldDomainModel.getComputer(computerModel.computer.name);
-
-                if (oldComputerModel != null) {
-                    // If an update is needed
-                    if (oldComputerModel.computer.isAlive != computerModel.computer.isAlive) {
-                        foreach (var item in List_Computer.SelectedItems) {
-                            if (item is ComputerModel && (item as ComputerModel).computer.nameLong == computerModel.computer.nameLong) {
-                                needRefresh = true;
-                            }
-                        }
-                    }
-
-                    oldComputerModel.computer = computerModel.computer;
-                } else
-                    oldDomainModel.addComputer(computerModel);
-            }
-
-            // Update & adding of new models
-            foreach (var subdomainModel in domainModel.getDomains()) {
-                var oldSubdomainModel = oldDomainModel.getDomain(subdomainModel.name);
-
-                if (oldSubdomainModel != null)
-                    needRefresh = needRefresh || updateDomainModel(oldSubdomainModel, subdomainModel);
-                else
-                    oldDomainModel.addDomain(subdomainModel);
-            }
-
-            // Removing of old computers
-            foreach (string computerToRemove in oldDomainModel.getComputers().Select(c => c.computer.name).
-                                                Except(domainModel.getComputers().Select(c => c.computer.name)).
-                                                ToList()) {
-                oldDomainModel.removeComputer(computerToRemove);
-            }
-
-            // Removing of old domains
-            foreach (string domainToRemove in oldDomainModel.getDomains().Select(d => d.name).
-                                                Except(domainModel.getDomains().Select(d => d.name)).
-                                                ToList()) {
-                oldDomainModel.removeDomain(domainToRemove);
-            }
-
-            return needRefresh;
-        }
-
+        
         /// <summary>
         /// Update the domain computer list
         /// </summary>
@@ -212,11 +100,11 @@ namespace NetworkManager {
                 Domain domain = new Domain();
                 await domain.fill();
 
-                DomainModel domainModel = await createDomainModel(domain);
+                DomainModel domainModel = await DomainModel.createDomainModel(domain, errorHandler);
 
                 if (!List_Computer.Items.IsEmpty) {
                     // Update the existing model with the new generated one
-                    var needRefresh = updateDomainModel(List_Computer.Items[0] as DomainModel, domainModel);
+                    var needRefresh = (List_Computer.Items[0] as DomainModel).updateDomainModel(domainModel, List_Computer.SelectedItems);
 
                     if(needRefresh) // If an update is needed
                         updateSelectedComputers();
@@ -328,130 +216,12 @@ namespace NetworkManager {
             DomainModel domainModel = List_Computer.Items.First() as DomainModel;
 
             if (domainModel != null) {
-                updateComputerModel(domainModel, computer);
+                domainModel.updateComputerModel(computer);
                 updateSelectedComputers();
             }
         }
     }
 
-    public class DomainModel : INotifyPropertyChanged {
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        public string name { get; set; }
-        private Dictionary<string, ComputerModel> computers { get; set; }
-        private Dictionary<string, DomainModel> domains { get; set; }
-
-        internal void notifyPropertyChanged(String info) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
-        }
-
-        public DomainModel() {
-            computers = new Dictionary<string, ComputerModel>();
-            domains = new Dictionary<string, DomainModel>();
-        }
-
-        public DomainModel getDomain(string name) {
-            return domains.GetValueOrDefault(name);
-        }
-
-        public ComputerModel getComputer(string name) {
-            return computers.GetValueOrDefault(name);
-        }
-
-        public void addDomain(DomainModel domain) {
-            domains[domain.name] = domain;
-            Items.Insert(computerIndex, domain);
-            computerIndex++;
-
-            notifyPropertyChanged("Domains");
-        }
-
-        public void addComputer(ComputerModel computer) {
-            computers[computer.computer.name] = computer;
-            Items.Add(computer);
-
-            notifyPropertyChanged("Computers");
-        }
-
-        public void removeComputer(ComputerModel computer) {
-            removeComputer(computer.computer.name);
-        }
-
-        public void removeComputer(string computer) {
-            computers.Remove(computer);
-            for (int i = computerIndex; i < Items.Count; i++) {
-                var item = Items[i] as ComputerModel;
-
-                if (item.computer.name == computer) {
-                    Items.RemoveAt(i);
-                    notifyPropertyChanged("Computers");
-                    break;
-                }
-            }
-        }
-
-        public void removeDomain(DomainModel domain) {
-            removeDomain(domain.name);
-        }
-
-        public void removeDomain(string domain) {
-            domains.Remove(domain);
-            for (int i = 0; i < computerIndex; i++) {
-                var item = Items[i] as DomainModel;
-
-                if (item.name == domain) {
-                    Items.RemoveAt(i);
-                    computerIndex--;
-                    notifyPropertyChanged("Domains");
-                    break;
-                }
-            }
-        }
-
-        public IEnumerable<ComputerModel> getComputers() {
-            return computers.Values;
-        }
-
-        public IEnumerable<DomainModel> getDomains() {
-            return domains.Values;
-        }
-
-        private int computerIndex;
-        private ObservableCollection<object> items;
-        public ObservableCollection<object> Items {
-            get {
-                if (items == null) {
-                    items = new ObservableCollection<object>();
-                    computerIndex = 0;
-                }
-
-                return items;
-            }
-        }
-    }
-
-    public class ComputerModel : INotifyPropertyChanged {
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private Computer _computer;
-        public Computer computer {
-            get {
-                return _computer;
-            }
-
-            set {
-                if(_computer != null)
-                    value.copyCache(_computer); // Keep in memory the cached values of the computer
-                _computer = value;
-                notifyPropertyChanged("computer");
-            }
-        }
-
-        internal void notifyPropertyChanged(String info) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
-        }
-
-    }
 }

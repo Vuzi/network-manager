@@ -298,7 +298,7 @@ namespace NetworkManager.DomainContent {
                                 if (!alive && !hasShutdown)
                                     hasShutdown = true;
 
-                            } while (isAlive && hasShutdown);
+                            } while (!(isAlive && hasShutdown));
                         }).Wait(task.timeout * 1000);
 
                         // If timeout

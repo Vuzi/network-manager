@@ -78,6 +78,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="src\model\ComputerModel.cs" />
+    <Compile Include="src\model\DomainModel.cs" />
     <Compile Include="src\Properties.cs" />
     <Compile Include="src\view\ConfigurationWindow.xaml.cs">
       <DependentUpon>ConfigurationWindow.xaml</DependentUpon>

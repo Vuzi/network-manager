@@ -6,6 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:local="clr-namespace:NetworkManager"
+        xmlns:model="clr-namespace:NetworkManager.View.Model"
         xmlns:Controls="clr-namespace:System.Windows.Controls;assembly=TreeViewEx"
         xmlns:component="clr-namespace:NetworkManager.View.Component"
         xmlns:networkManager="clr-namespace:NetworkManager.DomainContent;assembly=NetworkManagerCore"
@@ -44,11 +45,11 @@
         <Controls:TreeViewEx x:Name="List_Computer" Loaded="List_Machine_Loaded"  Margin="10,48,10,10" MouseLeftButtonUp="List_Computer_MouseLeftButtonUp" KeyUp="List_Computer_KeyUp" >
 
             <Controls:TreeViewEx.Resources>
-                <HierarchicalDataTemplate DataType="{x:Type local:DomainModel}" ItemsSource="{Binding Items}">
+                <HierarchicalDataTemplate DataType="{x:Type model:DomainModel}" ItemsSource="{Binding Items}">
                     <TextBlock Text="{Binding name}" FontSize="14" FontWeight="DemiBold" />
                 </HierarchicalDataTemplate>
 
-                <DataTemplate DataType="{x:Type local:ComputerModel}">
+                <DataTemplate DataType="{x:Type model:ComputerModel}">
                     <StackPanel Orientation="Horizontal">
                         <fa:FontAwesome Icon="Server" FontSize="14" FontWeight="Normal" VerticalAlignment="Center" Margin="0,0,5,0" >
                             <TextBlock.Style>
