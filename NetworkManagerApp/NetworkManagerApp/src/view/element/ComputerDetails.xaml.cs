@@ -165,23 +165,24 @@ namespace NetworkManager.View.Component {
             textBox_AdressMac.Text = "";
             textBox_IPAdress.Text = "";
 
-            if(computer.isAlive) {
+            var computerInfo = MainWindow.computerInfoStore.getComputerInfoByName(computer.nameLong);
+
+            if (computer.isAlive) {
                 aliveButtons.ToList().ForEach(button => button.Visibility = Visibility.Visible);
                 notAliveButtons.ToList().ForEach(button => button.Visibility = Visibility.Collapsed);
 
                 try {
                     // Connected : get the IP from DNS, and the MAC from WMI
                     textBox_IPAdress.Text = computer.getIpAddress().ToString();
-                    textBox_AdressMac.Text = await computer.getMacAddress();
+                    textBox_AdressMac.Text = computerInfo != null ? computerInfo.macAddress : await computer.getMacAddress();
                 } catch (Exception e) {
                     mainWindow.errorHandler.addError(e);
                 }
-            } else {
+            }
+            // Not connected : get the IP and MAC from local database
+            else {
                 aliveButtons.ToList().ForEach(button => button.Visibility = Visibility.Collapsed);
                 notAliveButtons.ToList().ForEach(button => button.Visibility = Visibility.Visible);
-
-                // Not connected : get the IP and MAC from local database
-                var computerInfo = MainWindow.computerInfoStore.getComputerInfoByName(computer.nameLong);
 
                 if (computerInfo != null) {
                     textBox_IPAdress.Text = computerInfo.ipAddress;
@@ -337,6 +338,11 @@ namespace NetworkManager.View.Component {
                     mainWindow.requireReload(15);
                 }
             }
+        }
+
+        private void button_ReloadComputer_Click(object sender, RoutedEventArgs e) {
+            if(computer != null)
+                mainWindow.requireReload(computer, 0);
         }
     }
 }

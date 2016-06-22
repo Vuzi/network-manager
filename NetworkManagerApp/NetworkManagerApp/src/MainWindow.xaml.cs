@@ -128,6 +128,30 @@ namespace NetworkManager {
             return domainModel;
         }
 
+        private bool updateComputerModel(DomainModel domainModel, Computer computer) {
+            bool needRefresh = false;
+
+            // Update & adding of new computers
+            foreach (var computerModel in domainModel.getComputers()) {
+                if (computerModel.computer.nameLong == computer.nameLong) {
+                    if (computer.isAlive != computerModel.computer.isAlive) {
+                        needRefresh = true;
+                    }
+
+                    computerModel.computer = computer;
+
+                    return needRefresh;
+                }
+            }
+
+            foreach (var subdomainModel in domainModel.getDomains()) {
+                if ((needRefresh = (needRefresh || updateComputerModel(subdomainModel, computer))))
+                    return needRefresh;
+            }
+
+            return needRefresh;
+        }
+
         private bool updateDomainModel(DomainModel oldDomainModel, DomainModel domainModel) {
             bool needRefresh = false;
 
@@ -255,6 +279,7 @@ namespace NetworkManager {
         }
 
         public void requireReload(int inSeconds) {
+            // TODO change
             var timer = new DispatcherTimer();
             timer.Tick += async (source, e) => {
                 timer.Stop();
@@ -295,6 +320,17 @@ namespace NetworkManager {
             configurationHandler.Left = this.Left + 50;
             configurationHandler.Top = this.Top + 50;
             configurationHandler.Show();
+        }
+
+        public void requireReload(Computer computer, int v) {
+            computer.updateAliveStatus().Wait();
+
+            DomainModel domainModel = List_Computer.Items.First() as DomainModel;
+
+            if (domainModel != null) {
+                updateComputerModel(domainModel, computer);
+                updateSelectedComputers();
+            }
         }
     }
 

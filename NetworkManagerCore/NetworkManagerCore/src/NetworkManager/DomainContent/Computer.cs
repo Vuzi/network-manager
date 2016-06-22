@@ -1,14 +1,15 @@
 ﻿
 using System;
 using System.IO;
+using System.Net;
 using System.Linq;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-using NetworkManager.WMIExecution;
-using System.Net;
 using NetworkManager.Job;
+using NetworkManager.WMIExecution;
+
 using System.Net.NetworkInformation;
 
 namespace NetworkManager.DomainContent {
