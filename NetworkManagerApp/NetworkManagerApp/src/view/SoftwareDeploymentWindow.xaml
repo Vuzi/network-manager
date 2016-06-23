@@ -16,7 +16,7 @@
         </Button>
 
         <DataGrid x:Name="dataGrid_SoftwareList" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" 
-          CanUserReorderColumns="True" CanUserResizeColumns="True" AutoGenerateColumns="False" CanUserAddRows="false"
+          CanUserReorderColumns="True" CanUserResizeColumns="True" AutoGenerateColumns="False" CanUserAddRows="false" SelectionMode="Single" SelectedCellsChanged="dataGrid_SoftwareList_SelectedCellsChanged"
           CanUserResizeRows="False" CanUserSortColumns="True" Loaded="AppsToDeploy_Loaded" Margin="4,47,4,72" HorizontalGridLinesBrush="#FF8D8A8A" VerticalGridLinesBrush="#FF8D8A8A" GridLinesVisibility="Horizontal" >
             <DataGrid.ContextMenu>
                 <ContextMenu>

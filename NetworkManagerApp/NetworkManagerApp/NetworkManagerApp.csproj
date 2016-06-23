@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{0830E338-1181-4645-A4A0-1ADF42663BE9}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NetworkManagerApp</RootNamespace>
     <AssemblyName>NetworkManagerApp</AssemblyName>
@@ -78,6 +78,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="src\model\ComputerModel.cs" />
+    <Compile Include="src\model\DomainModel.cs" />
     <Compile Include="src\Properties.cs" />
     <Compile Include="src\view\ConfigurationWindow.xaml.cs">
       <DependentUpon>ConfigurationWindow.xaml</DependentUpon>
@@ -87,6 +89,9 @@
     </Compile>
     <Compile Include="src\view\element\ComputerDetails.xaml.cs">
       <DependentUpon>ComputerDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\view\ExecutionReportsWindow.xaml.cs">
+      <DependentUpon>ExecutionReportsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\view\element\job\TaskInstall.xaml.cs">
       <DependentUpon>TaskInstall.xaml</DependentUpon>
@@ -136,6 +141,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="src\view\element\ComputerDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\view\ExecutionReportsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

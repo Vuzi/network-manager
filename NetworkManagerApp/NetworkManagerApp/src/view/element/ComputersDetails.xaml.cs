@@ -224,7 +224,15 @@ namespace NetworkManager.View.Component {
         }
 
         private void button_Installsoftware_Click(object sender, RoutedEventArgs e) {
-            // TODO
+            List<Computer> toInstallSoftwareOn = computers.FindAll(c => c.isAlive);
+
+            // If a least one computer is alive
+            if (toInstallSoftwareOn.Count > 0) {
+                SoftwareDeploymentWindow softwareDeployment = new SoftwareDeploymentWindow(mainWindow.errorHandler, toInstallSoftwareOn);
+                softwareDeployment.Left = mainWindow.Left + 50;
+                softwareDeployment.Top = mainWindow.Top + 50;
+                softwareDeployment.Show();
+            }
         }
 
         private void checkBox_ShowAllColumnsComputers_Click(object sender, RoutedEventArgs e) {

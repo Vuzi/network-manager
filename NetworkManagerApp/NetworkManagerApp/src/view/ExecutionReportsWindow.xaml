@@ -1,0 +1,45 @@
+﻿<Window x:Class="NetworkManager.View.ExecutionReportsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NetworkManager.View"
+        mc:Ignorable="d"
+        Title="Network Manager - Deployment reports" Height="352.793" Width="525" Background="LightGray" Icon="../../resource/icon.ico">
+    <Grid>
+        <Label Content="Execution report" VerticalAlignment="Top" Margin="5,10,0,0" HorizontalAlignment="Left" Width="517" FontWeight="Bold" FontSize="18" Height="34" Grid.RowSpan="2"/>
+        <DataGrid x:Name="dataGrid_Reports" Margin="10,49,10,10" CanUserAddRows="false"
+          CanUserReorderColumns="True" CanUserResizeColumns="True" SelectionMode="Extended" SelectionUnit="FullRow"
+          CanUserResizeRows="False" CanUserSortColumns="True" AutoGenerateColumns="False"
+                  MouseDoubleClick="dataGrid_Reports_MouseDoubleClick" >
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding hasError}" Value="true">
+                            <Setter Property="Background" Value="LightCyan"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding hasError}" Value="false">
+                            <Setter Property="Background" Value="LightGreen"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="Copy"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            <DataGrid.Columns>
+                <DataGridTextColumn  Header="Computer" Width="Auto" Binding="{Binding computer.nameLong}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridCheckBoxColumn  Header="Timeout" Width="Auto" Binding="{Binding timeout}" IsReadOnly="True" CanUserReorder="True"/>
+                <DataGridTemplateColumn  Header="More information" Width="*"  IsReadOnly="True" CanUserReorder="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Width="150" Click="Button_Click">Show more information...</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

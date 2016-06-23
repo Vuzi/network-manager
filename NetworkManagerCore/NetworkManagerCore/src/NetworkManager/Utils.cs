@@ -103,8 +103,17 @@ namespace NetworkManager {
             return retVal;
         }
 
-        public static bool waitFor(Func<bool> test, int each, int timeout) {
-            return false;
+        public class ValueOrError<V, E> {
+            public V value { get; set; }
+            public E error { get; set; }
+
+            public bool hasError() {
+                return error != null;
+            }
+
+            public bool hasValue() {
+                return value != null;
+            }
         }
     }
 }

@@ -1,16 +1,16 @@
 ﻿
 using System;
 using System.IO;
+using System.Net;
 using System.Linq;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using NetworkManager.WMIExecution;
-using System.Net;
 
-using NetworkManager.Job;
 using System.Net.NetworkInformation;
+using NetworkManager.Job;
 
 namespace NetworkManager.DomainContent {
 
@@ -237,13 +237,16 @@ namespace NetworkManager.DomainContent {
 
                 try {
                     // Start the install remotely
-                    result = await exec(destPath, args, timeout * 1000);
+                    if (path.ToLower().EndsWith(".msi"))
+                        result = await exec("msiexec.exe /i " + destPath, args, timeout * 1000);
+                    else
+                        result = await exec(destPath, args, timeout * 1000);
                 } catch (Exception e) {
                     throw e;
                 } finally {
                     // Delete the file
                     try {
-                        deleteFile(path);
+                        deleteFile(destPath);
                     } catch (Exception e) {
                         throw new WMIException() {
                             error = e,
@@ -298,7 +301,10 @@ namespace NetworkManager.DomainContent {
                                 if (!alive && !hasShutdown)
                                     hasShutdown = true;
 
-                            } while (isAlive && hasShutdown);
+                                // Wait for 0.5s
+                                await Task.Delay(500);
+
+                            } while (!(isAlive && hasShutdown));
                         }).Wait(task.timeout * 1000);
 
                         // If timeout
@@ -318,7 +324,11 @@ namespace NetworkManager.DomainContent {
                         r = Task.Run(async () => {
                             do {
                                 bool alive = await updateAliveStatus();
-                            } while (isAlive);
+
+                                // Wait for 0.5s
+                                await Task.Delay(500);
+
+                            } while(!isAlive);
                         }).Wait(task.timeout * 1000);
 
                         // If timeout
@@ -332,6 +342,8 @@ namespace NetworkManager.DomainContent {
                             error = new Exception($"Unknown task type to performs '{task.type}'")
                         };
                 }
+
+                continue;
 
                 timeout:
                 throw new WMIException() {

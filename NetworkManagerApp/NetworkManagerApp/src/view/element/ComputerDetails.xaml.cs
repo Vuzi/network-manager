@@ -202,7 +202,7 @@ namespace NetworkManager.View.Component {
         
         private void button_Installsoftware_Click(object sender, RoutedEventArgs e) {
             if (computer != null) {
-                SoftwareDeploymentWindow softwareDeployment = new SoftwareDeploymentWindow(mainWindow.errorHandler, computer);
+                SoftwareDeploymentWindow softwareDeployment = new SoftwareDeploymentWindow(mainWindow.errorHandler, new List<Computer>() { computer });
                 softwareDeployment.Left = mainWindow.Left + 50;
                 softwareDeployment.Top = mainWindow.Top + 50;
                 softwareDeployment.Show();
