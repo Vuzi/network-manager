@@ -10,13 +10,13 @@ namespace NetworkManager.View {
 
         public WMIExecutionResult executionResult { get; set; }
 
-        public ExecutionReport(Computer computer, WMIExecutionResult result) {
+        public ExecutionReport(WMIExecutionResult result) {
             InitializeComponent();
 
             this.executionResult = result;
 
             // Set values
-            label_ClientName.Content = $"Software Deployment report on {computer.name}";
+            label_ClientName.Content = $"Software Deployment report on {result.computer.name}";
 
             if (result.returnValue == 0)
                 label_Status.Content = "Success";

@@ -17,11 +17,15 @@ namespace NetworkManager.WMIExecution {
     /// WMI Execution result
     /// </summary>
     public class WMIExecutionResult {
-        public string output;
-        public string err;
-        public uint returnValue;
-        public bool timeout;
-        public long duration;
+        public string output { get; set; }
+        public string err { get; set; }
+        public uint returnValue { get; set; }
+        public bool timeout { get; set; }
+        public long duration { get; set; }
+        public Computer computer { get; set; }
+        public bool hasError {
+            get { return timeout || returnValue != 0; }
+        }
     }
 
     /// <summary>
@@ -290,6 +294,7 @@ namespace NetworkManager.WMIExecution {
 
                     // Result to return
                     var result = new WMIExecutionResult {
+                        computer = computer,
                         returnValue = (uint)outParams["returnValue"],
                         timeout = timeout,
                         duration = stopWatch.ElapsedMilliseconds

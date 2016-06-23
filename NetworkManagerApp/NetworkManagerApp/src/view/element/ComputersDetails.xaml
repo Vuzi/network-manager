@@ -47,9 +47,9 @@
 
         <!-- Connected users -->
         <Label x:Name="label_Computers" Content="Selected computers" HorizontalAlignment="Left" Margin="7,95,0,0" VerticalAlignment="Top" Width="146" Height="30px" FontWeight="Bold" FontSize="14"/>
-        <Button Name="button_ComputersReload" Margin="153,102,0,0" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ComputersReload_Click">
+        <Button Name="button_ComputersReload" Margin="149,99,0,0" HorizontalAlignment="Left" Width="25" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ComputersReload_Click">
             <DockPanel LastChildFill="True"  Width="15" Height="15">
-                <Image DockPanel.Dock="Left" Source="../../resource/reload.png" Width="13" Height="13"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant"/>
+                <fa:FontAwesome Icon="Refresh" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </DockPanel>
         </Button>
         <DataGrid x:Name="dataGrid_Computers" Margin="10,124,10,31" CanUserAddRows="false"

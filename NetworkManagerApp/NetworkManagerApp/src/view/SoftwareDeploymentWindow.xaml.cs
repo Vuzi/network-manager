@@ -5,9 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
+using static NetworkManager.Utils;
 
 namespace NetworkManager.View {
     /// <summary>
@@ -15,15 +18,15 @@ namespace NetworkManager.View {
     /// </summary>
     public partial class SoftwareDeploymentWindow : Window {
         
-        private Computer currentComputer;
+        private List<Computer> computers;
         private ErrorHandlerWindow errorHandler;
 
-        public SoftwareDeploymentWindow(ErrorHandlerWindow errorHandler, Computer computer) {
+        public SoftwareDeploymentWindow(ErrorHandlerWindow errorHandler, List<Computer> computers) {
             InitializeComponent();
 
             this.errorHandler = errorHandler;
-            this.currentComputer = computer;
-            this.label_ComputerName.Content = $"Software Deployment on {computer.name}";
+            this.computers = computers;
+            this.label_ComputerName.Content = $"Software Deployment on {(computers.Count == 1 ? computers[0].name : computers.Count + " computers" )}";
         }
 
         private void showLoading() {
@@ -94,11 +97,38 @@ namespace NetworkManager.View {
             showLoading();
 
             try {
-                // Install on the current computer
-                WMIExecutionResult result = await currentComputer.installSoftware(soft.path, new string[] { textBox_LaunchArgs.Text }, int.Parse(textBox_Timeout.Text));
+                int timeout = int.Parse(textBox_Timeout.Text);
+                string path = soft.path;
+                string args = textBox_LaunchArgs.Text;
 
-                // Show report
-                ExecutionReport reporter = new ExecutionReport(currentComputer, result);
+                var tasks = computers.Select(async (computer) => {
+                    var r = new ValueOrError<WMIExecutionResult, Exception>();
+                    try {
+                        r.value = await Task.Run(async () => {
+                            // Install on the current computer
+                            return await computer.installSoftware(path, new string[] { args }, timeout);
+                        });
+                    } catch (Exception e) {
+                        r.error = e;
+                    }
+
+                    return r;
+                });
+
+                var results = await Task.WhenAll(tasks);
+                var reports = new List<WMIExecutionResult>();
+
+                foreach(var result in results) {
+                    if (result.hasValue())
+                        reports.Add(result.value);
+                    else {
+                        errorHandler.addError(result.error);
+                        WarningImage.Visibility = Visibility.Visible;
+                    }
+                }
+
+                // Show reports
+                var reporter = new ExecutionReportsWindow(reports);
                 reporter.Left = this.Left + 50;
                 reporter.Top = this.Top + 50;
                 reporter.Show();
