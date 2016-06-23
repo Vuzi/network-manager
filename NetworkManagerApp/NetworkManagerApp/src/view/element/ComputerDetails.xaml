@@ -10,7 +10,15 @@
     <Grid Margin="0,0,0,0">
 
         <!-- Selection computer informations -->
-        <Label x:Name="label_ClientName" Content="&lt;No Computer Selected&gt;" VerticalAlignment="Top" Margin="3,-2,-498,0" HorizontalAlignment="Left" Width="795" FontWeight="Bold" FontSize="18"/>
+        <WrapPanel Margin="3,-2,-498,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <Label x:Name="label_ClientName" Content="&lt;No Computer Selected&gt;" Width="Auto" FontWeight="Bold" FontSize="18"/>
+            <Button x:Name="button_ReloadComputer"  Margin="2,2,0,0" Width="25" Height="25" Background="Transparent" BorderThickness="0" Click="button_ReloadComputer_Click">
+                <DockPanel LastChildFill="True"  Width="15" Height="15">
+                    <fa:FontAwesome Icon="Refresh" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </DockPanel>
+            </Button>
+        </WrapPanel>
+        
         <WrapPanel Orientation="Horizontal" Margin="8,34,0,0" Height="38" VerticalAlignment="Top" HorizontalAlignment="Left" Width="744">
             <Button x:Name="button_ShutDown" Foreground="DarkRed" Visibility="Collapsed" Margin="3" HorizontalAlignment="Left" Width="125" Height="30" VerticalAlignment="Top" Click="button_ShutDown_Click">
                 <DockPanel LastChildFill="True" VerticalAlignment="Center" Width="123">
@@ -85,7 +93,7 @@
 
         <!-- Connected users -->
         <Label x:Name="label_ConnectedUsers" Content="Connected Users" HorizontalAlignment="Left" Margin="10,202,0,0" VerticalAlignment="Top" Width="146" Height="30px" FontWeight="Bold" FontSize="14"/>
-        <Button Name="button_ConnectedUsersReload" Margin="128,204,0,0" HorizontalAlignment="Left" Width="25" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ConnectedUsersReload_Click">
+        <Button x:Name="button_ConnectedUsersReload" Margin="128,204,0,0" HorizontalAlignment="Left" Width="25" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ConnectedUsersReload_Click">
             <DockPanel LastChildFill="True"  Width="15" Height="15">
                 <fa:FontAwesome Icon="Refresh" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </DockPanel>
