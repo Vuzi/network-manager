@@ -31,7 +31,7 @@
             <ColumnDefinition Width="823*"/>
         </Grid.ColumnDefinitions>
         <!-- AD Computer treeview -->
-        <Label x:Name="label_Computers" Content="Computers" VerticalAlignment="Top" Margin="10,8,0,0" HorizontalAlignment="Left" Width="246" FontWeight="Bold" FontSize="18" Grid.ColumnSpan="2"/>
+        <Label x:Name="label_Computers" Content="Computers" VerticalAlignment="Top" Margin="10,8,0,0" HorizontalAlignment="Left" Width="229" FontWeight="Bold" FontSize="18"/>
         <Button x:Name="button_ComputersReload" Margin="116,14,0,0" HorizontalAlignment="Left" Width="25" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ComputersReload_Click">
             <DockPanel LastChildFill="True"  Width="15" Height="15">
                 <fa:FontAwesome Icon="Refresh" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -42,7 +42,7 @@
                 <fa:FontAwesome Icon="Wrench" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </DockPanel>
         </Button>
-        <Controls:TreeViewEx x:Name="List_Computer" Loaded="List_Machine_Loaded"  Margin="10,48,10,10" MouseLeftButtonUp="List_Computer_MouseLeftButtonUp" KeyUp="List_Computer_KeyUp" >
+        <Controls:TreeViewEx x:Name="List_Computer" Loaded="List_Machine_Loaded"  Margin="10,94,10.4,10" MouseLeftButtonUp="List_Computer_MouseLeftButtonUp" KeyUp="List_Computer_KeyUp" >
 
             <Controls:TreeViewEx.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type model:DomainModel}" ItemsSource="{Binding Items}">
@@ -64,6 +64,12 @@
                                         <DataTrigger Binding="{Binding computer.isAlive}" Value="false" >
                                             <Setter Property="Opacity" Value="0.5"/>
                                         </DataTrigger>
+                                        <DataTrigger Binding="{Binding isHide}" Value="false" >
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding isHide}" Value="true" >
+                                            <Setter Property="Visibility" Value="Hidden"/>
+                                        </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
@@ -81,6 +87,12 @@
                                         <DataTrigger Binding="{Binding computer.isAlive}" Value="false" >
                                             <Setter Property="Opacity" Value="0.5"/>
                                         </DataTrigger>
+                                        <DataTrigger Binding="{Binding isHide}" Value="false" >
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding isHide}" Value="true" >
+                                            <Setter Property="Visibility" Value="Hidden"/>
+                                        </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
@@ -96,6 +108,12 @@
                                         <DataTrigger Binding="{Binding computer.isAlive}" Value="false" >
                                             <Setter Property="Opacity" Value="0.5"/>
                                             <Setter Property="Foreground" Value="DarkRed"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding isHide}" Value="false" >
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding isHide}" Value="true" >
+                                            <Setter Property="Visibility" Value="Hidden"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -142,5 +160,9 @@
                 <fa:FontAwesome Icon="ExclamationTriangle" Foreground="DarkRed" FontSize="18" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
             </DockPanel>
         </Button>
+        <CheckBox x:Name="checkBox_FilterOn" Content="On" IsChecked="True" Checked="checkBox_FilterOn_Checked" Unchecked="checkBox_FilterOn_Unchecked" HorizontalAlignment="Left" Margin="12,54,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.528,-0.105"/>
+        <CheckBox x:Name="checkBox_FilterOff" Content="Off" IsChecked="True" Checked="checkBox_FilterOff_Checked" Unchecked="checkBox_FilterOff_Unchecked" HorizontalAlignment="Left" Margin="60,54,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.528,-0.105"/>
+        <Label x:Name="label" Content="Number of machines" Margin="117,43,0,0" VerticalAlignment="Top" FontSize="11" HorizontalAlignment="Left" Width="112"/>
+        <Label x:Name="label_NumberOfMachines" Content="0" Margin="116,65,0,0" VerticalAlignment="Top" FontSize="11" HorizontalContentAlignment="Center" Width="112" FontWeight="Bold" HorizontalAlignment="Left" Padding="2"/>
     </Grid>
 </Window>

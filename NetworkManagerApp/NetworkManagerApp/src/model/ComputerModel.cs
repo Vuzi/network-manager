@@ -9,6 +9,8 @@ namespace NetworkManager.View.Model {
         public event PropertyChangedEventHandler PropertyChanged;
 
         private Computer _computer;
+        private bool _isHide;
+
         public Computer computer {
             get {
                 return _computer;
@@ -25,7 +27,16 @@ namespace NetworkManager.View.Model {
         internal void notifyPropertyChanged(String info) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
-
+        public bool isHide
+        {
+            get {
+                return _isHide;
+            }
+            set {
+                _isHide = value;
+                notifyPropertyChanged("isHide");
+            }
+        }
     }
 
 }

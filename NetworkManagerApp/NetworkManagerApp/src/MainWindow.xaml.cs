@@ -77,6 +77,8 @@ namespace NetworkManager {
             };
             timer.Interval = new TimeSpan(0, 0, config.getInt("scantimeout", 30));
             timer.Start();
+
+            
         }
 
         /// <summary>
@@ -94,7 +96,7 @@ namespace NetworkManager {
         /// </summary>
         public async Task updateListComputers() {
             showLoading();
-
+            
             try {
                 // Only one domain for now
                 Domain domain = new Domain();
@@ -109,6 +111,8 @@ namespace NetworkManager {
                     if(needRefresh) // If an update is needed
                         updateSelectedComputers();
 
+                    countMachine();
+
                 } else {
                     // Set the new domain model
                     List_Computer.Items.Add(domainModel);
@@ -116,6 +120,7 @@ namespace NetworkManager {
                     // Expand the root node
                     TreeViewExItem item = (TreeViewExItem)List_Computer.ItemContainerGenerator.ContainerFromItem(domainModel);
                     item.IsExpanded = true;
+                    countMachine();
                 }
 
             } catch(Exception e) {
@@ -176,7 +181,16 @@ namespace NetworkManager {
             timer.Interval = new TimeSpan(0, 0, inSeconds);
             timer.Start();
         }
-
+        public void countMachine()
+        {
+            int cpt = 0;
+            foreach (ComputerModel item in (List_Computer.Items[0] as DomainModel).Items)
+            {
+                if (item.isHide != true)
+                    cpt++;
+            }
+            label_NumberOfMachines.Content = cpt.ToString();
+        }
         private void List_Computer_KeyUp(object sender, System.Windows.Input.KeyEventArgs e) {
             switch(e.Key) {
                 case System.Windows.Input.Key.Up:
@@ -218,6 +232,63 @@ namespace NetworkManager {
             if (domainModel != null) {
                 domainModel.updateComputerModel(computer);
                 updateSelectedComputers();
+            }
+        }
+
+        private void checkBox_FilterOn_Checked(object sender, RoutedEventArgs e)
+        {
+            for(int i = 0;i < List_Computer.Items.Count; i++) {
+                DomainModel dm = (DomainModel)List_Computer.Items[i];
+                for(int y = 0; y < dm.Items.Count; y++)
+                {
+                    if (((ComputerModel)dm.Items[y]).computer.isAlive == true)
+                        ((ComputerModel)dm.Items[y]).isHide = false;
+                    else if (((ComputerModel)dm.Items[y]).computer.isAlive == true && checkBox_FilterOff.IsChecked == true)
+                        ((ComputerModel)dm.Items[y]).isHide = false;
+                }
+            }
+        }
+
+        private void checkBox_FilterOff_Checked(object sender, RoutedEventArgs e)
+        {
+            for (int i = 0; i < List_Computer.Items.Count; i++)
+            {
+                DomainModel dm = (DomainModel)List_Computer.Items[i];
+                for (int y = 0; y < dm.Items.Count; y++)
+                {
+                    if (((ComputerModel)dm.Items[y]).computer.isAlive == false)
+                        ((ComputerModel)dm.Items[y]).isHide = false;
+                    else if (((ComputerModel)dm.Items[y]).computer.isAlive == false && checkBox_FilterOn.IsChecked == true)
+                        ((ComputerModel)dm.Items[y]).isHide = false;
+                }
+            }
+        }
+
+        private void checkBox_FilterOff_Unchecked(object sender, RoutedEventArgs e)
+        {
+            for (int i = 0; i < List_Computer.Items.Count; i++)
+            {
+                DomainModel dm = (DomainModel)List_Computer.Items[i];
+                for (int y = 0; y < dm.Items.Count; y++)
+                {
+                    ComputerModel tmpComputer = (ComputerModel)dm.Items[y];
+                    if (((ComputerModel)dm.Items[y]).computer.isAlive == false)
+                        ((ComputerModel)dm.Items[y]).isHide = true;
+                }
+            }
+        }
+
+        private void checkBox_FilterOn_Unchecked(object sender, RoutedEventArgs e)
+        {
+            for (int i = 0; i < List_Computer.Items.Count; i++)
+            {
+                DomainModel dm = (DomainModel)List_Computer.Items[i];
+                for (int y = 0; y < dm.Items.Count; y++)
+                {
+                    ComputerModel tmpComputer = (ComputerModel)dm.Items[y];
+                    if (((ComputerModel)dm.Items[y]).computer.isAlive == true)
+                        ((ComputerModel)dm.Items[y]).isHide = true;
+                }
             }
         }
     }
