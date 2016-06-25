@@ -276,25 +276,32 @@ namespace NetworkManager.DomainContent {
             return result;
         }
 
-        public async void performsTasks(List<JobTask> tasks) {
+        public async Task<List<JobTaskReport>> performsTasks(List<JobTask> tasks) {
+            List<JobTaskReport> reports = new List<JobTaskReport>();
+            JobTaskReport report = null;
+
             try {
                 foreach (JobTask task in tasks) {
                     bool r;
+                    report = new JobTaskReport() {
+                        error = false,
+                        taskId = task.id
+                    };
 
                     switch (task.type) {
                         case JobTaskType.INSTALL_SOFTWARE:
                             // Install the software
                             // TODO handle args (drop data2 or handle data 2 in task creation)
-                            var report = await installSoftware(task.data, new string[] { task.data2 }, task.timeout);
+                            var installReport = await installSoftware(task.data, new string[] { task.data2 }, task.timeout);
 
                             // If timeout
-                            if (report.timeout)
+                            if (installReport.timeout)
                                 goto timeout;
                             // If installation fail
-                            else if(report.returnValue != 0)
+                            else if(installReport.returnValue != 0)
                                 throw new WMIException() {
                                     computer = nameLong,
-                                    error = new Exception($"Install task failed with code '{report.returnValue}'")
+                                    error = new Exception($"Install task failed with code '{installReport.returnValue}'")
                                 };
 
                             break;
@@ -364,11 +371,14 @@ namespace NetworkManager.DomainContent {
                 }
 
             } catch (Exception e) {
-                // TODO write error in report
                 if (e is WMIException)
                     e = (e as WMIException).error;
-                Console.WriteLine(e.Message);
+
+                report.error = true;
+                report.extra = e.Message;
             }
+
+            return reports;
         }
 
         /// <summary>

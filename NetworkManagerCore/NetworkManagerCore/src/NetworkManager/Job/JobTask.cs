@@ -19,6 +19,8 @@ namespace NetworkManager.Job {
         public JobTaskType type { get; set; }
         [NotNull]
         public int timeout { get; set; }
+        [NotNull]
+        public int order { get; set; }
         public string data { get; set; }
         public string data2 { get; set; }
     }

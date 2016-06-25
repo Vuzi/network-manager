@@ -30,31 +30,43 @@ namespace NetworkManagerExecutor {
                 Job j = jobStore.getJobById(id);
 
                 if (j != null) {
+                    #if DEBUG
                     Console.WriteLine($"Job => {j.name}");
                     Console.WriteLine("\tComputers : ");
                     foreach(var c in j.computers)
                         Console.WriteLine("\t\t" + c.name);
+                    #endif
 
-                    j.status = JobStatus.SCHEDULED;
-                    //jobStore.updateStatus(j);
+                    j.status = JobStatus.IN_PROGRESS;
+                    jobStore.updateJob(j);
+                    
+                    Parallel.ForEach(j.computers, async c => {
+                        Computer computer = new Computer(c);
 
-                    if (j.name == "Test Job #3") {
-                        Parallel.ForEach(j.computers, c => {
-                            Computer computer = new Computer(c);
+                        JobReport report = new JobReport() {
+                            computerName = computer.nameLong,
+                            error = false
+                        };
+                        report.tasksReports = await computer.performsTasks(j.tasks);
 
-                            try {
-                                computer.performsTasks(j.tasks);
-                            } catch (Exception e) {
-                                Console.WriteLine(e.Message);
-                            }
-                        });
+                        // Update report
+                        foreach (JobTaskReport taskReport in report.tasksReports)
+                            if (taskReport.error)
+                                report.error = true;
 
-                        j.status = JobStatus.TERMINATED;
-                        //jobStore.updateStatus(j);
-                    }
-                } else {
+                        // Save the report
+                        jobStore.insertJobReport(j, report);
+                    });
+
+                    j.status = JobStatus.TERMINATED;
+                    jobStore.updateJob(j);
+                    
+                }
+                #if DEBUG
+                else {
                     Console.WriteLine($"Job => none");
                 }
+                #endif
             }
 
             Console.ReadLine();
