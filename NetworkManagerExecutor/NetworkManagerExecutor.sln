@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkManagerService", "NetworkManagerService\NetworkManagerService.csproj", "{6E92D733-199A-4DFC-816A-6C85B74B1A3A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkManagerExecutor", "NetworkManagerExecutor\NetworkManagerExecutor.csproj", "{198C47F2-6A23-465A-B561-415335581B8C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkManagerCore", "..\NetworkManagerCore\NetworkManagerCore\NetworkManagerCore.csproj", "{0B1C14AD-EE44-4B90-ADC2-A3BC6F94D44B}"
 EndProject
@@ -13,10 +13,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6E92D733-199A-4DFC-816A-6C85B74B1A3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6E92D733-199A-4DFC-816A-6C85B74B1A3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6E92D733-199A-4DFC-816A-6C85B74B1A3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6E92D733-199A-4DFC-816A-6C85B74B1A3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{198C47F2-6A23-465A-B561-415335581B8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{198C47F2-6A23-465A-B561-415335581B8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{198C47F2-6A23-465A-B561-415335581B8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{198C47F2-6A23-465A-B561-415335581B8C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0B1C14AD-EE44-4B90-ADC2-A3BC6F94D44B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0B1C14AD-EE44-4B90-ADC2-A3BC6F94D44B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B1C14AD-EE44-4B90-ADC2-A3BC6F94D44B}.Release|Any CPU.ActiveCfg = Release|Any CPU

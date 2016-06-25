@@ -14,8 +14,7 @@ namespace NetworkManager.View.Component.Job {
     /// Logique d'interaction pour TaskReboot.xaml
     /// </summary>
     public partial class TaskInstall : UserControl {
-
-        private static string path = @"C:\apps\";
+        
         public static string name { get; } = "Install software";
         public JobSchedulerWindow mainWindow { get; set; }
 
@@ -23,14 +22,36 @@ namespace NetworkManager.View.Component.Job {
             InitializeComponent();
         }
 
+        private Dictionary<string, string> subDirectoryParameters = new Dictionary<string, string>() {
+            { "FreewareVS", "/VERYSILENT" },
+            { "FreewareS", "/S" },
+            { "MSI", "" }
+        };
+
         private void DataGrid_softwareList_Loaded(object sender, RoutedEventArgs e) {
+
+            string path = MainWindow.config.get("softwarepath");
+
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
 
-            string[] dir = Directory.GetFiles(path);
-            var data = new List<SoftwareModel>();
-            foreach (var filePath in dir) {
+            List<string> dirs = new List<string>();
+            dirs.AddRange(Directory.GetFiles(path));
 
+            foreach (var sub in subDirectoryParameters) {
+                string subPath = $@"{path}\{sub.Key}";
+
+                if (!Directory.Exists(subPath))
+                    Directory.CreateDirectory(subPath);
+
+                dirs.AddRange(Directory.GetFiles(subPath));
+            }
+
+            dirs.Sort();
+
+            var data = new List<SoftwareModel>();
+
+            foreach (var filePath in dirs) {
                 var sysicon = System.Drawing.Icon.ExtractAssociatedIcon(filePath);
                 var bmpSrc = Imaging.CreateBitmapSourceFromHIcon(sysicon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
                 sysicon.Dispose();
@@ -57,6 +78,18 @@ namespace NetworkManager.View.Component.Job {
             }
 
             DataGrid_softwareList.ItemsSource = data;
+        }
+
+        private void DataGrid_softwareList_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e) {
+            SoftwareModel soft = (SoftwareModel)DataGrid_softwareList.SelectedItem;
+
+            if (soft == null)
+                return;
+
+            string arg = subDirectoryParameters.GetValueOrDefault(Directory.GetParent(soft.path).Name);
+
+            Textbox_launchArgs.Text = arg == null ? "" : arg;
+            Textbox_launchArgs.IsEnabled = !(soft.path.ToLower().EndsWith(".msi"));
         }
 
         private void button_Down_Click(object sender, RoutedEventArgs e) {

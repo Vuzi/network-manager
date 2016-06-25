@@ -27,7 +27,7 @@ namespace NetworkManager.View {
 
             this.errorHandler = errorHandler;
             this.computers = computers;
-            this.label_ComputerName.Content = $"Software Deployment on {(computers.Count == 1 ? computers[0].name : computers.Count + " computers" )}";
+            this.Label_ComputerName.Content = $"Software Deployment on {(computers.Count == 1 ? computers[0].name : computers.Count + " computers" )}";
         }
 
         private void showLoading() {
@@ -51,8 +51,7 @@ namespace NetworkManager.View {
             File.Copy(ofd.FileName, MainWindow.config.get("softwarepath") + "/" + Path.GetFileName(ofd.FileName), true);
             AppsToDeploy_Loaded(this, null);
         }
-
-        // TODO : in conf file ?
+        
         private Dictionary<string, string> subDirectoryParameters = new Dictionary<string, string>() {
             { "FreewareVS", "/VERYSILENT" },
             { "FreewareS", "/S" },
@@ -107,11 +106,11 @@ namespace NetworkManager.View {
                 data.Add(itm);
             }
 
-            dataGrid_SoftwareList.ItemsSource = data;
+            DataGrid_SoftwareList.ItemsSource = data;
         }
 
         private async void ButtonLaunch_Click(object sender, RoutedEventArgs eventArg) {
-            SoftwareModel soft = (SoftwareModel)dataGrid_SoftwareList.SelectedItem;
+            SoftwareModel soft = (SoftwareModel)DataGrid_SoftwareList.SelectedItem;
 
             if (soft == null)
                 return;
@@ -119,9 +118,9 @@ namespace NetworkManager.View {
             showLoading();
 
             try {
-                int timeout = int.Parse(textBox_Timeout.Text);
+                int timeout = int.Parse(TextBox_Timeout.Text);
                 string path = soft.path;
-                string args = textBox_LaunchArgs.Text;
+                string args = TextBox_LaunchArgs.Text;
 
                 var tasks = computers.Select(async (computer) => {
                     var r = new ValueOrError<WMIExecutionResult, Exception>();
@@ -169,15 +168,15 @@ namespace NetworkManager.View {
         }
         
         private void dataGrid_SoftwareList_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e) {
-            SoftwareModel soft = (SoftwareModel)dataGrid_SoftwareList.SelectedItem;
+            SoftwareModel soft = (SoftwareModel)DataGrid_SoftwareList.SelectedItem;
 
             if (soft == null)
                 return;
 
             string arg = subDirectoryParameters.GetValueOrDefault(Directory.GetParent(soft.path).Name);
 
-            textBox_LaunchArgs.Text = arg == null ? "" : arg;
-            textBox_LaunchArgs.IsEnabled = !(soft.path.ToLower().EndsWith(".msi"));
+            TextBox_LaunchArgs.Text = arg == null ? "" : arg;
+            TextBox_LaunchArgs.IsEnabled = !(soft.path.ToLower().EndsWith(".msi"));
         }
     }
 

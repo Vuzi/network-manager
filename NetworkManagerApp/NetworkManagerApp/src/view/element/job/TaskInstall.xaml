@@ -15,7 +15,7 @@
                 <TextBlock Text="Install the specified software on the selected computers. The installed software must have a silent mode available and specified in the launch arguments field." Margin="10,37,10,72" TextWrapping="Wrap"/>
 
                 <DataGrid x:Name="DataGrid_softwareList" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" 
-                  CanUserReorderColumns="True" CanUserResizeColumns="True" AutoGenerateColumns="False" CanUserAddRows="false"
+                  CanUserReorderColumns="True" CanUserResizeColumns="True" AutoGenerateColumns="False" CanUserAddRows="false" SelectionMode="Single" SelectedCellsChanged="DataGrid_softwareList_SelectedCellsChanged"
                   CanUserResizeRows="False" CanUserSortColumns="True" Loaded="DataGrid_softwareList_Loaded" Margin="10,78,10,72" HorizontalGridLinesBrush="#FF8D8A8A" VerticalGridLinesBrush="#FF8D8A8A" GridLinesVisibility="Horizontal" >
                     <DataGrid.ContextMenu>
                         <ContextMenu>

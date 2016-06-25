@@ -42,6 +42,16 @@ namespace NetworkManager.DomainContent {
         private string cachedMacAddr;
         private DateTime lastMacAddrFetch;
         
+        public Computer() { }
+
+        public Computer(ComputerInfo info) {
+            string[] name = info.name.Split('.');
+            this.name = name[0];
+            this.domain = info.name.Substring(name[0].Length + 1);
+            this.cachedMacAddr = info.macAddress;
+            this.lastMacAddrFetch = DateTime.MaxValue; // No cache update
+        }
+
         /// <summary>
         /// Return the first ipv4 of the computer, or null if not found
         /// </summary>
@@ -267,89 +277,97 @@ namespace NetworkManager.DomainContent {
         }
 
         public async void performsTasks(List<JobTask> tasks) {
-            foreach (JobTask task in tasks) {
-                bool r;
+            try {
+                foreach (JobTask task in tasks) {
+                    bool r;
 
-                switch (task.type) {
-                    case JobTaskType.INSTALL_SOFTWARE:
-                        // Install the software
-                        // TODO handle args (drop data2 or handle data 2 in task creation)
-                        var report = await installSoftware(task.data, new string[] { task.data2 }, task.timeout);
+                    switch (task.type) {
+                        case JobTaskType.INSTALL_SOFTWARE:
+                            // Install the software
+                            // TODO handle args (drop data2 or handle data 2 in task creation)
+                            var report = await installSoftware(task.data, new string[] { task.data2 }, task.timeout);
 
-                        // If timeout
-                        if (report.timeout)
-                            goto timeout;
-                        // If installation fail
-                        else if(report.returnValue != 0)
+                            // If timeout
+                            if (report.timeout)
+                                goto timeout;
+                            // If installation fail
+                            else if(report.returnValue != 0)
+                                throw new WMIException() {
+                                    computer = nameLong,
+                                    error = new Exception($"Install task failed with code '{report.returnValue}'")
+                                };
+
+                            break;
+                        case JobTaskType.REBOOT:
+                            // Reboot the computer
+                            await reboot();
+
+                            // Wait for the reboot to be completed
+                            r = Task.Run(async () => {
+                                bool hasShutdown = false;
+
+                                do {
+                                    bool alive = await updateAliveStatus();
+
+                                    if (!alive && !hasShutdown)
+                                        hasShutdown = true;
+
+                                    // Wait for 0.5s
+                                    await Task.Delay(500);
+
+                                } while (!(isAlive && hasShutdown));
+                            }).Wait(task.timeout * 1000);
+
+                            // If timeout
+                            if (!r)
+                                goto timeout;
+
+                            break;
+                        case JobTaskType.SHUTDOWN:
+                            // Shutdown the computer (note : this will cause any task after to fail)
+                            await shutdown();
+                            break;
+                        case JobTaskType.WAKE_ON_LAN:
+                            // TODO : get the database mac address + handle case with no mac address
+                            Utils.wakeOnLan(await getMacAddress());
+
+                            // Wait for the reboot..
+                            r = Task.Run(async () => {
+                                do {
+                                    bool alive = await updateAliveStatus();
+
+                                    // Wait for 0.5s
+                                    await Task.Delay(500);
+
+                                } while(!isAlive);
+                            }).Wait(task.timeout * 1000);
+
+                            // If timeout
+                            if (!r)
+                                goto timeout;
+
+                            break;
+                        default:
                             throw new WMIException() {
                                 computer = nameLong,
-                                error = new Exception($"Install task failed with code '{report.returnValue}'")
+                                error = new Exception($"Unknown task type to performs '{task.type}'")
                             };
+                    }
 
-                        break;
-                    case JobTaskType.REBOOT:
-                        // Reboot the computer
-                        await reboot();
+                    continue;
 
-                        // Wait for the reboot to be completed
-                        r = Task.Run(async () => {
-                            bool hasShutdown = false;
-
-                            do {
-                                bool alive = await updateAliveStatus();
-
-                                if (!alive && !hasShutdown)
-                                    hasShutdown = true;
-
-                                // Wait for 0.5s
-                                await Task.Delay(500);
-
-                            } while (!(isAlive && hasShutdown));
-                        }).Wait(task.timeout * 1000);
-
-                        // If timeout
-                        if (!r)
-                            goto timeout;
-
-                        break;
-                    case JobTaskType.SHUTDOWN:
-                        // Shutdown the computer (note : this will cause any task after to fail)
-                        await shutdown();
-                        break;
-                    case JobTaskType.WAKE_ON_LAN:
-                        // TODO : get the database mac address + handle case with no mac address
-                        Utils.wakeOnLan(await getMacAddress());
-
-                        // Wait for the reboot..
-                        r = Task.Run(async () => {
-                            do {
-                                bool alive = await updateAliveStatus();
-
-                                // Wait for 0.5s
-                                await Task.Delay(500);
-
-                            } while(!isAlive);
-                        }).Wait(task.timeout * 1000);
-
-                        // If timeout
-                        if (!r)
-                            goto timeout;
-
-                        break;
-                    default:
-                        throw new WMIException() {
-                            computer = nameLong,
-                            error = new Exception($"Unknown task type to performs '{task.type}'")
-                        };
+                    timeout:
+                    throw new WMIException() {
+                        computer = nameLong,
+                        error = new Exception($"Task timeout '{task.type}' for '{nameLong}'")
+                    };
                 }
 
-                continue;
-
-                timeout:
-                throw new WMIException() {
-                    computer = nameLong,
-                    error = new Exception($"Task timeout '{task.type}' for '{nameLong}'")
-                };
+            } catch (Exception e) {
+                // TODO write error in report
+                if (e is WMIException)
+                    e = (e as WMIException).error;
+                Console.WriteLine(e.Message);
             }
         }
 

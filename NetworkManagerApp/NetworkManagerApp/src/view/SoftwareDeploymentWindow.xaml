@@ -15,7 +15,7 @@
             </DockPanel>
         </Button>
 
-        <DataGrid x:Name="dataGrid_SoftwareList" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" 
+        <DataGrid x:Name="DataGrid_SoftwareList" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" 
           CanUserReorderColumns="True" CanUserResizeColumns="True" AutoGenerateColumns="False" CanUserAddRows="false" SelectionMode="Single" SelectedCellsChanged="dataGrid_SoftwareList_SelectedCellsChanged"
           CanUserResizeRows="False" CanUserSortColumns="True" Loaded="AppsToDeploy_Loaded" Margin="4,47,4,72" HorizontalGridLinesBrush="#FF8D8A8A" VerticalGridLinesBrush="#FF8D8A8A" GridLinesVisibility="Horizontal" >
             <DataGrid.ContextMenu>
@@ -45,11 +45,11 @@
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" >Start deployment</TextBlock>
             </DockPanel>
         </Button>
-        <Label x:Name="label_ComputerName" FontWeight="Bold" FontSize="18" Content="Software Deployment on .." HorizontalAlignment="Left" Margin="8,3,0,0" VerticalAlignment="Top" Width="396" Height="39"/>
+        <Label x:Name="Label_ComputerName" FontWeight="Bold" FontSize="18" Content="Software Deployment on .." HorizontalAlignment="Left" Margin="8,3,0,0" VerticalAlignment="Top" Width="396" Height="39"/>
         <Label Content="Launch arguments :" Padding="2" HorizontalAlignment="Left" Margin="19,0,0,41" Width="110" Height="21" VerticalAlignment="Bottom"/>
-        <TextBox x:Name="textBox_LaunchArgs" HorizontalContentAlignment="Left"  Text="" Margin="129,0,0,41" Width="215" BorderThickness="2" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" Height="21" VerticalAlignment="Bottom" />
+        <TextBox x:Name="TextBox_LaunchArgs" HorizontalContentAlignment="Left"  Text="" Margin="129,0,0,41" Width="215" BorderThickness="2" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" Height="21" VerticalAlignment="Bottom" />
         <Label Content="Timeout (s) :" Padding="2" HorizontalAlignment="Left" Margin="19,0,0,10" VerticalAlignment="Bottom" Width="110" Height="21"/>
-        <TextBox x:Name="textBox_Timeout" HorizontalContentAlignment="Left" Text="60" Margin="129,0,0,10" Width="215" BorderThickness="2" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" Height="21" VerticalAlignment="Bottom" />
+        <TextBox x:Name="TextBox_Timeout" HorizontalContentAlignment="Left" Text="60" Margin="129,0,0,10" Width="215" BorderThickness="2" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" Height="21" VerticalAlignment="Bottom" />
 
         <!-- Loader -->
         <fa:FontAwesome x:Name="LoadingSpinner" Icon="Gear" Visibility="Hidden" Margin="0,0,5,4" FontSize="20" VerticalAlignment="Bottom" HorizontalAlignment="Right">

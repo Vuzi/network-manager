@@ -15,6 +15,12 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_24AE715D7F22414D870FCCB59612D7FD"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_34F6D4CCBCF0B237922165B21DE07B6C"
         "OwnerKey" = "8:_C38FF2300F2341C9B41A64524520D201"
         "MsmSig" = "8:_UNDEFINED"
@@ -216,6 +222,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_24AE715D7F22414D870FCCB59612D7FD"
+            {
+            "SourcePath" = "8:C:\\Program Files (x86)\\ESGI\\Network Manager\\NetworkManager.sqlite"
+            "TargetName" = "8:NetworkManager.sqlite"
+            "Tag" = "8:"
+            "Folder" = "8:_289F391238A04610A7F9B9C6E9D94D94"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_34F6D4CCBCF0B237922165B21DE07B6C"
             {
             "AssemblyRegister" = "3:1"
@@ -540,15 +566,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Network Manager"
-        "ProductCode" = "8:{8C57E653-3075-48AB-9D9C-CA6831751111}"
-        "PackageCode" = "8:{383CDE2D-6168-423C-A0E2-1D6C89CA5FDD}"
+        "ProductCode" = "8:{47DE7700-F561-45CB-9AD3-CBD3DFA44959}"
+        "PackageCode" = "8:{007A8B20-7AE0-45E3-9219-DCF9C6C3CE4B}"
         "UpgradeCode" = "8:{AE53F5F8-FC5A-4E1C-A0BD-EA34775D7D0A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.2.4"
+        "ProductVersion" = "8:0.2.5"
         "Manufacturer" = "8:ESGI"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using SQLite;
 
 namespace NetworkManager.DomainContent {

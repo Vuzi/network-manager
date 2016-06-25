@@ -27,11 +27,11 @@ namespace NetworkManager.View.Component {
                 button_OpenDiskC,
                 button_OpenDiskD,
                 button_OpenDiskE,
-                button_JobSchedule,
                 button_Installsoftware
             };
             notAliveButtons = new Button[] {
-                button_WakeOnLan
+                button_WakeOnLan,
+                button_JobSchedule
             };
         }
 
@@ -197,9 +197,22 @@ namespace NetworkManager.View.Component {
         /// Update all the information of the selected computer
         /// </summary>
         public async Task updateComputer() {
-            await Task.WhenAll(updateComputerInformations(), updateLoggedUsers(), updateInstalledSoftwares());
+            //if (MainWindow.config.get("detailsautoload") == "true")
+                await Task.WhenAll(updateComputerInformations(), updateLoggedUsers(), updateInstalledSoftwares());
+            //else {
+            //    if (loggedUserToken != null)
+            //        loggedUserToken.Cancel();
+            //
+            //    dataGrid_ConnectedUsers.ItemsSource = null;
+            //
+            //     if (installedSofwaresToken != null)
+            //        installedSofwaresToken.Cancel();
+            //
+            //    dataGrid_ShowAllInstalledSoftware.ItemsSource = null;
+            //    await updateComputerInformations();
+            //}
         }
-        
+
         private void button_Installsoftware_Click(object sender, RoutedEventArgs e) {
             if (computer != null) {
                 SoftwareDeploymentWindow softwareDeployment = new SoftwareDeploymentWindow(mainWindow.errorHandler, new List<Computer>() { computer });

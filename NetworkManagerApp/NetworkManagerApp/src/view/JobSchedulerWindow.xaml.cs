@@ -139,9 +139,9 @@ namespace NetworkManager.View {
                 return;
             }
 
-            var computersNames = new List<string>();
+            var selectedComputers = new List<ComputerInfo>();
             foreach(Computer c in selectedComputersGrid.SelectedItems) {
-                computersNames.Add(c.nameLong);
+                selectedComputers.Add(MainWindow.computerInfoStore.getComputerInfoByName(c.nameLong));
             }
 
             // Get the tasks
@@ -166,17 +166,18 @@ namespace NetworkManager.View {
             // OK, create the job
             var job = new Job.Job() {
                 scheduledDateTime = jobDateTime.Value,
-                computersNames = computersNames,
+                computers = selectedComputers,
                 status = JobStatus.CREATED,
                 tasks = tasks,
+                name = textBox_TaskName.Text,
                 report = null
             };
 
             // Tests
-            (selectedComputersGrid.SelectedItems[0] as Computer).performsTasks(tasks);
+            //(selectedComputersGrid.SelectedItems[0] as Computer).performsTasks(tasks);
 
             // Insert into the job store
-            //MainWindow.jobStore.insertJob(job);
+            MainWindow.jobStore.insertJob(job);
 
             // Create a windows task
             // TODO
