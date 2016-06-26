@@ -19,6 +19,9 @@ namespace NetworkManager.Scheduling {
         public string id { get; set; }
         public string name { get; set; }
         public DateTime scheduledDateTime { get; set; }
+        [NotNull]
+        public DateTime creationDate { get; set; }
+        [NotNull]
         public JobStatus status { get; set; }
 
         [Ignore]

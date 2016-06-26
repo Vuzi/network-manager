@@ -28,6 +28,11 @@ namespace NetworkManager.View.Component.Job {
             mainWindow.deleteTask(this);
         }
 
+        public void initFromTask(JobTask task) {
+            // Timeout
+            TextBox_timeout.Text = task.timeout.ToString();
+        }
+
         /// <summary>
         /// Create the task from the panel
         /// </summary>

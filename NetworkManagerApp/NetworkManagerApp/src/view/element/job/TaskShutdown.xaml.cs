@@ -27,6 +27,8 @@ namespace NetworkManager.View.Component.Job {
             mainWindow.deleteTask(this);
         }
 
+        public void initFromTask(JobTask task) {}
+
         /// <summary>
         /// Create the task from the panel
         /// </summary>

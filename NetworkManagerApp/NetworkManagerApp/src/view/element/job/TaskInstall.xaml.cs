@@ -104,6 +104,23 @@ namespace NetworkManager.View.Component.Job {
             mainWindow.deleteTask(this);
         }
 
+        public void initFromTask(JobTask task) {
+            // Select
+            DataGrid_softwareList.SelectedItem = null;
+            foreach (SoftwareModel item in DataGrid_softwareList.Items) {
+                if(item.path == task.data) {
+                    DataGrid_softwareList.SelectedItem = item;
+                    break;
+                }
+            }
+
+            // Arguments
+            Textbox_launchArgs.Text = task.data2;
+
+            // Timeout
+            Textbox_timeout.Text = task.timeout.ToString();
+        }
+
         /// <summary>
         /// Create the task from the panel
         /// </summary>

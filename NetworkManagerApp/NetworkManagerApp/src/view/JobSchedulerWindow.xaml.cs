@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using NetworkManager.Model;
 using System;
 using NetworkManager.Scheduling;
+using System.Windows.Controls;
 
 namespace NetworkManager.View {
 
@@ -19,29 +20,23 @@ namespace NetworkManager.View {
             updateScheduledJobs();
         }
 
+        Dictionary<JobStatus, string> groups = new Dictionary<JobStatus, string>() {
+            { JobStatus.CREATED, "Created tasks" },
+            { JobStatus.SCHEDULED, "Scheduled tasks" },
+            { JobStatus.IN_PROGRESS, "In progress tasks" },
+            { JobStatus.TERMINATED, "Terminated tasks" }
+        };
+
         public void updateScheduledJobs() {
 
             scheduledJobs.Items.Clear();
 
-            var element = new ScheduledJobModelGroup() { name = "Created tasks" };
-            foreach (Job j in MainWindow.jobStore.getJobByStatus(JobStatus.CREATED))
-                element.Items.Add(new ScheduledJobModel() { job = j });
-            scheduledJobs.Items.Add(element);
-
-            element = new ScheduledJobModelGroup() { name = "Scheduled tasks" };
-            foreach (Job j in MainWindow.jobStore.getJobByStatus(JobStatus.SCHEDULED))
-                element.Items.Add(new ScheduledJobModel() { job = j });
-            scheduledJobs.Items.Add(element);
-
-            element = new ScheduledJobModelGroup() { name = "In progress tasks" };
-            foreach (Job j in MainWindow.jobStore.getJobByStatus(JobStatus.IN_PROGRESS))
-                element.Items.Add(new ScheduledJobModel() { job = j });
-            scheduledJobs.Items.Add(element);
-
-            element = new ScheduledJobModelGroup() { name = "Terminated tasks" };
-            foreach (Job j in MainWindow.jobStore.getJobByStatus(JobStatus.TERMINATED))
-                element.Items.Add(new ScheduledJobModel() { job = j });
-            scheduledJobs.Items.Add(element);
+            foreach(var group in groups) {
+                var element = new ScheduledJobModelGroup() { name = group.Value };
+                foreach (Job j in MainWindow.jobStore.getJobByStatus(group.Key))
+                    element.Items.Add(new ScheduledJobModel() { job = j });
+                scheduledJobs.Items.Add(element);
+            }
         }
 
         public void selectComputer(Computer computer) {
@@ -50,6 +45,16 @@ namespace NetworkManager.View {
 
         public void selectComputers(List<Computer> computers) {
             jobDetails.selectComputers(computers);
+        }
+
+        private void scheduledJobs_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
+            var selectedElement = scheduledJobs.SelectedItem;
+
+            if(selectedElement is ScheduledJobModel) {
+                var job = (selectedElement as ScheduledJobModel).job;
+
+                jobDetails.setJob(job);
+            }
         }
     }
 }

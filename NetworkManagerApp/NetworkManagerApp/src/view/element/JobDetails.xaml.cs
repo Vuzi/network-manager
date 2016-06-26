@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using NetworkManager.Scheduling;
+using NetworkManager.View.Component.Job;
 
 namespace NetworkManager.View.Component {
 
@@ -41,7 +42,6 @@ namespace NetworkManager.View.Component {
             jobDatePicker.IsEnabled = jobNowCheckbox.IsChecked == false;
             jobHoursPicker.IsEnabled = jobNowCheckbox.IsChecked == false;
             jobMinutesPicker.IsEnabled = jobNowCheckbox.IsChecked == false;
-
         }
 
         private void fillComputers(Domain d) {
@@ -58,6 +58,54 @@ namespace NetworkManager.View.Component {
             }
         }
 
+        internal void setJob(Scheduling.Job job) {
+            if(job == null || job.status == JobStatus.CREATED || job.status == JobStatus.SCHEDULED) {
+                this.IsEnabled = true;
+            } else {
+                this.IsEnabled = false;
+            }
+
+            textBox_TaskName.Text = job.name;
+
+            if(job.scheduledDateTime != DateTime.MinValue) {
+                jobNowCheckbox.IsChecked = false;
+                jobDatePicker.SelectedDate = job.scheduledDateTime;
+                jobHoursPicker.SelectedIndex = job.scheduledDateTime.Hour;
+                jobMinutesPicker.SelectedIndex = job.scheduledDateTime.Minute;
+            } else {
+                jobHoursPicker.SelectedIndex = -1;
+                jobMinutesPicker.SelectedIndex = -1;
+                jobDatePicker.SelectedDate = null;
+                jobNowCheckbox.IsChecked = true;
+            }
+
+            // TODO computers
+
+            tasksPanel.Children.Clear();
+            foreach (JobTask task in job.tasks) {
+                dynamic panel = null;
+
+                switch(task.type) {
+                    case JobTaskType.INSTALL_SOFTWARE:
+                        panel = new TaskInstall();
+                        break;
+                    case JobTaskType.REBOOT:
+                        panel = new TaskReboot();
+                        break;
+                    case JobTaskType.SHUTDOWN:
+                        panel = new TaskShutdown();
+                        break;
+                    case JobTaskType.WAKE_ON_LAN:
+                        panel = new TaskWakeOnLan();
+                        break;
+                }
+
+                if(panel != null) {
+                    panel.initFromTask(task);
+                    tasksPanel.Children.Add(panel);
+                }
+            }
+        }
 
         private async void selectedComputersGrid_Loaded(object sender, RoutedEventArgs e) {
             // Fill the computers
@@ -121,16 +169,20 @@ namespace NetworkManager.View.Component {
         private void buttonCreateJob_Click(object sender, RoutedEventArgs e) {
 
             // Get the picked date
-            DateTime? jobDateTime = null;
+            DateTime jobDateTime;
             if (jobNowCheckbox.IsChecked == true) {
-                jobDateTime = DateTime.Now;
+                jobDateTime = DateTime.MinValue;
             } else {
-                jobDateTime = jobDatePicker.SelectedDate;
-
-                if (jobDateTime == null) {
+                if (jobDatePicker.SelectedDate == null || jobHoursPicker.SelectedItem == null || jobMinutesPicker.SelectedItem == null) {
                     MessageBox.Show("Error : An execution date must be provided to the job", "Job creation error");
                     return;
-                } else if (jobDateTime < DateTime.Now) {
+                }
+
+                jobDateTime = jobDatePicker.SelectedDate.Value;
+                jobDateTime = jobDateTime.AddHours(jobHoursPicker.SelectedIndex);
+                jobDateTime = jobDateTime.AddMinutes(jobMinutesPicker.SelectedIndex);
+
+                if (jobDateTime < DateTime.Now) {
                     MessageBox.Show("Error : The specified date can't be in the past", "Job creation error");
                     return;
                 }
@@ -156,8 +208,6 @@ namespace NetworkManager.View.Component {
                 if (jobTask == null)
                     return; // Error during jobtask creation
 
-                Console.WriteLine(element.GetType());
-
                 tasks.Add(jobTask);
             }
 
@@ -168,7 +218,8 @@ namespace NetworkManager.View.Component {
 
             // OK, create the job
             var job = new Scheduling.Job() {
-                scheduledDateTime = jobDateTime.Value,
+                scheduledDateTime = jobDateTime,
+                creationDate = DateTime.Now,
                 computers = selectedComputers,
                 status = JobStatus.CREATED,
                 tasks = tasks,

@@ -27,6 +27,11 @@ namespace NetworkManager.View.Component.Job {
         private void button_Delete_Click(object sender, RoutedEventArgs e) {
             mainWindow.deleteTask(this);
         }
+        
+        public void initFromTask(JobTask task) {
+            // Timeout
+            TextBox_timeout.Text = task.timeout.ToString();
+        }
 
         /// <summary>
         /// Create the task from the panel
