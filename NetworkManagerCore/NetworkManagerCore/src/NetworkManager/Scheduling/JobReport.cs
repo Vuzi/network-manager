@@ -2,7 +2,7 @@
 using SQLite;
 using System.Collections.Generic;
 
-namespace NetworkManager.Job {
+namespace NetworkManager.Scheduling {
 
     public class JobReport {
         [PrimaryKey, NotNull]

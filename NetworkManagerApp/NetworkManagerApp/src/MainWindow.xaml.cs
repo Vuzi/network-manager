@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Threading;
-using NetworkManager.Job;
+using NetworkManager.Scheduling;
 using NetworkManager.View.Model;
 
 namespace NetworkManager {

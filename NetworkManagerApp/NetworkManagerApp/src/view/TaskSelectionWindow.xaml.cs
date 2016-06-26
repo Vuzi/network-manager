@@ -1,4 +1,5 @@
-﻿using NetworkManager.View.Component.Job;
+﻿using NetworkManager.View.Component;
+using NetworkManager.View.Component.Job;
 using System;
 using System.Windows;
 
@@ -11,7 +12,7 @@ namespace NetworkManager.View {
             InitializeComponent();
         }
 
-        public JobSchedulerWindow mainWindow { get; set; }
+        public JobDetails mainWindow { get; set; }
 
         private void cancel_Click(object sender, RoutedEventArgs e) {
             this.Close();

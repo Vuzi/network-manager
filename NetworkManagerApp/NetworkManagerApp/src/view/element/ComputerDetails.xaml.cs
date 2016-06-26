@@ -27,7 +27,8 @@ namespace NetworkManager.View.Component {
                 button_OpenDiskC,
                 button_OpenDiskD,
                 button_OpenDiskE,
-                button_Installsoftware
+                button_Installsoftware,
+                button_JobSchedule
             };
             notAliveButtons = new Button[] {
                 button_WakeOnLan,
@@ -168,8 +169,8 @@ namespace NetworkManager.View.Component {
             var computerInfo = MainWindow.computerInfoStore.getComputerInfoByName(computer.nameLong);
 
             if (computer.isAlive) {
-                aliveButtons.ToList().ForEach(button => button.Visibility = Visibility.Visible);
                 notAliveButtons.ToList().ForEach(button => button.Visibility = Visibility.Collapsed);
+                aliveButtons.ToList().ForEach(button => button.Visibility = Visibility.Visible);
 
                 try {
                     // Connected : get the IP from DNS, and the MAC from WMI

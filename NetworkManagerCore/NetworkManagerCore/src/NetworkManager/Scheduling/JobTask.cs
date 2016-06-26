@@ -1,7 +1,7 @@
 ﻿
 using SQLite;
 
-namespace NetworkManager.Job {
+namespace NetworkManager.Scheduling {
     
     public enum JobTaskType {
         INSTALL_SOFTWARE, WAKE_ON_LAN, REBOOT, SHUTDOWN

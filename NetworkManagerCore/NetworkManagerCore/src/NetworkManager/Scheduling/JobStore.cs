@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using NetworkManager.DomainContent;
 
-namespace NetworkManager.Job {
+namespace NetworkManager.Scheduling {
     public class JobStore {
         private SQLiteConnection conn;
 

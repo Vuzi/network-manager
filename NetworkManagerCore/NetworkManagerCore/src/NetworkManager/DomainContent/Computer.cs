@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using NetworkManager.WMIExecution;
 
 using System.Net.NetworkInformation;
-using NetworkManager.Job;
+using NetworkManager.Scheduling;
 
 namespace NetworkManager.DomainContent {
 

@@ -1,4 +1,4 @@
-﻿using NetworkManager.Job;
+﻿using NetworkManager.Scheduling;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -93,15 +93,15 @@ namespace NetworkManager.View.Component.Job {
         }
 
         private void button_Down_Click(object sender, RoutedEventArgs e) {
-            mainWindow.downTask(this);
+            mainWindow.jobDetails.downTask(this);
         }
 
         private void button_Up_Click(object sender, RoutedEventArgs e) {
-            mainWindow.upTask(this);
+            mainWindow.jobDetails.upTask(this);
         }
 
         private void button_Delete_Click(object sender, RoutedEventArgs e) {
-            mainWindow.deleteTask(this);
+            mainWindow.jobDetails.deleteTask(this);
         }
 
         /// <summary>

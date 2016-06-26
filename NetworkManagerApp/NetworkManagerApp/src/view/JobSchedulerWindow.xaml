@@ -4,53 +4,28 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NetworkManager.View"
+        xmlns:model="clr-namespace:NetworkManager.Model"
+        xmlns:component="clr-namespace:NetworkManager.View.Component"
         mc:Ignorable="d"
         Title="Network Manager - Job Scheduler" Height="753" Width="880" Icon="../../resource/icon.ico" Background="LightGray" >
     <Grid>
         <!-- List of all already planned tasks -->
-        <TreeView x:Name="treeView" HorizontalAlignment="Left" Margin="10,49,0,10" Width="210"/>
         <Label Content="Planned jobs" VerticalAlignment="Top" Margin="10,10,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="18"/>
-        <Label Content="Selected job" VerticalAlignment="Top" Margin="241,10,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="18"/>
+        <TreeView x:Name="scheduledJobs" HorizontalAlignment="Left" Margin="10,49,0,10" Width="210">
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type model:ScheduledJobModelGroup}" ItemsSource="{Binding Items}">
+                    <TextBlock Text="{Binding name}" FontSize="14" FontWeight="DemiBold" />
+                </HierarchicalDataTemplate>
 
-        <!-- Taks name -->
-        <TextBox x:Name="textBox_TaskName" HorizontalAlignment="Left" Height="23" Margin="373,47,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Job name (optional) :" HorizontalAlignment="Left" Margin="246,44,0,0" VerticalAlignment="Top" Width="149"/>
+                <DataTemplate DataType="{x:Type model:ScheduledJobModel}">
+                    <TextBlock Text="{Binding name}" FontSize="14" FontWeight="DemiBold" />
+                </DataTemplate>
 
-        <!-- Task date -->
-        <Label Content="Scheduled execution" VerticalAlignment="Top" Margin="241,75,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="15"/>
+            </TreeView.Resources>
+        </TreeView>
 
-        <Label Content="Planned date :" HorizontalAlignment="Left" Margin="246,107,0,0" VerticalAlignment="Top" Width="149"/>
-        <DatePicker x:Name="jobDatePicker" HorizontalAlignment="Left" Margin="247,131,0,0" VerticalAlignment="Top"/>
-
-        <Label Content="Planned hour :" Padding="2" Margin="415,107,0,0" VerticalAlignment="Top" Height="21" HorizontalAlignment="Left" Width="146"/>
-        <ComboBox x:Name="jobHoursPicker" HorizontalAlignment="Left" Margin="415,132,0,0" VerticalAlignment="Top" Width="51"></ComboBox>
-        <ComboBox x:Name="jobMinutesPicker" HorizontalAlignment="Left" Margin="471,132,0,0" VerticalAlignment="Top" Width="63"></ComboBox>
-        <CheckBox x:Name="jobNowCheckbox" Content="Now" HorizontalAlignment="Left" Margin="563,136,0,0" VerticalAlignment="Top" Click="jobNow_Click"/>
-        <Rectangle Fill="Gray" Height="9" Margin="240,177,0,0" VerticalAlignment="Top"/>
-
-        <!-- Selected computers -->
-        <Label Content="Computers" VerticalAlignment="Top" Margin="241,188,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="15"/>
-        <DataGrid x:Name="selectedComputersGrid" Margin="241,222,10,0" VerticalAlignment="Top" Height="128" Loaded="selectedComputersGrid_Loaded" SelectedCellsChanged="selectedComputersGrid_SelectedCellsChanged" >
-            <DataGrid.Columns>
-                <DataGridTextColumn  Header="Name" Width="Auto" Binding="{Binding name}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Domain" Width="Auto" Binding="{Binding domain}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Fully qualified domain name" Width="Auto" Binding="{Binding nameLong}" IsReadOnly="True" CanUserReorder="True"/>
-            </DataGrid.Columns>
-        </DataGrid>
-        <Button x:Name="buttonSelectAll" Content="Select all" HorizontalAlignment="Left" Margin="241,355,0,0" VerticalAlignment="Top" Width="75" Click="buttonSelectAll_Click" />
-        <Button x:Name="buttonDeselectAll" Content="Deselect all" HorizontalAlignment="Left" Margin="321,355,0,0" VerticalAlignment="Top" Width="75" Click="buttonDeselectAll_Click"/>
-        <Label x:Name="selectedComputersLabel" Content="0 computer selected" HorizontalAlignment="Left" Margin="401,352,0,0" VerticalAlignment="Top" Width="149"/>
-
-        <Rectangle Fill="Gray" Height="9" Margin="240,390,0,0" VerticalAlignment="Top"/>
-
-        <!-- Tasks -->
-        <Label Content="Tasks" VerticalAlignment="Top" Margin="241,404,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="15"/>
-        <ScrollViewer Margin="241,439,10,42">
-            <StackPanel x:Name="tasksPanel" Orientation="Vertical" VerticalAlignment="Stretch" />
-        </ScrollViewer>
-        <Button x:Name="buttonAddTask" Content="Add Task" HorizontalAlignment="Left" Margin="301,409,0,0" VerticalAlignment="Top" Width="75" Click="buttonAddTask_Click"/>
-
-        <Button x:Name="buttonCreateJob" Content="Create a new job" HorizontalAlignment="Left" Margin="240,0,0,10" Width="140" Height="21" VerticalAlignment="Bottom" Click="buttonCreateJob_Click" />
+        <!-- Job details -->
+        <component:JobDetails x:Name="jobDetails" Margin="220, 0, 0,0" Width="Auto"/>
 
     </Grid>
 </Window>

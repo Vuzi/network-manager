@@ -2,7 +2,7 @@
 using NetworkManager.DomainContent;
 using SQLite;
 
-namespace NetworkManager.Job {
+namespace NetworkManager.Scheduling {
     
     public class JobTaskReport {
         [PrimaryKey, NotNull]

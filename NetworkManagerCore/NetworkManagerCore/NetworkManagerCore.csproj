@@ -67,11 +67,11 @@
     <Compile Include="src\NetworkManager\DomainContent\Domain.cs" />
     <Compile Include="src\NetworkManager\DomainContent\Software.cs" />
     <Compile Include="src\NetworkManager\DomainContent\User.cs" />
-    <Compile Include="src\NetworkManager\Job\Job.cs" />
-    <Compile Include="src\NetworkManager\Job\JobReport.cs" />
-    <Compile Include="src\NetworkManager\Job\JobStore.cs" />
-    <Compile Include="src\NetworkManager\Job\JobTask.cs" />
-    <Compile Include="src\NetworkManager\Job\JobTaskReport.cs" />
+    <Compile Include="src\NetworkManager\Scheduling\Job.cs" />
+    <Compile Include="src\NetworkManager\Scheduling\JobReport.cs" />
+    <Compile Include="src\NetworkManager\Scheduling\JobStore.cs" />
+    <Compile Include="src\NetworkManager\Scheduling\JobTask.cs" />
+    <Compile Include="src\NetworkManager\Scheduling\JobTaskReport.cs" />
     <Compile Include="src\NetworkManager\Utils.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

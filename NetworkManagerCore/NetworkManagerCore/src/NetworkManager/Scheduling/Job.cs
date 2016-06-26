@@ -4,7 +4,7 @@ using SQLite;
 using System;
 using System.Collections.Generic;
 
-namespace NetworkManager.Job {
+namespace NetworkManager.Scheduling {
 
     public enum JobStatus {
         CREATED, SCHEDULED, IN_PROGRESS, TERMINATED

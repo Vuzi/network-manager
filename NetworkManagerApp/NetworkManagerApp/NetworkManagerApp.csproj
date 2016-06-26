@@ -80,6 +80,8 @@
     </ApplicationDefinition>
     <Compile Include="src\model\ComputerModel.cs" />
     <Compile Include="src\model\DomainModel.cs" />
+    <Compile Include="src\model\ScheduledJobModel.cs" />
+    <Compile Include="src\model\ScheduledJobModelGroup.cs" />
     <Compile Include="src\Properties.cs" />
     <Compile Include="src\view\ConfigurationWindow.xaml.cs">
       <DependentUpon>ConfigurationWindow.xaml</DependentUpon>
@@ -89,6 +91,9 @@
     </Compile>
     <Compile Include="src\view\element\ComputerDetails.xaml.cs">
       <DependentUpon>ComputerDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\view\element\JobDetails.xaml.cs">
+      <DependentUpon>JobDetails.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\view\ExecutionReportsWindow.xaml.cs">
       <DependentUpon>ExecutionReportsWindow.xaml</DependentUpon>
@@ -141,6 +146,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="src\view\element\ComputerDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\view\element\JobDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
