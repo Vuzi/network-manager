@@ -47,26 +47,38 @@ namespace NetworkManager.Scheduling {
             conn.InsertAll(relations);
         }
 
+        private Job fillJob(Job j) {
+            if (j == null)
+                return null;
+            
+            j.tasks = conn.Table<JobTask>().Where(jtask => jtask.jobId == j.id).OrderBy(jtask => jtask.order).ToList();
+            j.computers = new List<ComputerInfo>();
+
+            foreach (var relation in conn.Table<ComputerInJob>().Where(relation => relation.jobId == j.id).ToList()) {
+                var computer = conn.Find<ComputerInfo>(relation.computerName);
+                if (computer != null)
+                    j.computers.Add(computer);
+            }
+
+            return j;
+        }
+
         /// <summary>
         /// Return a job by its ID
         /// </summary>
         /// <param name="id">The job ID</param>
         /// <returns></returns>
         public Job getJobById(string id) {
-            Job j = conn.Find<Job>(id);
+            return fillJob(conn.Find<Job>(id));
+        }
 
-            if(j != null) {
-                j.tasks = conn.Table<JobTask>().Where(jtask => jtask.jobId == j.id).OrderBy(jtask => jtask.order).ToList();
-                j.computers = new List<ComputerInfo>();
+        public List<Job> getJobByStatus(JobStatus status) {
+            var jobs = conn.Table<Job>().Where(j => j.status == status).ToList();
 
-                foreach(var relation in conn.Table<ComputerInJob>().Where(relation => relation.jobId == j.id).ToList()) {
-                    var computer = conn.Find<ComputerInfo>(relation.computerName);
-                    if (computer != null)
-                        j.computers.Add(computer);
-                }
-            }
+            foreach (Job j in jobs)
+                fillJob(j);
 
-            return j;
+            return jobs;
         }
 
         /// <summary>

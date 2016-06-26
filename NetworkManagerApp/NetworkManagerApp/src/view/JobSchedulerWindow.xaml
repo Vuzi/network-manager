@@ -18,7 +18,7 @@
                 </HierarchicalDataTemplate>
 
                 <DataTemplate DataType="{x:Type model:ScheduledJobModel}">
-                    <TextBlock Text="{Binding name}" FontSize="14" FontWeight="DemiBold" />
+                    <TextBlock Text="{Binding name}" FontSize="14" />
                 </DataTemplate>
 
             </TreeView.Resources>

@@ -16,7 +16,7 @@ namespace NetworkManager.View.Component.Job {
     public partial class TaskInstall : UserControl {
         
         public static string name { get; } = "Install software";
-        public JobSchedulerWindow mainWindow { get; set; }
+        public JobDetails mainWindow { get; set; }
 
         public TaskInstall() {
             InitializeComponent();
@@ -93,15 +93,15 @@ namespace NetworkManager.View.Component.Job {
         }
 
         private void button_Down_Click(object sender, RoutedEventArgs e) {
-            mainWindow.jobDetails.downTask(this);
+            mainWindow.downTask(this);
         }
 
         private void button_Up_Click(object sender, RoutedEventArgs e) {
-            mainWindow.jobDetails.upTask(this);
+            mainWindow.upTask(this);
         }
 
         private void button_Delete_Click(object sender, RoutedEventArgs e) {
-            mainWindow.jobDetails.deleteTask(this);
+            mainWindow.deleteTask(this);
         }
 
         /// <summary>
