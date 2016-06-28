@@ -237,57 +237,68 @@ namespace NetworkManager {
 
         private void checkBox_FilterOn_Checked(object sender, RoutedEventArgs e)
         {
-            for(int i = 0;i < List_Computer.Items.Count; i++) {
-                DomainModel dm = (DomainModel)List_Computer.Items[i];
-                for(int y = 0; y < dm.Items.Count; y++)
+            foreach(var item in List_Computer.Items){
+                if(item.GetType() == typeof(DomainModel))
                 {
-                    if (((ComputerModel)dm.Items[y]).computer.isAlive == true)
-                        ((ComputerModel)dm.Items[y]).isHide = false;
-                    else if (((ComputerModel)dm.Items[y]).computer.isAlive == true && checkBox_FilterOff.IsChecked == true)
-                        ((ComputerModel)dm.Items[y]).isHide = false;
+                    DomainModel dm = (DomainModel)item;
+                    IEnumerable<ComputerModel> listcomputer = dm.getComputers();
+                    foreach(var c in listcomputer)
+                    {
+                        if (c.computer.isAlive == true)
+                            c.isHide = false;                        
+                    }
                 }
             }
         }
 
         private void checkBox_FilterOff_Checked(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < List_Computer.Items.Count; i++)
+            foreach (var item in List_Computer.Items)
             {
-                DomainModel dm = (DomainModel)List_Computer.Items[i];
-                for (int y = 0; y < dm.Items.Count; y++)
+                if (item.GetType() == typeof(DomainModel))
                 {
-                    if (((ComputerModel)dm.Items[y]).computer.isAlive == false)
-                        ((ComputerModel)dm.Items[y]).isHide = false;
-                    else if (((ComputerModel)dm.Items[y]).computer.isAlive == false && checkBox_FilterOn.IsChecked == true)
-                        ((ComputerModel)dm.Items[y]).isHide = false;
+                    DomainModel dm = (DomainModel)item;
+                    IEnumerable<ComputerModel> listcomputer = dm.getComputers();
+                    foreach (var c in listcomputer)
+                    {
+                        if (c.computer.isAlive == false)
+                            c.isHide = false;
+                    }
                 }
             }
         }
 
         private void checkBox_FilterOff_Unchecked(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < List_Computer.Items.Count; i++)
+            foreach (var item in List_Computer.Items)
             {
-                DomainModel dm = (DomainModel)List_Computer.Items[i];
-                for (int y = 0; y < dm.Items.Count; y++)
+                if (item.GetType() == typeof(DomainModel))
                 {
-                    ComputerModel tmpComputer = (ComputerModel)dm.Items[y];
-                    if (((ComputerModel)dm.Items[y]).computer.isAlive == false)
-                        ((ComputerModel)dm.Items[y]).isHide = true;
+                    DomainModel dm = (DomainModel)item;
+                    IEnumerable<ComputerModel> listcomputer = dm.getComputers();
+                    foreach (var c in listcomputer)
+                    {
+                        if (c.computer.isAlive == false)
+                            c.isHide = true;
+                    }
                 }
             }
         }
 
         private void checkBox_FilterOn_Unchecked(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < List_Computer.Items.Count; i++)
+            foreach (var item in List_Computer.Items)
             {
-                DomainModel dm = (DomainModel)List_Computer.Items[i];
-                for (int y = 0; y < dm.Items.Count; y++)
+                if (item.GetType() == typeof(DomainModel))
                 {
-                    ComputerModel tmpComputer = (ComputerModel)dm.Items[y];
-                    if (((ComputerModel)dm.Items[y]).computer.isAlive == true)
-                        ((ComputerModel)dm.Items[y]).isHide = true;
+                    DomainModel dm = (DomainModel)item;
+                    IEnumerable<ComputerModel> listcomputer = dm.getComputers();
+                    foreach (var c in listcomputer)
+                    {
+                        if (c.computer.isAlive == true)
+                            c.isHide = true;
+                        
+                    }
                 }
             }
         }
