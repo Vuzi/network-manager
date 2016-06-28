@@ -235,72 +235,45 @@ namespace NetworkManager {
             }
         }
 
-        private void checkBox_FilterOn_Checked(object sender, RoutedEventArgs e)
-        {
-            foreach(var item in List_Computer.Items){
-                if(item.GetType() == typeof(DomainModel))
-                {
-                    DomainModel dm = (DomainModel)item;
-                    IEnumerable<ComputerModel> listcomputer = dm.getComputers();
-                    foreach(var c in listcomputer)
-                    {
-                        if (c.computer.isAlive == true)
-                            c.isHide = false;                        
-                    }
+        private void checkBox_FilterOn_Checked(object sender, RoutedEventArgs e) {
+            foreach (var item in List_Computer.Items) {
+                if (item is DomainModel) {
+                    filterDomain(item as DomainModel, true, false);
                 }
             }
         }
 
-        private void checkBox_FilterOff_Checked(object sender, RoutedEventArgs e)
-        {
-            foreach (var item in List_Computer.Items)
-            {
-                if (item.GetType() == typeof(DomainModel))
-                {
-                    DomainModel dm = (DomainModel)item;
-                    IEnumerable<ComputerModel> listcomputer = dm.getComputers();
-                    foreach (var c in listcomputer)
-                    {
-                        if (c.computer.isAlive == false)
-                            c.isHide = false;
-                    }
+        private void checkBox_FilterOff_Checked(object sender, RoutedEventArgs e) {
+            foreach (var item in List_Computer.Items) {
+                if (item is DomainModel) {
+                    filterDomain(item as DomainModel, false, false);
                 }
             }
         }
 
-        private void checkBox_FilterOff_Unchecked(object sender, RoutedEventArgs e)
-        {
-            foreach (var item in List_Computer.Items)
-            {
-                if (item.GetType() == typeof(DomainModel))
-                {
-                    DomainModel dm = (DomainModel)item;
-                    IEnumerable<ComputerModel> listcomputer = dm.getComputers();
-                    foreach (var c in listcomputer)
-                    {
-                        if (c.computer.isAlive == false)
-                            c.isHide = true;
-                    }
+        private void checkBox_FilterOff_Unchecked(object sender, RoutedEventArgs e) {
+            foreach (var item in List_Computer.Items) {
+                if (item is DomainModel) {
+                    filterDomain(item as DomainModel, false, true);
                 }
             }
         }
 
-        private void checkBox_FilterOn_Unchecked(object sender, RoutedEventArgs e)
-        {
-            foreach (var item in List_Computer.Items)
-            {
-                if (item.GetType() == typeof(DomainModel))
-                {
-                    DomainModel dm = (DomainModel)item;
-                    IEnumerable<ComputerModel> listcomputer = dm.getComputers();
-                    foreach (var c in listcomputer)
-                    {
-                        if (c.computer.isAlive == true)
-                            c.isHide = true;
-                        
-                    }
+        private void checkBox_FilterOn_Unchecked(object sender, RoutedEventArgs e) {
+            foreach (var item in List_Computer.Items) {
+                if (item is DomainModel) {
+                    filterDomain(item as DomainModel, true, true);
                 }
             }
+        }
+        
+        private void filterDomain(DomainModel domainModel, bool computerState, bool show) {
+            foreach (var computer in domainModel.getComputers()) {
+                if (computer.computer.isAlive == computerState)
+                    computer.isHide = show;
+            }
+            foreach (var subDomainModel in domainModel.getDomains())
+                filterDomain(subDomainModel, computerState, show);
         }
     }
 
