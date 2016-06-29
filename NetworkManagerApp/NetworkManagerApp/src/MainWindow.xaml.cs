@@ -12,6 +12,8 @@ using System.Linq;
 using System.Windows.Threading;
 using NetworkManager.Job;
 using NetworkManager.View.Model;
+using System.Windows.Data;
+using System.ComponentModel;
 
 namespace NetworkManager {
 
@@ -122,6 +124,8 @@ namespace NetworkManager {
                     item.IsExpanded = true;
                     countMachine();
                 }
+                CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(List_Computer.ItemsSource);
+                view.SortDescriptions.Add(new SortDescription("computer.name", ListSortDirection.Ascending));
 
             } catch(Exception e) {
                 errorHandler.addError(e);
