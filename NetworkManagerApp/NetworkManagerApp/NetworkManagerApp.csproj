@@ -95,6 +95,9 @@
     <Compile Include="src\view\element\JobDetails.xaml.cs">
       <DependentUpon>JobDetails.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\view\element\JobReportDetails.xaml.cs">
+      <DependentUpon>JobReportDetails.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\view\ExecutionReportsWindow.xaml.cs">
       <DependentUpon>ExecutionReportsWindow.xaml</DependentUpon>
     </Compile>
@@ -150,6 +153,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\view\element\JobDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\view\element\JobReportDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

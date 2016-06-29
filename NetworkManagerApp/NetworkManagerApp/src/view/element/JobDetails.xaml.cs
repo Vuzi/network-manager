@@ -105,6 +105,10 @@ namespace NetworkManager.View.Component {
                     tasksPanel.Children.Add(panel);
                 }
             }
+
+            buttonShowReport.IsEnabled = true;
+            buttonShowReport.Visibility = Visibility.Visible;
+            buttonCreateJob.Visibility = Visibility.Collapsed;
         }
 
         private async void selectedComputersGrid_Loaded(object sender, RoutedEventArgs e) {
@@ -217,14 +221,13 @@ namespace NetworkManager.View.Component {
             }
 
             // OK, create the job
-            var job = new Scheduling.Job() {
+            var job = new Scheduling.Job {
                 scheduledDateTime = jobDateTime,
                 creationDate = DateTime.Now,
                 computers = selectedComputers,
                 status = JobStatus.CREATED,
                 tasks = tasks,
-                name = textBox_TaskName.Text,
-                report = null
+                name = textBox_TaskName.Text
             };
 
             // Tests
@@ -236,6 +239,10 @@ namespace NetworkManager.View.Component {
 
             // Create a windows task
             // TODO
+        }
+
+        private void buttonShowReport_Click(object sender, RoutedEventArgs e) {
+
         }
     }
 }

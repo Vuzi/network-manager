@@ -30,7 +30,8 @@
         </TreeView>
 
         <!-- Job details -->
-        <component:JobDetails x:Name="jobDetails" Margin="220, 0, 0,0" Width="Auto"/>
+        <component:JobDetails Visibility="Hidden" x:Name="jobDetails" Margin="220, 0, 0,0" Width="Auto"/>
 
+        <component:JobReportDetails x:Name="jobReportDetails" Margin="220, 0, 0,0" Width="Auto"/>
     </Grid>
 </Window>

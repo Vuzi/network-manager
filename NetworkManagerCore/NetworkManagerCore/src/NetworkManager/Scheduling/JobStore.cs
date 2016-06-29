@@ -82,22 +82,21 @@ namespace NetworkManager.Scheduling {
         }
 
         /// <summary>
-        /// Return the job report of a job, or null if the job has no report
+        /// Return the list of job report of a job
         /// </summary>
         /// <param name="job">The job</param>
         /// <returns>The found report, or null</returns>
-        public JobReport getJobReport(Job job) {
-            JobReport jobReport = conn.Table<JobReport>().Where(jr => jr.jobId == job.id).Take(1).FirstOrDefault();
+        public List<JobReport> getJobReport(Job job) {
+            List <JobReport> jobReports = conn.Table<JobReport>().Where(jr => jr.jobId == job.id).ToList();
 
-            if (jobReport == null)
-                return null;
-
-            jobReport.tasksReports = conn.Table<JobTaskReport>().Where(jtask => jtask.jobReportId == jobReport.id).OrderBy(jtask => jtask.order).ToList();
-            for(int i = 0; i < jobReport.tasksReports.Count && i < job.tasks.Count; i++) {
-                jobReport.tasksReports[i].task = job.tasks[i]; // Orders should matche
+            foreach (JobReport jobReport in jobReports) {
+                jobReport.tasksReports = conn.Table<JobTaskReport>().Where(jtask => jtask.jobReportId == jobReport.id).OrderBy(jtask => jtask.order).ToList();
+                for (int i = 0; i < jobReport.tasksReports.Count && i < job.tasks.Count; i++) {
+                    jobReport.tasksReports[i].task = job.tasks[i]; // Orders should matche
+                }
             }
 
-            return jobReport;
+            return jobReports;
         }
 
         /// <summary>

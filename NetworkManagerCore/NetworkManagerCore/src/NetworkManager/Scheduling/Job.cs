@@ -29,7 +29,7 @@ namespace NetworkManager.Scheduling {
         [Ignore]
         public List<JobTask> tasks { get; set; }
         [Ignore]
-        public JobReport report { get; set; }
+        public List<JobReport> reports { get; set; }
     }
 
     public class ComputerInJob {
