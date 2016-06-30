@@ -60,6 +60,8 @@ namespace NetworkManager.Scheduling {
                     j.computers.Add(computer);
             }
 
+            j.reports = getJobReport(j);
+
             return j;
         }
 

@@ -1,9 +1,9 @@
 ﻿
 using System;
 using NetworkManager.DomainContent;
-using NetworkManager.Job;
 using SQLite;
 using System.Threading.Tasks;
+using NetworkManager.Scheduling;
 
 namespace NetworkManagerExecutor {
     class Program {
@@ -27,27 +27,31 @@ namespace NetworkManagerExecutor {
             prepareDatabaseConnection();
 
             foreach (string id in args) {
-                Job j = jobStore.getJobById(id);
+                Job job = jobStore.getJobById(id);
 
-                if (j != null) {
+                if (job != null) {
                     #if DEBUG
                     Console.WriteLine($"Job => {j.name}");
                     Console.WriteLine("\tComputers : ");
-                    foreach(var c in j.computers)
+                    foreach(var c in job.computers)
                         Console.WriteLine("\t\t" + c.name);
                     #endif
-
-                    j.status = JobStatus.IN_PROGRESS;
-                    jobStore.updateJob(j);
                     
-                    Parallel.ForEach(j.computers, async c => {
+                    job.status = JobStatus.IN_PROGRESS;
+                    job.startDateTime = DateTime.Now;
+                    jobStore.updateJob(job);
+
+                    Parallel.ForEach(job.computers, c => {
                         Computer computer = new Computer(c);
 
                         JobReport report = new JobReport() {
                             computerName = computer.nameLong,
                             error = false
                         };
-                        report.tasksReports = await computer.performsTasks(j.tasks);
+
+                        Task.Run(async () => {
+                            report.tasksReports = await computer.performsTasks(job.tasks);
+                        }).Wait();
 
                         // Update report
                         foreach (JobTaskReport taskReport in report.tasksReports)
@@ -55,12 +59,15 @@ namespace NetworkManagerExecutor {
                                 report.error = true;
 
                         // Save the report
-                        jobStore.insertJobReport(j, report);
+                        jobStore.insertJobReport(job, report);
                     });
 
-                    j.status = JobStatus.TERMINATED;
-                    jobStore.updateJob(j);
-                    
+                    // Execution done
+                    job.status = JobStatus.TERMINATED;
+                    job.endDateTime = DateTime.Now;
+                    jobStore.updateJob(job);
+
+                    job.unSchedule();
                 }
                 #if DEBUG
                 else {

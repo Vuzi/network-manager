@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using NetworkManager.Scheduling;
 using NetworkManager.View.Component.Job;
+using System.Threading.Tasks;
 
 namespace NetworkManager.View.Component {
 
@@ -59,10 +60,10 @@ namespace NetworkManager.View.Component {
         }
 
         internal void setJob(Scheduling.Job job) {
-            if(job == null || job.status == JobStatus.CREATED || job.status == JobStatus.SCHEDULED) {
-                this.IsEnabled = true;
+            if(job == null || job.status == JobStatus.CREATED /*|| job.status == JobStatus.SCHEDULED*/) {
+                gridControls.IsEnabled = true;
             } else {
-                this.IsEnabled = false;
+                gridControls.IsEnabled = false;
             }
 
             textBox_TaskName.Text = job.name;
@@ -107,7 +108,11 @@ namespace NetworkManager.View.Component {
             }
 
             buttonShowReport.IsEnabled = true;
-            buttonShowReport.Visibility = Visibility.Visible;
+            if (job.status == JobStatus.TERMINATED && job.reports != null && job.reports.Count > 0) {
+                buttonShowReport.Visibility = Visibility.Visible;
+                parent.jobReportDetails.setJob(job);
+            } else
+                buttonShowReport.Visibility = Visibility.Collapsed;
             buttonCreateJob.Visibility = Visibility.Collapsed;
         }
 
@@ -225,24 +230,23 @@ namespace NetworkManager.View.Component {
                 scheduledDateTime = jobDateTime,
                 creationDate = DateTime.Now,
                 computers = selectedComputers,
-                status = JobStatus.CREATED,
+                status = JobStatus.SCHEDULED,
                 tasks = tasks,
                 name = textBox_TaskName.Text
             };
 
-            // Tests
-            //(selectedComputersGrid.SelectedItems[0] as Computer).performsTasks(tasks);
+            // Create a windows task
+            job.schedule();
 
             // Insert into the job store
             MainWindow.jobStore.insertJob(job);
-            parent.updateScheduledJobs();
 
-            // Create a windows task
-            // TODO
+            parent.updateScheduledJobs();
         }
 
         private void buttonShowReport_Click(object sender, RoutedEventArgs e) {
-
+            parent.jobDetails.Visibility = Visibility.Collapsed;
+            parent.jobReportDetails.Visibility = Visibility.Visible;
         }
     }
 }

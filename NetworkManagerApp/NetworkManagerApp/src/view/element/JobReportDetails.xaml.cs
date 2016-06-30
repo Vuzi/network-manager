@@ -4,6 +4,8 @@ using NetworkManager.View.Component;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -15,13 +17,14 @@ namespace NetworkManager.View.Component {
     /// Logique d'interaction pour JobReportDetails.xaml
     /// </summary>
     public partial class JobReportDetails : UserControl {
+
+        public JobSchedulerWindow parent { get; set; }
+
         public JobReportDetails() {
             InitializeComponent();
         }
 
         private void detailsGrid_Loaded(object sender, RoutedEventArgs e) {
-            detailsGrid.Columns.Clear();
-
 
             var job = new Scheduling.Job() {
                 computers = new List<ComputerInfo>() {
@@ -90,6 +93,44 @@ namespace NetworkManager.View.Component {
                 }
             };
 
+            //setJob(job);
+        }
+
+        List<Tuple<float, string>> messages = new List<Tuple<float, string>> {
+            Tuple.Create(99f, "successful"),
+            Tuple.Create(74f, "mostly successful"),
+            Tuple.Create(49f, "mostly failed"),
+            Tuple.Create(24f, "failed"),
+            Tuple.Create(0f , "total failure")
+        };
+
+        public void setJob(Scheduling.Job job) {
+
+            textBox_PlannedStart.Text = job.scheduledDateTime != DateTime.MinValue ? job.scheduledDateTime.ToString("f",
+                CultureInfo.CreateSpecificCulture("fr-FR")) : "As soon as possible";
+
+            textBox_RealStart.Text = job.startDateTime.ToString("f",
+                CultureInfo.CreateSpecificCulture("fr-FR"));
+
+            var diff = (job.endDateTime - job.startDateTime);
+            textBox_Duration.Text = (int)diff.TotalMinutes + " minutes " + (int)(diff.TotalSeconds%60) + " seconds";
+
+            float success = job.reports.Aggregate(0, (sum, jr) => jr.error ? sum : sum + 1) / (float)job.reports.Count * 100f;
+            string message = null;
+
+            foreach(var msg in messages) {
+                if(success >= msg.Item1) {
+                    message = msg.Item2;
+                    break;
+                }
+            }
+
+            textBox_SuccessRate.Content = $"{message} ({(int)success}%)";
+
+            // Grid clear
+            detailsGrid.Items.Clear();
+            detailsGrid.Columns.Clear();
+
             // Column creation
             detailsGrid.Columns.Add(new DataGridTextColumn {
                 Header = "Computer Name",
@@ -140,6 +181,11 @@ namespace NetworkManager.View.Component {
                     }
                 }
             }
+        }
+
+        private void buttonShowJob_Click(object sender, RoutedEventArgs e) {
+            parent.jobDetails.Visibility = Visibility.Visible;
+            parent.jobReportDetails.Visibility = Visibility.Collapsed;
         }
     }
 

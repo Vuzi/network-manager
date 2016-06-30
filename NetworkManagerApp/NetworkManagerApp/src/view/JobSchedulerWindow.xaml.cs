@@ -17,11 +17,13 @@ namespace NetworkManager.View {
             InitializeComponent();
 
             jobDetails.parent = this;
+            jobReportDetails.parent = this;
+
             updateScheduledJobs();
         }
 
         Dictionary<JobStatus, string> groups = new Dictionary<JobStatus, string>() {
-            { JobStatus.CREATED, "Created tasks" },
+            //{ JobStatus.CREATED, "Created tasks" },
             { JobStatus.SCHEDULED, "Scheduled tasks" },
             { JobStatus.IN_PROGRESS, "In progress tasks" },
             { JobStatus.TERMINATED, "Terminated tasks" }

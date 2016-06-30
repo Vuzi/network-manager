@@ -288,6 +288,8 @@ namespace NetworkManager.DomainContent {
                         taskId = task.id
                     };
 
+                    reports.Add(report);
+
                     switch (task.type) {
                         case JobTaskType.INSTALL_SOFTWARE:
                             // Install the software
