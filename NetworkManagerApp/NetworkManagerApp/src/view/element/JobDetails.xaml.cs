@@ -205,7 +205,7 @@ namespace NetworkManager.View.Component {
 
             var selectedComputers = new List<ComputerInfo>();
             foreach (Computer c in selectedComputersGrid.SelectedItems) {
-                selectedComputers.Add(MainWindow.computerInfoStore.getComputerInfoByName(c.nameLong));
+                selectedComputers.Add(App.computerInfoStore.getComputerInfoByName(c.nameLong));
             }
 
             // Get the tasks
@@ -235,11 +235,11 @@ namespace NetworkManager.View.Component {
                 name = textBox_TaskName.Text
             };
 
+            // Insert into the job store
+            App.jobStore.insertJob(job);
+
             // Create a windows task
             job.schedule();
-
-            // Insert into the job store
-            MainWindow.jobStore.insertJob(job);
 
             parent.updateScheduledJobs();
         }

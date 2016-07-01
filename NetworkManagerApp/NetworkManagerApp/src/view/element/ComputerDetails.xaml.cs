@@ -166,7 +166,7 @@ namespace NetworkManager.View.Component {
             textBox_AdressMac.Text = "";
             textBox_IPAdress.Text = "";
 
-            var computerInfo = MainWindow.computerInfoStore.getComputerInfoByName(computer.nameLong);
+            var computerInfo = App.computerInfoStore.getComputerInfoByName(computer.nameLong);
 
             if (computer.isAlive) {
                 notAliveButtons.ToList().ForEach(button => button.Visibility = Visibility.Collapsed);
@@ -345,7 +345,7 @@ namespace NetworkManager.View.Component {
 
         private void button_WakeOnLan_Click(object sender, RoutedEventArgs e) {
             if(computer != null) {
-                var computerInfo = MainWindow.computerInfoStore.getComputerInfoByName(computer.nameLong);
+                var computerInfo = App.computerInfoStore.getComputerInfoByName(computer.nameLong);
 
                 if (computerInfo != null) {
                     Utils.wakeOnLan(computerInfo.macAddress);

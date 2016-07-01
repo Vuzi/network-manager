@@ -30,7 +30,7 @@ namespace NetworkManager.View.Component.Job {
 
         private void DataGrid_softwareList_Loaded(object sender, RoutedEventArgs e) {
 
-            string path = MainWindow.config.get("softwarepath");
+            string path = App.config.get("softwarepath");
 
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);

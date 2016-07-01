@@ -26,7 +26,7 @@ namespace NetworkManager {
 
             Dictionary<string, Parameter> configs = new Dictionary<string, Parameter>();
             
-            foreach(var item in MainWindow.config.list) {
+            foreach(var item in App.config.list) {
                 string[] itemKeys = item.Key.Split('.');
                 if (configs.ContainsKey(itemKeys[0])) {
                     if (itemKeys.Length > 1 && itemKeys[1] == "name") {
@@ -52,9 +52,9 @@ namespace NetworkManager {
 
         private void button_Save_Click(object sender, RoutedEventArgs e) {
             foreach (var itemInSoft in ListConfig) {
-                MainWindow.config.set(itemInSoft.key, itemInSoft.value);
+                App.config.set(itemInSoft.key, itemInSoft.value);
             }
-            MainWindow.config.save();
+            App.config.save();
             this.Hide();
         }
         

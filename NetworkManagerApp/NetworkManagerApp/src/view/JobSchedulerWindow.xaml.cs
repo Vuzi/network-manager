@@ -35,7 +35,7 @@ namespace NetworkManager.View {
 
             foreach(var group in groups) {
                 var element = new ScheduledJobModelGroup() { name = group.Value };
-                foreach (Job j in MainWindow.jobStore.getJobByStatus(group.Key))
+                foreach (Job j in App.jobStore.getJobByStatus(group.Key))
                     element.Items.Add(new ScheduledJobModel() { job = j });
                 scheduledJobs.Items.Add(element);
             }

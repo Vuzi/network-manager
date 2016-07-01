@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 
 namespace NetworkManager.Scheduling {
 
@@ -41,7 +42,7 @@ namespace NetworkManager.Scheduling {
         /// </summary>
         public void unSchedule() {
             using (TaskService ts = new TaskService()) {
-                ts.RootFolder.DeleteTask($"NetworkManager_Task-{id}");
+                ts.GetFolder("\\Network Manager")?.DeleteTask($"NetworkManager Task #{id}");
             }
         }
 
@@ -54,12 +55,21 @@ namespace NetworkManager.Scheduling {
             using (TaskService ts = new TaskService()) {
                 TaskDefinition td = ts.NewTask();
                 td.RegistrationInfo.Description = $"Network Manager Task #{id}";
-                
-                td.Triggers.Add(new TimeTrigger { StartBoundary = scheduledDateTime });
-                
-                td.Actions.Add(new ExecAction(exe, $"{id}", null));
+                td.RegistrationInfo.Author = $"Network Manager v{Assembly.GetExecutingAssembly().GetName().Version}";
+                td.Settings.DisallowStartIfOnBatteries = false;
+                td.Principal.UserId = "SYSTEM";
+                td.Principal.RunLevel = TaskRunLevel.Highest;
+                td.Principal.LogonType = TaskLogonType.ServiceAccount;
 
-                ts.RootFolder.RegisterTaskDefinition($"NetworkManager_Task-{id}", td);
+                // Trigger
+                td.Triggers.Add(new TimeTrigger((scheduledDateTime != DateTime.MinValue ? scheduledDateTime : DateTime.Now).AddSeconds(3)));
+                
+                // Action
+                td.Actions.Add(new ExecAction(exe, $"{id}", Directory.GetCurrentDirectory()));
+
+                // Task registration
+                var folder = ts.RootFolder.CreateFolder("Network Manager", null, false);
+                folder.RegisterTaskDefinition($"NetworkManager Task #{id}", td);
             }
 
         }

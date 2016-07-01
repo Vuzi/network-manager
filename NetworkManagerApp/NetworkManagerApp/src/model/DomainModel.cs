@@ -103,10 +103,8 @@ namespace NetworkManager.View.Model {
                 return items;
             }
         }
-
-
+        
         public static async Task<DomainModel> createDomainModel(Domain domain, ErrorHandlerWindow erroHandler) {
-
             DomainModel domainModel = new DomainModel() {
                 name = domain.name
             };
@@ -119,10 +117,10 @@ namespace NetworkManager.View.Model {
                 // If the computer is alive, save its values in the database
                 if (c.isAlive) {
                     try {
-                        var info = MainWindow.computerInfoStore.getComputerInfoByName(c.nameLong);
+                        var info = App.computerInfoStore.getComputerInfoByName(c.nameLong);
 
                         if (info == null || (DateTime.Now - info.lastUpdate).TotalDays > 30) {
-                            MainWindow.computerInfoStore.updateOrInsertComputerInfo(new ComputerInfo() {
+                            App.computerInfoStore.updateOrInsertComputerInfo(new ComputerInfo() {
                                 name = c.nameLong,
                                 ipAddress = c.getIpAddress().ToString(),
                                 macAddress = await c.getMacAddress(),

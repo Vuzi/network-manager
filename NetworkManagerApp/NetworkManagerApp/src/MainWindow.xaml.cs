@@ -1,8 +1,6 @@
 ﻿using NetworkManager.DomainContent;
 using NetworkManager.View;
 
-using SQLite;
-
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +10,7 @@ using System.Linq;
 using System.Windows.Threading;
 using NetworkManager.Scheduling;
 using NetworkManager.View.Model;
+using System.Reflection;
 
 namespace NetworkManager {
 
@@ -24,26 +23,13 @@ namespace NetworkManager {
         /// Error handler
         /// </summary>
         public ErrorHandlerWindow errorHandler { get; private set; }
-        
-        /// <summary>
-        /// Configuration
-        /// </summary>
-        public static Properties config { get; private set; } = new Properties(@"config\parameters.properties");
-
-        public static ComputerInfoStore computerInfoStore { get; private set; }
-        public static JobStore jobStore { get; private set; }
 
         public ConfigurationWindow configurationHandler { get; private set; }
 
         public MainWindow() {
-            try {
-                InitializeComponent();
-            } catch(Exception e) {
-                Console.WriteLine(e);
-            }
+            App.logger.Info($"{Assembly.GetExecutingAssembly().GetName().Name} - v{Assembly.GetExecutingAssembly().GetName().Version}");
 
-            // Preapre the database
-            prepareDatabaseConnection();
+            InitializeComponent();
 
             // Detail panels
             computerDetails.mainWindow = this;
@@ -75,18 +61,8 @@ namespace NetworkManager {
                     timer.Start();
                 }
             };
-            timer.Interval = new TimeSpan(0, 0, config.getInt("scantimeout", 30));
+            timer.Interval = new TimeSpan(0, 0, App.config.getInt("scantimeout", 30));
             timer.Start();
-        }
-
-        /// <summary>
-        /// Prepare the SQLite connection
-        /// </summary>
-        private void prepareDatabaseConnection() {
-            var conn = new SQLiteConnection("NetworkManager.sqlite");
-
-            computerInfoStore = new ComputerInfoStore(conn);
-            jobStore = new JobStore(conn);
         }
         
         /// <summary>

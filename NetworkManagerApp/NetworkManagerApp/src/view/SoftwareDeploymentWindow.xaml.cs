@@ -48,7 +48,7 @@ namespace NetworkManager.View {
             if (result == false)
                 return;
 
-            File.Copy(ofd.FileName, MainWindow.config.get("softwarepath") + "/" + Path.GetFileName(ofd.FileName), true);
+            File.Copy(ofd.FileName, App.config.get("softwarepath") + "/" + Path.GetFileName(ofd.FileName), true);
             AppsToDeploy_Loaded(this, null);
         }
         
@@ -59,7 +59,7 @@ namespace NetworkManager.View {
         };
 
         private void AppsToDeploy_Loaded(object sender, RoutedEventArgs e) {
-            string path = MainWindow.config.get("softwarepath");
+            string path = App.config.get("softwarepath");
 
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);

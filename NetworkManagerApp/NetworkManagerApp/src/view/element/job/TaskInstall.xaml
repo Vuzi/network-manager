@@ -31,12 +31,12 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+                        <DataGridTextColumn  Header="Filename" Width="Auto" Binding="{Binding file}" IsReadOnly="True" CanUserReorder="True"/>
                         <DataGridTextColumn  Header="Name" Width="Auto" Binding="{Binding name}" IsReadOnly="True" CanUserReorder="True" FontWeight="Bold"/>
                         <DataGridTextColumn  Header="Publisher" Width="Auto" Binding="{Binding company}" IsReadOnly="True" CanUserReorder="True"/>
                         <DataGridTextColumn  Header="Version" Width="Auto" Binding="{Binding version}" IsReadOnly="True" CanUserReorder="True"/>
                         <DataGridTextColumn  Header="Size" Width="Auto" Binding="{Binding size}" IsReadOnly="True" CanUserReorder="True"/>
-                        <DataGridTextColumn  Header="Filename" Width="Auto" Binding="{Binding file}" IsReadOnly="True" CanUserReorder="True"/>
-                    </DataGrid.Columns>
+                        </DataGrid.Columns>
                 </DataGrid>
 
                 <Label Content="Launch arguments :" Padding="2" HorizontalAlignment="Left" Margin="10,0,0,41" Width="110" Height="21" VerticalAlignment="Bottom"/>

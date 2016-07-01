@@ -4,9 +4,16 @@ using NetworkManager.DomainContent;
 using SQLite;
 using System.Threading.Tasks;
 using NetworkManager.Scheduling;
+using System.IO;
+using System.Reflection;
+
+using log4net;
+using log4net.Config;
 
 namespace NetworkManagerExecutor {
     class Program {
+
+        private static readonly ILog logger = LogManager.GetLogger(typeof(Program));
 
         public static ComputerInfoStore computerInfoStore { get; private set; }
         public static JobStore jobStore { get; private set; }
@@ -21,63 +28,97 @@ namespace NetworkManagerExecutor {
             jobStore = new JobStore(conn);
         }
 
-        static void Main(string[] args) {
+        /// <summary>
+        /// Prepare the logger
+        /// </summary>
+        static private void configureLogger() {
+            var configFile = Directory.GetCurrentDirectory() + @"\log4net.config";
 
+            if (File.Exists(configFile)) {
+                XmlConfigurator.Configure(new FileInfo(configFile));
+            } else {
+                BasicConfigurator.Configure();
+                logger.Warn("No log4net configuration file found");
+            }
+        }
+
+        static void Main(string[] args) {
+            // Configure the logger
+            configureLogger();
+
+            logger.Info($"{Assembly.GetExecutingAssembly().GetName().Name} - v{Assembly.GetExecutingAssembly().GetName().Version}");
+            logger.Debug($"Started in {Directory.GetCurrentDirectory()}");
+        
             // Preapre the database
             prepareDatabaseConnection();
 
             foreach (string id in args) {
-                Job job = jobStore.getJobById(id);
+                Job job = null;
 
-                if (job != null) {
-                    #if DEBUG
-                    Console.WriteLine($"Job => {j.name}");
-                    Console.WriteLine("\tComputers : ");
-                    foreach(var c in job.computers)
-                        Console.WriteLine("\t\t" + c.name);
-                    #endif
-                    
-                    job.status = JobStatus.IN_PROGRESS;
-                    job.startDateTime = DateTime.Now;
-                    jobStore.updateJob(job);
+                try {
+                    job = jobStore.getJobById(id);
 
-                    Parallel.ForEach(job.computers, c => {
-                        Computer computer = new Computer(c);
+                    if (job != null) {
+                        logger.Info($"Job => {job.name} ({id})");
+                        logger.Debug("\tComputers : ");
+                        foreach (var c in job.computers)
+                            logger.Debug("\t\t" + c.name);
 
-                        JobReport report = new JobReport() {
-                            computerName = computer.nameLong,
-                            error = false
-                        };
+                        job.status = JobStatus.IN_PROGRESS;
+                        job.startDateTime = DateTime.Now;
+                        jobStore.updateJob(job);
 
-                        Task.Run(async () => {
-                            report.tasksReports = await computer.performsTasks(job.tasks);
-                        }).Wait();
+                        logger.Debug("\tTasks processing...");
 
-                        // Update report
-                        foreach (JobTaskReport taskReport in report.tasksReports)
-                            if (taskReport.error)
-                                report.error = true;
+                        Parallel.ForEach(job.computers, c => {
+                            Computer computer = new Computer(c);
+                            logger.Debug($"\tTasks processing for {c.name}");
 
-                        // Save the report
-                        jobStore.insertJobReport(job, report);
-                    });
+                            JobReport report = new JobReport() {
+                                computerName = computer.nameLong,
+                                error = false
+                            };
 
-                    // Execution done
-                    job.status = JobStatus.TERMINATED;
-                    job.endDateTime = DateTime.Now;
-                    jobStore.updateJob(job);
+                            Task.Run(async () => {
+                                report.tasksReports = await computer.performsTasks(job.tasks);
+                            }).Wait();
 
-                    job.unSchedule();
+                            // Update report
+                            foreach (JobTaskReport taskReport in report.tasksReports)
+                                if (taskReport.error)
+                                    report.error = true;
+
+                            // Save the report
+                            jobStore.insertJobReport(job, report);
+                        });
+
+                        // Execution done
+                        job.status = JobStatus.TERMINATED;
+                        job.endDateTime = DateTime.Now;
+                        jobStore.updateJob(job);
+
+                        job.unSchedule();
+
+                        logger.Info($"\tJob {job.name} terminated, updated and unscheduled");
+                    } else {
+                        logger.Info($"Job => none ({id})");
+                    }
+                } catch(Exception e) {
+                    logger.Error("An unexpected error occurred", e);
+
+                    if(job != null) {
+                        try {
+                            job.unSchedule();
+
+                            job.status = JobStatus.TERMINATED;
+                            job.endDateTime = DateTime.Now;
+                            jobStore.updateJob(job);
+                        } catch(Exception e2) {
+                            logger.Error("An unexpected error occurred during the handling of the previous exception", e2);
+                        }
+                    }
                 }
-                #if DEBUG
-                else {
-                    Console.WriteLine($"Job => none");
-                }
-                #endif
             }
-
-            Console.ReadLine();
-
         }
     }
 }

@@ -52,22 +52,20 @@ namespace NetworkManager.View.Component {
                 foreach (Computer computer in computers) {
                     string ipAddress = null;
                     string macAddress = null;
-                    
-                    if (computer.isAlive) {
+
+                    // Not connected : get the IP and MAC from local database
+                    var computerInfo = App.computerInfoStore.getComputerInfoByName(computer.nameLong);
+
+                    if (computerInfo != null) {
+                        ipAddress = computer.getIpAddress().ToString();
+                        macAddress = computerInfo.macAddress;
+                    } else if(computer.isAlive) {
                         try {
                             // Connected : get the IP from DNS, and the MAC from WMI
                             ipAddress = computer.getIpAddress().ToString();
                             macAddress = await computer.getMacAddress();
                         } catch (Exception e) {
                             mainWindow.errorHandler.addError(e);
-                        }
-                    } else {
-                        // Not connected : get the IP and MAC from local database
-                        var computerInfo = MainWindow.computerInfoStore.getComputerInfoByName(computer.nameLong);
-
-                        if (computerInfo != null) {
-                            ipAddress = computerInfo.ipAddress;
-                            macAddress = computerInfo.macAddress;
                         }
                     }
 
@@ -202,7 +200,7 @@ namespace NetworkManager.View.Component {
             await Task.Factory.StartNew(() => {
                 Parallel.ForEach(toWakeOnLan, computer => {
                     try {
-                        var computerInfo = MainWindow.computerInfoStore.getComputerInfoByName(computer.nameLong);
+                        var computerInfo = App.computerInfoStore.getComputerInfoByName(computer.nameLong);
 
                         if (computerInfo != null) {
                             Utils.wakeOnLan(computerInfo.macAddress);

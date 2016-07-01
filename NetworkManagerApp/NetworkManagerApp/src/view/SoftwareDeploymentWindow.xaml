@@ -32,12 +32,12 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+                <DataGridTextColumn  Header="Filename" Width="Auto" Binding="{Binding file}" IsReadOnly="True" CanUserReorder="True"/>
                 <DataGridTextColumn  Header="Name" Width="Auto" Binding="{Binding name}" IsReadOnly="True" CanUserReorder="True" FontWeight="Bold"/>
                 <DataGridTextColumn  Header="Publisher" Width="Auto" Binding="{Binding company}" IsReadOnly="True" CanUserReorder="True"/>
                 <DataGridTextColumn  Header="Version" Width="Auto" Binding="{Binding version}" IsReadOnly="True" CanUserReorder="True"/>
                 <DataGridTextColumn  Header="Size" Width="Auto" Binding="{Binding size}" IsReadOnly="True" CanUserReorder="True"/>
-                <DataGridTextColumn  Header="Filename" Width="Auto" Binding="{Binding file}" IsReadOnly="True" CanUserReorder="True"/>
-            </DataGrid.Columns>
+                </DataGrid.Columns>
         </DataGrid>
         <Button x:Name="ButtonLaunch" Click="ButtonLaunch_Click"  Margin="0,0,5,26" Height="36" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="156">
             <DockPanel LastChildFill="True" Width="149" >

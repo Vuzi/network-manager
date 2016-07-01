@@ -138,7 +138,8 @@ namespace NetworkManager.Scheduling {
 
             // Insert
             conn.Insert(jobReport);
-            conn.InsertAll(jobReport.tasksReports);
+            foreach(var taskReport in jobReport.tasksReports)
+                conn.Insert(taskReport);
         }
     }
 }
