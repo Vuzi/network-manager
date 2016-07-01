@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Media;
+using NetworkManager.Scheduling;
 
 namespace NetworkManager.View.Component {
     /// <summary>
@@ -20,80 +21,10 @@ namespace NetworkManager.View.Component {
 
         public JobSchedulerWindow parent { get; set; }
 
+        private Scheduling.Job job;
+
         public JobReportDetails() {
             InitializeComponent();
-        }
-
-        private void detailsGrid_Loaded(object sender, RoutedEventArgs e) {
-
-            var job = new Scheduling.Job() {
-                computers = new List<ComputerInfo>() {
-                    new ComputerInfo { name = "PC 1" },
-                    new ComputerInfo { name = "PC 2" },
-                    new ComputerInfo { name = "PC 3" },
-                    new ComputerInfo { name = "PC 4" },
-                },
-                status = Scheduling.JobStatus.TERMINATED,
-                tasks = new List<Scheduling.JobTask> {
-                    new Scheduling.JobTask() { type = Scheduling.JobTaskType.WAKE_ON_LAN },
-                    new Scheduling.JobTask() { type = Scheduling.JobTaskType.INSTALL_SOFTWARE },
-                    new Scheduling.JobTask() { type = Scheduling.JobTaskType.SHUTDOWN }
-                },
-                reports = new List<Scheduling.JobReport>() {
-                    new Scheduling.JobReport() {
-                        computerName = "PC 1",
-                        error = false,
-                        tasksReports = new List<Scheduling.JobTaskReport>() {
-                            new Scheduling.JobTaskReport() {
-                                error = false,
-                                task = new Scheduling.JobTask() { type = Scheduling.JobTaskType.WAKE_ON_LAN }
-                            },
-                            new Scheduling.JobTaskReport() {
-                                error = false,
-                                task = new Scheduling.JobTask() { type = Scheduling.JobTaskType.INSTALL_SOFTWARE }
-                            },
-                            new Scheduling.JobTaskReport() {
-                                error = false,
-                                task = new Scheduling.JobTask() { type = Scheduling.JobTaskType.SHUTDOWN }
-                            },
-                        }
-                    },
-                    new Scheduling.JobReport() {
-                        computerName = "PC 2",
-                        error = false,
-                        tasksReports = new List<Scheduling.JobTaskReport>() {
-                            new Scheduling.JobTaskReport() {
-                                error = false,
-                                task = new Scheduling.JobTask() { type = Scheduling.JobTaskType.WAKE_ON_LAN }
-                            },
-                            new Scheduling.JobTaskReport() {
-                                error = false,
-                                task = new Scheduling.JobTask() { type = Scheduling.JobTaskType.INSTALL_SOFTWARE }
-                            },
-                            new Scheduling.JobTaskReport() {
-                                error = false,
-                                task = new Scheduling.JobTask() { type = Scheduling.JobTaskType.SHUTDOWN }
-                            },
-                        }
-                    },
-                    new Scheduling.JobReport() {
-                        computerName = "PC 3",
-                        error = true,
-                        tasksReports = new List<Scheduling.JobTaskReport>() {
-                            new Scheduling.JobTaskReport() {
-                                error = false,
-                                task = new Scheduling.JobTask() { type = Scheduling.JobTaskType.WAKE_ON_LAN }
-                            },
-                            new Scheduling.JobTaskReport() {
-                                error = true,
-                                task = new Scheduling.JobTask() { type = Scheduling.JobTaskType.INSTALL_SOFTWARE }
-                            }
-                        }
-                    },
-                }
-            };
-
-            //setJob(job);
         }
 
         List<Tuple<float, string>> messages = new List<Tuple<float, string>> {
@@ -105,6 +36,7 @@ namespace NetworkManager.View.Component {
         };
 
         public void setJob(Scheduling.Job job) {
+            this.job = job;
 
             textBox_PlannedStart.Text = job.scheduledDateTime != DateTime.MinValue ? job.scheduledDateTime.ToString("f",
                 CultureInfo.CreateSpecificCulture("fr-FR")) : "As soon as possible";
@@ -186,6 +118,11 @@ namespace NetworkManager.View.Component {
         private void buttonShowJob_Click(object sender, RoutedEventArgs e) {
             parent.jobDetails.Visibility = Visibility.Visible;
             parent.jobReportDetails.Visibility = Visibility.Collapsed;
+        }
+
+        private void button_JobReload_Click(object sender, RoutedEventArgs e) {
+            if (job != null)
+                setJob(App.jobStore.getJobById(job.id));
         }
     }
 

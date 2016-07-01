@@ -15,8 +15,9 @@ namespace NetworkManager.View.Component {
     public partial class JobDetails : UserControl {
 
         public JobSchedulerWindow parent { get; set; }
-
         private List<Computer> preSelectedComputers { get; set; } = new List<Computer>();
+
+        private Scheduling.Job job;
 
         public JobDetails() {
             InitializeComponent();
@@ -64,6 +65,8 @@ namespace NetworkManager.View.Component {
         /// </summary>
         /// <param name="job">The job to show</param>
         internal void setJob(Scheduling.Job job) {
+            this.job = job;
+
             if(job == null) {
                 reset();
                 return;
@@ -291,6 +294,11 @@ namespace NetworkManager.View.Component {
         private void buttonShowReport_Click(object sender, RoutedEventArgs e) {
             parent.jobDetails.Visibility = Visibility.Collapsed;
             parent.jobReportDetails.Visibility = Visibility.Visible;
+        }
+
+        private void button_JobReload_Click(object sender, RoutedEventArgs e) {
+            if(job != null)
+                setJob(App.jobStore.getJobById(job.id));
         }
     }
 }

@@ -63,5 +63,9 @@ namespace NetworkManager.View {
 
             jobDetails.setJob(null);
         }
+
+        private void button_JobsReload_Click(object sender, RoutedEventArgs e) {
+            updateScheduledJobs();
+        }
     }
 }

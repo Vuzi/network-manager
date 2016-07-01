@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:local="clr-namespace:NetworkManager.View"
         xmlns:model="clr-namespace:NetworkManager.Model"
         xmlns:component="clr-namespace:NetworkManager.View.Component"
@@ -11,6 +12,11 @@
     <Grid>
         <!-- List of all already planned tasks -->
         <Label Content="Planned jobs" VerticalAlignment="Top" Margin="10,10,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="18"/>
+        <Button x:Name="button_JobsReload" Margin="130,16,0,0" HorizontalAlignment="Left" Width="25" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_JobsReload_Click">
+            <DockPanel LastChildFill="True"  Width="15" Height="15">
+                <fa:FontAwesome Icon="Refresh" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </DockPanel>
+        </Button>
         <TreeView x:Name="scheduledJobs" HorizontalAlignment="Left" Margin="10,49,0,41" Width="210" SelectedItemChanged="scheduledJobs_SelectedItemChanged" >
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">

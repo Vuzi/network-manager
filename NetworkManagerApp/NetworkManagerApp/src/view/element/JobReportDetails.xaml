@@ -2,13 +2,19 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:local="clr-namespace:NetworkManager.View.Component"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="550">
     <Grid>
         <Label Content="Selected job's execution report" VerticalAlignment="Top" Margin="10,10,0,0" HorizontalAlignment="Left" Width="326" FontWeight="Bold" FontSize="18"/>
-
+        <Button x:Name="button_JobReload" Margin="285,16,0,0" HorizontalAlignment="Left" Width="25" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_JobReload_Click">
+            <DockPanel LastChildFill="True"  Width="15" Height="15">
+                <fa:FontAwesome Icon="Refresh" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </DockPanel>
+        </Button>
+        
         <!-- Report details -->
         <Label Content="Job execution status :" HorizontalAlignment="Left" Margin="16,44,0,0" VerticalAlignment="Top" Width="123"/>
         <Label x:Name="textBox_SuccessRate" Content="mostly successful (75%)" HorizontalAlignment="Left" Margin="139,44,0,0" VerticalAlignment="Top" FontWeight="Bold" Width="207"/>
@@ -22,7 +28,7 @@
 
         <!-- Detail for each computer -->
         <Label Content="Details for each computer" VerticalAlignment="Top" Margin="11,152,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="15"/>
-        <DataGrid x:Name="detailsGrid" Margin="11,186,10,44" Loaded="detailsGrid_Loaded" CanUserReorderColumns="False" CanUserSortColumns="False" >
+        <DataGrid x:Name="detailsGrid" Margin="11,186,10,44" CanUserReorderColumns="False" CanUserSortColumns="False" >
             <DataGrid.CellStyle>
                 <Style TargetType="{x:Type DataGridCell}">
                     <Style.Triggers>
