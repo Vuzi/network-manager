@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="550">
     <Grid>
-        <Label Content="Selected job" VerticalAlignment="Top" Margin="10,10,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="18"/>
+        <Label x:Name="label_jobDetailsTitle" Content="Selected job" VerticalAlignment="Top" Margin="10,10,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="18"/>
 
         <Grid x:Name="gridControls" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
@@ -50,7 +50,7 @@
             <Button x:Name="buttonAddTask" Content="Add Task" HorizontalAlignment="Left" Margin="71,409,0,0" VerticalAlignment="Top" Width="75" Click="buttonAddTask_Click"/>
         </Grid>
 
-        <Button x:Name="buttonCreateJob" Content="Create a new job" HorizontalAlignment="Left" Margin="10,0,0,10" Width="140" Height="21" VerticalAlignment="Bottom" Click="buttonCreateJob_Click" />
+        <Button x:Name="buttonCreateJob" Content="Register and schedule the job" HorizontalAlignment="Left" Margin="10,0,0,10" Width="189" Height="21" VerticalAlignment="Bottom" Click="buttonCreateJob_Click" />
         <Button x:Name="buttonShowReport" Visibility="Collapsed" Content="Show job reporting" HorizontalAlignment="Left" Margin="10,0,0,10" Width="140" Height="21" VerticalAlignment="Bottom" Click="buttonShowReport_Click" />
     </Grid>
 </UserControl>

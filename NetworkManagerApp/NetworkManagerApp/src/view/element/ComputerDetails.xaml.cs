@@ -224,13 +224,14 @@ namespace NetworkManager.View.Component {
         }
 
         private void button_JobSchedule_Click(object sender, RoutedEventArgs e) {
-            if (computer != null) {
                 JobSchedulerWindow jobScheduler = new JobSchedulerWindow();
                 jobScheduler.Left = mainWindow.Left + 50;
                 jobScheduler.Top = mainWindow.Top + 50;
                 jobScheduler.Show();
-                jobScheduler.selectComputer(computer);
-            }
+                jobScheduler.jobDetails.reset();
+
+                if (computer != null)
+                    jobScheduler.selectComputer(computer);
         }
 
         private async void button_ShutDown_Click(object sender, RoutedEventArgs e) {

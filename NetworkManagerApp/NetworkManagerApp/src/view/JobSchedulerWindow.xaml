@@ -11,7 +11,7 @@
     <Grid>
         <!-- List of all already planned tasks -->
         <Label Content="Planned jobs" VerticalAlignment="Top" Margin="10,10,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="18"/>
-        <TreeView x:Name="scheduledJobs" HorizontalAlignment="Left" Margin="10,49,0,10" Width="210" SelectedItemChanged="scheduledJobs_SelectedItemChanged" >
+        <TreeView x:Name="scheduledJobs" HorizontalAlignment="Left" Margin="10,49,0,41" Width="210" SelectedItemChanged="scheduledJobs_SelectedItemChanged" >
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
                     <Setter Property="IsExpanded" Value="True"/>
@@ -28,6 +28,7 @@
 
             </TreeView.Resources>
         </TreeView>
+        <Button x:Name="newJobButton" Content="Create new Job" VerticalAlignment="Bottom" Margin="10,0,0,10" HorizontalAlignment="Left" Width="210" Click="newJobButton_Click" ></Button>
 
         <!-- Job details -->
         <component:JobDetails x:Name="jobDetails" Margin="220, 0, 0,0" Width="Auto"/>

@@ -16,7 +16,7 @@ namespace NetworkManager.View.Component {
 
         public JobSchedulerWindow parent { get; set; }
 
-        private List<Computer> preSelectedComputers { get; set; }
+        private List<Computer> preSelectedComputers { get; set; } = new List<Computer>();
 
         public JobDetails() {
             InitializeComponent();
@@ -59,13 +59,23 @@ namespace NetworkManager.View.Component {
             }
         }
 
+        /// <summary>
+        /// Show a job in the panel. If the job is null, the panel will be reset
+        /// </summary>
+        /// <param name="job">The job to show</param>
         internal void setJob(Scheduling.Job job) {
-            if(job == null || job.status == JobStatus.CREATED /*|| job.status == JobStatus.SCHEDULED*/) {
+            if(job == null) {
+                reset();
+                return;
+            }
+
+            if(job.status == JobStatus.CREATED /*|| job.status == JobStatus.SCHEDULED*/) {
                 gridControls.IsEnabled = true;
             } else {
                 gridControls.IsEnabled = false;
             }
 
+            label_jobDetailsTitle.Content = "Selected Job";
             textBox_TaskName.Text = job.name;
 
             if(job.scheduledDateTime != DateTime.MinValue) {
@@ -80,8 +90,18 @@ namespace NetworkManager.View.Component {
                 jobNowCheckbox.IsChecked = true;
             }
 
-            // TODO computers
+            // Selected computers
+            selectedComputersGrid.SelectedItems.Clear();
+            foreach (Computer c in selectedComputersGrid.Items) {
+                foreach(ComputerInfo ci in job.computers) {
+                    if(ci.name == c.nameLong) {
+                        selectedComputersGrid.SelectedItems.Add(c);
+                        break;
+                    }
+                }
+            }
 
+            // Tasks
             tasksPanel.Children.Clear();
             foreach (JobTask task in job.tasks) {
                 dynamic panel = null;
@@ -116,6 +136,28 @@ namespace NetworkManager.View.Component {
             buttonCreateJob.Visibility = Visibility.Collapsed;
         }
 
+        /// <summary>
+        /// Reset the panel
+        /// </summary>
+        public void reset() {
+            label_jobDetailsTitle.Content = "New Job";
+            gridControls.IsEnabled = true;
+
+            textBox_TaskName.Text = string.Empty;
+
+            jobNowCheckbox.IsChecked = false;
+            jobDatePicker.SelectedDate = null;
+            jobHoursPicker.SelectedIndex = -1;
+            jobMinutesPicker.SelectedIndex = -1;
+
+            selectedComputersGrid.SelectedItems.Clear();
+
+            tasksPanel.Children.Clear();
+
+            buttonCreateJob.Visibility = Visibility.Visible;
+            buttonShowReport.Visibility = Visibility.Collapsed;
+        }
+
         private async void selectedComputersGrid_Loaded(object sender, RoutedEventArgs e) {
             // Fill the computers
             var domain = new Domain();
@@ -125,7 +167,7 @@ namespace NetworkManager.View.Component {
             fillComputers(domain);
         }
 
-        private void selectedComputersGrid_SelectedCellsChanged(object sender, System.Windows.Controls.SelectedCellsChangedEventArgs e) {
+        private void selectedComputersGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e) {
             selectedComputersLabel.Content = $"{selectedComputersGrid.SelectedItems.Count} computer{(selectedComputersGrid.SelectedItems.Count > 1 ? "s" : "")} selected";
         }
 
@@ -242,6 +284,8 @@ namespace NetworkManager.View.Component {
             job.schedule();
 
             parent.updateScheduledJobs();
+
+            reset();
         }
 
         private void buttonShowReport_Click(object sender, RoutedEventArgs e) {

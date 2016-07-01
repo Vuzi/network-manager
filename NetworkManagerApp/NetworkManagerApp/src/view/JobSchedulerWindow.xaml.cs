@@ -3,15 +3,13 @@ using NetworkManager.DomainContent;
 using System.Windows;
 using System.Collections.Generic;
 using NetworkManager.Model;
-using System;
 using NetworkManager.Scheduling;
-using System.Windows.Controls;
 
 namespace NetworkManager.View {
 
     public partial class JobSchedulerWindow : Window {
 
-        private List<Computer> preSelectedComputers { get; set; }
+        private List<Computer> preSelectedComputers { get; set; } = new List<Computer>();
 
         public JobSchedulerWindow() {
             InitializeComponent();
@@ -57,6 +55,13 @@ namespace NetworkManager.View {
 
                 jobDetails.setJob(job);
             }
+        }
+
+        private void newJobButton_Click(object sender, RoutedEventArgs e) {
+            jobDetails.Visibility = Visibility.Visible;
+            jobReportDetails.Visibility = Visibility.Collapsed;
+
+            jobDetails.setJob(null);
         }
     }
 }
