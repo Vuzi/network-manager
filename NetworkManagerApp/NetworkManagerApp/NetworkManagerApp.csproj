@@ -233,6 +233,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="resource\NetworkManager.sqlite" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
