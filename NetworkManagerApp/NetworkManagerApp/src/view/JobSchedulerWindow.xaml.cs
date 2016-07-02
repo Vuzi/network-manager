@@ -24,7 +24,8 @@ namespace NetworkManager.View {
             //{ JobStatus.CREATED, "Created tasks" },
             { JobStatus.SCHEDULED, "Scheduled tasks" },
             { JobStatus.IN_PROGRESS, "In progress tasks" },
-            { JobStatus.TERMINATED, "Terminated tasks" }
+            { JobStatus.TERMINATED, "Terminated tasks" },
+            { JobStatus.CANCELLED, "Cancelled tasks" }
         };
 
         public void updateScheduledJobs() {

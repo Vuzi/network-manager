@@ -11,7 +11,7 @@ using System.Reflection;
 namespace NetworkManager.Scheduling {
 
     public enum JobStatus {
-        CREATED, SCHEDULED, IN_PROGRESS, TERMINATED
+        CREATED, SCHEDULED, IN_PROGRESS, TERMINATED, CANCELLED
     }
 
     /// <summary>

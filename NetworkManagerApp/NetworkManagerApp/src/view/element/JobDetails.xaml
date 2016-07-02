@@ -58,5 +58,6 @@
 
         <Button x:Name="buttonCreateJob" Content="Register and schedule the job" HorizontalAlignment="Left" Margin="10,0,0,10" Width="189" Height="21" VerticalAlignment="Bottom" Click="buttonCreateJob_Click" />
         <Button x:Name="buttonShowReport" Visibility="Collapsed" Content="Show job reporting" HorizontalAlignment="Left" Margin="10,0,0,10" Width="140" Height="21" VerticalAlignment="Bottom" Click="buttonShowReport_Click" />
+        <Button x:Name="buttonCancel" Visibility="Collapsed" Content="Cancel the job" HorizontalAlignment="Left" Margin="10,0,0,10" Width="140" Height="21" VerticalAlignment="Bottom" Click="buttonCancel_Click" />
     </Grid>
 </UserControl>

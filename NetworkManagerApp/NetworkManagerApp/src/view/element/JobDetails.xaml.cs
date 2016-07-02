@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Controls;
 using NetworkManager.Scheduling;
 using NetworkManager.View.Component.Job;
-using System.Threading.Tasks;
 
 namespace NetworkManager.View.Component {
 
@@ -129,13 +128,23 @@ namespace NetworkManager.View.Component {
                     tasksPanel.Children.Add(panel);
                 }
             }
-
-            buttonShowReport.IsEnabled = true;
+            
+            // Terminated with reports
             if (job.status == JobStatus.TERMINATED && job.reports != null && job.reports.Count > 0) {
                 buttonShowReport.Visibility = Visibility.Visible;
+                buttonCancel.Visibility = Visibility.Collapsed;
                 parent.jobReportDetails.setJob(job);
-            } else
+            } 
+            // Scheduled (can be cancelled)
+            else if (job.status == JobStatus.CREATED || job.status == JobStatus.SCHEDULED) {
                 buttonShowReport.Visibility = Visibility.Collapsed;
+                buttonCancel.Visibility = Visibility.Visible;
+            } 
+            // In progress..
+            else {
+                buttonShowReport.Visibility = Visibility.Collapsed;
+                buttonCancel.Visibility = Visibility.Collapsed;
+            }
             buttonCreateJob.Visibility = Visibility.Collapsed;
         }
 
@@ -159,6 +168,7 @@ namespace NetworkManager.View.Component {
 
             buttonCreateJob.Visibility = Visibility.Visible;
             buttonShowReport.Visibility = Visibility.Collapsed;
+            buttonCancel.Visibility = Visibility.Collapsed;
         }
 
         private async void selectedComputersGrid_Loaded(object sender, RoutedEventArgs e) {
@@ -299,6 +309,23 @@ namespace NetworkManager.View.Component {
         private void button_JobReload_Click(object sender, RoutedEventArgs e) {
             if(job != null)
                 setJob(App.jobStore.getJobById(job.id));
+        }
+
+        private void buttonCancel_Click(object sender, RoutedEventArgs e) {
+            MessageBoxResult result = MessageBox.Show($"Are you sure you want to cancel this job ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.No)
+                return;
+
+            job = App.jobStore.getJobById(job.id);
+
+            if(job.status == JobStatus.CREATED || job.status == JobStatus.SCHEDULED) {
+                job.unSchedule();
+                job.status = JobStatus.CANCELLED;
+                App.jobStore.updateJob(job);
+            }
+
+            setJob(job);
+            parent.updateScheduledJobs();
         }
     }
 }
