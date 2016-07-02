@@ -46,7 +46,12 @@
             
             <Controls:TreeViewEx.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type model:DomainModel}" ItemsSource="{Binding Items}">
-                    <TextBlock Text="{Binding name}" FontSize="14" FontWeight="DemiBold" />
+                    <TextBlock FontSize="14" FontWeight="DemiBold">
+                        <Run Text="{Binding name}"></Run>
+                        <Run Text=" (" Foreground="DarkBlue"></Run>
+                        <Run Text="{Binding numberOfMachine}" Foreground="DarkBlue"></Run>
+                        <Run Text=")" Foreground="DarkBlue"></Run>
+                    </TextBlock>
                 </HierarchicalDataTemplate>
                 
                 <DataTemplate DataType="{x:Type model:ComputerModel}">
@@ -68,7 +73,7 @@
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding isHide}" Value="true" >
-                                            <Setter Property="Visibility" Value="Hidden"/>
+                                            <Setter Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -86,12 +91,6 @@
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding computer.isAlive}" Value="false" >
                                             <Setter Property="Opacity" Value="0.5"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding isHide}" Value="false" >
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding isHide}" Value="true" >
-                                            <Setter Property="Visibility" Value="Hidden"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -113,7 +112,7 @@
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding isHide}" Value="true" >
-                                            <Setter Property="Visibility" Value="Hidden"/>
+                                            <Setter Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -162,7 +161,5 @@
         </Button>
         <CheckBox x:Name="checkBox_FilterOn" Content="On" IsChecked="True" Checked="checkBox_FilterOn_Checked" Unchecked="checkBox_FilterOn_Unchecked" HorizontalAlignment="Left" Margin="12,54,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.528,-0.105"/>
         <CheckBox x:Name="checkBox_FilterOff" Content="Off" IsChecked="True" Checked="checkBox_FilterOff_Checked" Unchecked="checkBox_FilterOff_Unchecked" HorizontalAlignment="Left" Margin="60,54,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.528,-0.105"/>
-        <Label x:Name="label" Content="Number of machines" Margin="117,43,0,0" VerticalAlignment="Top" FontSize="11" HorizontalAlignment="Left" Width="112"/>
-        <Label x:Name="label_NumberOfMachines" Content="0" Margin="116,65,0,0" VerticalAlignment="Top" FontSize="11" HorizontalContentAlignment="Center" Width="112" FontWeight="Bold" HorizontalAlignment="Left" Padding="2"/>
     </Grid>
 </Window>

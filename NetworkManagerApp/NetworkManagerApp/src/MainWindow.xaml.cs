@@ -22,6 +22,7 @@ namespace NetworkManager {
     /// </summary>
     public partial class MainWindow : Window {
 
+
         /// <summary>
         /// Error handler
         /// </summary>
@@ -36,6 +37,8 @@ namespace NetworkManager {
         public static JobStore jobStore { get; private set; }
 
         public ConfigurationWindow configurationHandler { get; private set; }
+
+        
 
         public MainWindow() {
             try {
@@ -112,8 +115,7 @@ namespace NetworkManager {
 
                     if(needRefresh) // If an update is needed
                         updateSelectedComputers();
-
-                    countMachine();
+                    
 
                 } else {
                     // Set the new domain model
@@ -122,7 +124,6 @@ namespace NetworkManager {
                     // Expand the root node
                     TreeViewExItem item = (TreeViewExItem)List_Computer.ItemContainerGenerator.ContainerFromItem(domainModel);
                     item.IsExpanded = true;
-                    countMachine();
                 }
                 CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(List_Computer.ItemsSource);
                 view.SortDescriptions.Add(new SortDescription("computer.name", ListSortDirection.Ascending));
@@ -185,16 +186,8 @@ namespace NetworkManager {
             timer.Interval = new TimeSpan(0, 0, inSeconds);
             timer.Start();
         }
-        public void countMachine()
-        {
-            int cpt = 0;
-            foreach (ComputerModel item in (List_Computer.Items[0] as DomainModel).Items)
-            {
-                if (item.isHide != true)
-                    cpt++;
-            }
-            label_NumberOfMachines.Content = cpt.ToString();
-        }
+        
+        
         private void List_Computer_KeyUp(object sender, System.Windows.Input.KeyEventArgs e) {
             switch(e.Key) {
                 case System.Windows.Input.Key.Up:

@@ -15,6 +15,7 @@ namespace NetworkManager.View.Model {
         public string name { get; set; }
         private Dictionary<string, ComputerModel> computers { get; set; }
         private Dictionary<string, DomainModel> domains { get; set; }
+        
 
         internal void notifyPropertyChanged(String info) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
@@ -23,6 +24,29 @@ namespace NetworkManager.View.Model {
         public DomainModel() {
             computers = new Dictionary<string, ComputerModel>();
             domains = new Dictionary<string, DomainModel>();
+        }
+        public int _numberOfMachine;
+        public int numberOfMachine
+        {
+            get
+            {
+                _numberOfMachine = 0;
+                using (IEnumerator<ComputerModel> enumerator = getComputers().GetEnumerator())
+                {
+                    while (enumerator.MoveNext())
+                    {
+                        if (enumerator.Current.isHide == false)
+                            _numberOfMachine++;
+                    }
+                        
+                }
+                return _numberOfMachine;
+            }
+            set
+            {
+                _numberOfMachine = value;
+                notifyPropertyChanged("numberOfMachine");
+            }
         }
 
         public DomainModel getDomain(string name) {
