@@ -39,7 +39,7 @@ namespace NetworkManager {
         /// Prepare the logger
         /// </summary>
         static private void configureLogger() {
-            var configFile = Directory.GetCurrentDirectory() + @"\log4net.config";
+            var configFile = Directory.GetCurrentDirectory() + @"\config\log4net-app.config";
 
             if (File.Exists(configFile)) {
                 XmlConfigurator.Configure(new FileInfo(configFile));

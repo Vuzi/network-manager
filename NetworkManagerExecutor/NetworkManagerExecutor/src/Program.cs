@@ -32,7 +32,7 @@ namespace NetworkManagerExecutor {
         /// Prepare the logger
         /// </summary>
         static private void configureLogger() {
-            var configFile = Directory.GetCurrentDirectory() + @"\log4net.config";
+            var configFile = Directory.GetCurrentDirectory() + @"\config\log4net-executor.config";
 
             if (File.Exists(configFile)) {
                 XmlConfigurator.Configure(new FileInfo(configFile));
@@ -106,7 +106,7 @@ namespace NetworkManagerExecutor {
                 } catch(Exception e) {
                     logger.Error("An unexpected error occurred", e);
 
-                    if(job != null) {
+                    if (job != null) {
                         try {
                             job.unSchedule();
 
@@ -117,7 +117,11 @@ namespace NetworkManagerExecutor {
                             logger.Error("An unexpected error occurred during the handling of the previous exception", e2);
                         }
                     }
+
+                    Environment.Exit(1);
                 }
+
+                logger.Info("Execution done, now closing..");
             }
         }
     }

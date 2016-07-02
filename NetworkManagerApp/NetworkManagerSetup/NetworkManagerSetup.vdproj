@@ -15,7 +15,7 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_24AE715D7F22414D870FCCB59612D7FD"
+        "MsmKey" = "8:_037A49383F13438E995462289B91655A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -23,6 +23,12 @@
         {
         "MsmKey" = "8:_34F6D4CCBCF0B237922165B21DE07B6C"
         "OwnerKey" = "8:_C38FF2300F2341C9B41A64524520D201"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_34F6D4CCBCF0B237922165B21DE07B6C"
+        "OwnerKey" = "8:_E584C2C851DB47D7BBE22AADB8170998"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -39,8 +45,38 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_7AD9F6760E57DF15EE7C8691AF9176B9"
+        "OwnerKey" = "8:_C38FF2300F2341C9B41A64524520D201"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7AD9F6760E57DF15EE7C8691AF9176B9"
+        "OwnerKey" = "8:_E584C2C851DB47D7BBE22AADB8170998"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_7D423A1E73F743E8A7B00182BBCA339D"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_872AE6C14B8D15BB90D7917D841B869B"
+        "OwnerKey" = "8:_C38FF2300F2341C9B41A64524520D201"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_872AE6C14B8D15BB90D7917D841B869B"
+        "OwnerKey" = "8:_E584C2C851DB47D7BBE22AADB8170998"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_872AE6C14B8D15BB90D7917D841B869B"
+        "OwnerKey" = "8:_FA1FB2969212BC7853384A1297BD072F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -64,12 +100,30 @@
         "Entry"
         {
         "MsmKey" = "8:_B6606F9E906AAE55C2FD75A56AC43F43"
+        "OwnerKey" = "8:_E584C2C851DB47D7BBE22AADB8170998"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B6606F9E906AAE55C2FD75A56AC43F43"
         "OwnerKey" = "8:_C38FF2300F2341C9B41A64524520D201"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
+        "MsmKey" = "8:_BBC7EFFFC05F4C73A7A17CCEA7C71613"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_C38FF2300F2341C9B41A64524520D201"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E584C2C851DB47D7BBE22AADB8170998"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -87,8 +141,20 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_FA1FB2969212BC7853384A1297BD072F"
+        "OwnerKey" = "8:_E584C2C851DB47D7BBE22AADB8170998"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_C38FF2300F2341C9B41A64524520D201"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_E584C2C851DB47D7BBE22AADB8170998"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -106,6 +172,12 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_872AE6C14B8D15BB90D7917D841B869B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_38EB8F2501C78EBE5A164B6879F59871"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -113,6 +185,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_EBAEF97C2249BA3F17BA4643B70D4F3E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_7AD9F6760E57DF15EE7C8691AF9176B9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -222,12 +300,12 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_24AE715D7F22414D870FCCB59612D7FD"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_037A49383F13438E995462289B91655A"
             {
-            "SourcePath" = "8:C:\\Program Files (x86)\\ESGI\\Network Manager\\NetworkManager.sqlite"
-            "TargetName" = "8:NetworkManager.sqlite"
+            "SourcePath" = "8:..\\NetworkManagerApp\\config\\log4net-app.config"
+            "TargetName" = "8:log4net-app.config"
             "Tag" = "8:"
-            "Folder" = "8:_289F391238A04610A7F9B9C6E9D94D94"
+            "Folder" = "8:_05B9238146664842996CF9C0791426B7"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -324,6 +402,37 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7AD9F6760E57DF15EE7C8691AF9176B9"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_7AD9F6760E57DF15EE7C8691AF9176B9"
+                    {
+                    "Name" = "8:log4net.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:log4net.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_289F391238A04610A7F9B9C6E9D94D94"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7D423A1E73F743E8A7B00182BBCA339D"
             {
             "SourcePath" = "8:..\\NetworkManagerApp\\resource\\icon.ico"
@@ -342,6 +451,37 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_872AE6C14B8D15BB90D7917D841B869B"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Microsoft.Win32.TaskScheduler, Version=2.5.20.0, Culture=neutral, PublicKeyToken=0d013ddd5178a2ae, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_872AE6C14B8D15BB90D7917D841B869B"
+                    {
+                    "Name" = "8:Microsoft.Win32.TaskScheduler.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Microsoft.Win32.TaskScheduler.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_289F391238A04610A7F9B9C6E9D94D94"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8BADFE943CB0A33225543A0BF84C8D86"
@@ -426,6 +566,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BBC7EFFFC05F4C73A7A17CCEA7C71613"
+            {
+            "SourcePath" = "8:..\\..\\NetworkManagerExecutor\\NetworkManagerExecutor\\config\\log4net-executor.config"
+            "TargetName" = "8:log4net-executor.config"
+            "Tag" = "8:"
+            "Folder" = "8:_05B9238146664842996CF9C0791426B7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EBAEF97C2249BA3F17BA4643B70D4F3E"
             {
             "AssemblyRegister" = "3:1"
@@ -461,7 +621,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NetworkManagerCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:NetworkManagerCore, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_FA1FB2969212BC7853384A1297BD072F"
@@ -511,6 +671,17 @@
                     "Condition" = "8:"
                     "Transitive" = "11:FALSE"
                     "Property" = "8:_9A68780195814D4EA1FAA2023D6A2F48"
+                        "Folders"
+                        {
+                        }
+                    }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_613EB8BF76B3496EB7DE005AB0E32193"
+                    {
+                    "Name" = "8:log"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_8D424CED44354D30BD2A6117ED84C281"
                         "Folders"
                         {
                         }
@@ -567,7 +738,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Network Manager"
         "ProductCode" = "8:{47DE7700-F561-45CB-9AD3-CBD3DFA44959}"
-        "PackageCode" = "8:{007A8B20-7AE0-45E3-9219-DCF9C6C3CE4B}"
+        "PackageCode" = "8:{DD148394-6F4E-48C5-AD48-72A0C7D5EFFB}"
         "UpgradeCode" = "8:{AE53F5F8-FC5A-4E1C-A0BD-EA34775D7D0A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -1137,6 +1308,34 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
             "OutputProjectGuid" = "8:{0830E338-1181-4645-A4A0-1ADF42663BE9}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E584C2C851DB47D7BBE22AADB8170998"
+            {
+            "SourcePath" = "8:..\\..\\NetworkManagerExecutor\\NetworkManagerExecutor\\obj\\Release\\NetworkManagerExecutor.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_289F391238A04610A7F9B9C6E9D94D94"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{198C47F2-6A23-465A-B561-415335581B8C}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {

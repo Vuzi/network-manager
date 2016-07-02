@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{0830E338-1181-4645-A4A0-1ADF42663BE9}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NetworkManagerApp</RootNamespace>
     <AssemblyName>NetworkManagerApp</AssemblyName>
@@ -78,10 +78,10 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-	<ApplicationDefinition Include="src\App.xaml">
-		<Generator>MSBuild:Compile</Generator>
-		<SubType>Designer</SubType>
-	</ApplicationDefinition>
+    <ApplicationDefinition Include="src\App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
     <Compile Include="src\model\ComputerModel.cs" />
     <Compile Include="src\model\DomainModel.cs" />
     <Compile Include="src\model\ScheduledJobModel.cs" />
@@ -132,10 +132,10 @@
     <Compile Include="src\view\SoftwareDeploymentWindow.xaml.cs">
       <DependentUpon>SoftwareDeploymentWindow.xaml</DependentUpon>
     </Compile>
-	<Compile Include="src\App.xaml.cs">
-		<DependentUpon>App.xaml</DependentUpon>
-		<SubType>Code</SubType>
-	</Compile>
+    <Compile Include="src\App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Page Include="src\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -223,6 +223,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="config\log4net-app.config" />
     <None Include="config\parameters.properties">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
