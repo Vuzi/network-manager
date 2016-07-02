@@ -1,4 +1,5 @@
 ﻿using NetworkManager.DomainContent;
+using NetworkManager.View.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -33,10 +34,33 @@ namespace NetworkManager.View.Model {
             return computers.GetValueOrDefault(name);
         }
 
+        /// <summary>
+        /// Sort the items
+        /// </summary>
+        private void sortItems() {
+            Items.Sort<object>((a, b) => {
+                if (a is DomainModel) {
+                    if (b is DomainModel)
+                        return (a as DomainModel).name.CompareTo((b as DomainModel).name);
+                    else
+                        return -1;
+                } else if(a is ComputerModel) {
+                    if (b is DomainModel)
+                        return 1;
+                    else
+                        return (a as ComputerModel).computer.nameLong.CompareTo((b as ComputerModel).computer.nameLong);
+                }
+
+                return 0;
+            });
+        }
+
         public void addDomain(DomainModel domain) {
             domains[domain.name] = domain;
             Items.Insert(computerIndex, domain);
             computerIndex++;
+
+            sortItems();
 
             notifyPropertyChanged("Domains");
         }
@@ -44,6 +68,8 @@ namespace NetworkManager.View.Model {
         public void addComputer(ComputerModel computer) {
             computers[computer.computer.name] = computer;
             Items.Add(computer);
+
+            sortItems();
 
             notifyPropertyChanged("Computers");
         }
@@ -59,6 +85,9 @@ namespace NetworkManager.View.Model {
 
                 if (item.computer.name == computer) {
                     Items.RemoveAt(i);
+
+                    sortItems();
+
                     notifyPropertyChanged("Computers");
                     break;
                 }
@@ -77,6 +106,9 @@ namespace NetworkManager.View.Model {
                 if (item.name == domain) {
                     Items.RemoveAt(i);
                     computerIndex--;
+
+                    sortItems();
+
                     notifyPropertyChanged("Domains");
                     break;
                 }
@@ -140,11 +172,11 @@ namespace NetworkManager.View.Model {
             return domainModel;
         }
 
-        public bool updateDomainModel(DomainModel domainModel, System.Collections.IList selectedComputers) {
-            return updateDomainModel(this, domainModel, selectedComputers);
+        public bool updateDomainModel(DomainModel domainModel, bool showOnComputers, bool showOffComputers, System.Collections.IList selectedComputers) {
+            return updateDomainModel(this, domainModel, showOnComputers, showOffComputers, selectedComputers);
         }
 
-        public static bool updateDomainModel(DomainModel oldDomainModel, DomainModel domainModel, System.Collections.IList selectedComputers) {
+        public static bool updateDomainModel(DomainModel oldDomainModel, DomainModel domainModel, bool showOnComputers, bool showOffComputers, System.Collections.IList selectedComputers) {
             bool needRefresh = false;
 
             // Update & adding of new computers
@@ -152,17 +184,19 @@ namespace NetworkManager.View.Model {
                 var oldComputerModel = oldDomainModel.getComputer(computerModel.computer.name);
 
                 if (oldComputerModel != null) {
-                    // If an update is needed
-                    if (oldComputerModel.computer.isAlive != computerModel.computer.isAlive) {
-                        foreach (var item in selectedComputers) {
-                            if (item is ComputerModel && (item as ComputerModel).computer.nameLong == computerModel.computer.nameLong) {
-                                needRefresh = true;
+                    if ((computerModel.computer.isAlive && showOnComputers) || (!computerModel.computer.isAlive && showOffComputers)) {
+                        // If an update is needed
+                        if (oldComputerModel.computer.isAlive != computerModel.computer.isAlive) {
+                            foreach (var item in selectedComputers) {
+                                if (item is ComputerModel && (item as ComputerModel).computer.nameLong == computerModel.computer.nameLong) {
+                                    needRefresh = true;
+                                }
                             }
                         }
-                    }
-
-                    oldComputerModel.computer = computerModel.computer;
-                } else
+                        oldComputerModel.computer = computerModel.computer;
+                    } else
+                        oldDomainModel.removeComputer(computerModel);
+                } else if((computerModel.computer.isAlive && showOnComputers) ||(!computerModel.computer.isAlive && showOffComputers))
                     oldDomainModel.addComputer(computerModel);
             }
 
@@ -171,7 +205,7 @@ namespace NetworkManager.View.Model {
                 var oldSubdomainModel = oldDomainModel.getDomain(subdomainModel.name);
 
                 if (oldSubdomainModel != null)
-                    needRefresh = needRefresh || updateDomainModel(oldSubdomainModel, subdomainModel, selectedComputers);
+                    needRefresh = needRefresh || updateDomainModel(oldSubdomainModel, subdomainModel, showOnComputers, showOffComputers, selectedComputers);
                 else
                     oldDomainModel.addDomain(subdomainModel);
             }
@@ -219,6 +253,17 @@ namespace NetworkManager.View.Model {
             }
 
             return needRefresh;
+        }
+    }
+
+    static class ListUtils {
+        public static void Sort<T>(this ObservableCollection<T> collection, Comparison<T> comparison) {
+            var sortableList = new List<T>(collection);
+            sortableList.Sort(comparison);
+
+            for (int i = 0; i < sortableList.Count; i++) {
+                collection.Move(collection.IndexOf(sortableList[i]), i);
+            }
         }
     }
 }

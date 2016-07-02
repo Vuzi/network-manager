@@ -80,7 +80,7 @@ namespace NetworkManager {
 
                 if (!List_Computer.Items.IsEmpty) {
                     // Update the existing model with the new generated one
-                    var needRefresh = (List_Computer.Items[0] as DomainModel).updateDomainModel(domainModel, List_Computer.SelectedItems);
+                    var needRefresh = (List_Computer.Items[0] as DomainModel).updateDomainModel(domainModel, checkBox_FilterOn.IsChecked.Value, checkBox_FilterOff.IsChecked.Value, List_Computer.SelectedItems);
 
                     if(needRefresh) // If an update is needed
                         updateSelectedComputers();
@@ -195,6 +195,10 @@ namespace NetworkManager {
                 domainModel.updateComputerModel(computer);
                 updateSelectedComputers();
             }
+        }
+
+        private async void checkBox_Filter_Click(object sender, RoutedEventArgs e) {
+            await updateListComputers();
         }
     }
 

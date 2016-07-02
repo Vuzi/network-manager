@@ -42,7 +42,11 @@
                 <fa:FontAwesome Icon="Wrench" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </DockPanel>
         </Button>
-        <Controls:TreeViewEx x:Name="List_Computer" Loaded="List_Machine_Loaded"  Margin="10,48,10,10" MouseLeftButtonUp="List_Computer_MouseLeftButtonUp" KeyUp="List_Computer_KeyUp" >
+
+        <CheckBox x:Name="checkBox_FilterOn" Content="On" IsChecked="True" HorizontalAlignment="Left" Margin="12,50,0,0" VerticalAlignment="Top" Click="checkBox_Filter_Click" />
+        <CheckBox x:Name="checkBox_FilterOff" Content="Off" IsChecked="True" HorizontalAlignment="Left" Margin="60,50,0,0" VerticalAlignment="Top" Click="checkBox_Filter_Click" />
+
+        <Controls:TreeViewEx x:Name="List_Computer" Loaded="List_Machine_Loaded"  Margin="10,70,10,10" MouseLeftButtonUp="List_Computer_MouseLeftButtonUp" KeyUp="List_Computer_KeyUp" >
 
             <Controls:TreeViewEx.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type model:DomainModel}" ItemsSource="{Binding Items}">
