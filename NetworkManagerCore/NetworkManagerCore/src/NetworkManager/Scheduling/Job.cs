@@ -22,13 +22,14 @@ namespace NetworkManager.Scheduling {
         [PrimaryKey, NotNull]
         public string id { get; set; }
         public string name { get; set; }
-        public DateTime scheduledDateTime { get; set; }
-        public DateTime startDateTime { get; set; }
-        public DateTime endDateTime { get; set; }
         [NotNull]
-        public DateTime creationDate { get; set; }
+        public DateTime creationDateTime { get; set; }
+        public DateTime lastExecutionDateTime { get; set; }
         [NotNull]
         public JobStatus status { get; set; }
+        public bool cyclic { get; set; }
+        public bool executeNow { get; set; }
+        public string triggerDescription { get; set; }
 
         [Ignore]
         public List<ComputerInfo> computers { get; set; }
@@ -49,7 +50,7 @@ namespace NetworkManager.Scheduling {
         /// <summary>
         /// Schedule the job
         /// </summary>
-        public void schedule() {
+        public void schedule(Trigger trigger) {
             string exe = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\NetworkManagerExecutor.exe";
             
             using (TaskService ts = new TaskService()) {
@@ -60,7 +61,7 @@ namespace NetworkManager.Scheduling {
                 td.Principal.RunLevel = TaskRunLevel.Highest;
 
                 // Trigger
-                td.Triggers.Add(new TimeTrigger((scheduledDateTime != DateTime.MinValue ? scheduledDateTime : DateTime.Now).AddSeconds(3)));
+                td.Triggers.Add(trigger);
                 
                 // Action
                 td.Actions.Add(new ExecAction(exe, $"{id}", Directory.GetCurrentDirectory()));
@@ -70,6 +71,22 @@ namespace NetworkManager.Scheduling {
                 folder.RegisterTaskDefinition($"NetworkManager Task #{id}", td);
             }
 
+        }
+
+        public void schedule() {
+            schedule(new TimeTrigger(DateTime.Now.AddSeconds(3)));
+        }
+
+        public Trigger getScheduledTrigger() {
+            using (TaskService ts = new TaskService()) {
+                var task = ts.FindTask($"NetworkManager Task #{id}", true);
+
+                if(task != null) {
+                    return task.Definition.Triggers.Count > 0 ? task.Definition.Triggers[0] : null;
+                }
+            }
+
+            return null;
         }
     }
 

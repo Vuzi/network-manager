@@ -15,27 +15,19 @@ namespace NetworkManager.View.Component {
 
         public JobSchedulerWindow parent { get; set; }
         private List<Computer> preSelectedComputers { get; set; } = new List<Computer>();
-
+        private Microsoft.Win32.TaskScheduler.Trigger trigger;
+        private List<FrameworkElement> elementToDisable;
         private Scheduling.Job job;
 
         public JobDetails() {
             InitializeComponent();
 
-            // Fill the hours and minutes
-            jobHoursPicker.Items.Clear();
-            for (int i = 0; i < 24; i++)
-                jobHoursPicker.Items.Add($"{i}h");
-
-            jobMinutesPicker.Items.Clear();
-            for (int i = 0; i < 60; i++)
-                jobMinutesPicker.Items.Add($"{i}mn");
-
             // Control elements to disable
             elementToDisable = new List<FrameworkElement> {
                 textBox_TaskName,
-                jobDatePicker,
-                jobHoursPicker,
-                jobMinutesPicker,
+                button_changeTrigger,
+                textBox_plannedTrigger,
+                jobCyclicCheckbox,
                 jobNowCheckbox,
                 selectedComputersGrid,
                 buttonSelectAll,
@@ -64,8 +56,6 @@ namespace NetworkManager.View.Component {
             }
         }
 
-        List<FrameworkElement> elementToDisable;
-
         /// <summary>
         /// Show a job in the panel. If the job is null, the panel will be reset
         /// </summary>
@@ -87,16 +77,14 @@ namespace NetworkManager.View.Component {
             label_jobDetailsTitle.Content = "Selected Job";
             textBox_TaskName.Text = job.name;
 
-            if(job.scheduledDateTime != DateTime.MinValue) {
-                jobNowCheckbox.IsChecked = false;
-                jobDatePicker.SelectedDate = job.scheduledDateTime;
-                jobHoursPicker.SelectedIndex = job.scheduledDateTime.Hour;
-                jobMinutesPicker.SelectedIndex = job.scheduledDateTime.Minute;
-            } else {
-                jobHoursPicker.SelectedIndex = -1;
-                jobMinutesPicker.SelectedIndex = -1;
-                jobDatePicker.SelectedDate = null;
+            if(job.executeNow) {
                 jobNowCheckbox.IsChecked = true;
+                jobCyclicCheckbox.IsChecked = false;
+                textBox_plannedTrigger.Text = string.Empty;
+            } else {
+                jobNowCheckbox.IsChecked = false;
+                jobCyclicCheckbox.IsChecked = job.cyclic;
+                textBox_plannedTrigger.Text = job.triggerDescription;
             }
 
             // Selected computers
@@ -135,22 +123,31 @@ namespace NetworkManager.View.Component {
                     tasksPanel.Children.Add(panel);
                 }
             }
-            
-            // Terminated with reports
-            if (job.status == JobStatus.TERMINATED && job.reports != null && job.reports.Count > 0) {
-                buttonShowReport.Visibility = Visibility.Visible;
-                buttonCancel.Visibility = Visibility.Collapsed;
-                parent.jobReportDetails.setJob(job);
-            } 
-            // Scheduled (can be cancelled)
-            else if (job.status == JobStatus.CREATED || job.status == JobStatus.SCHEDULED) {
-                buttonShowReport.Visibility = Visibility.Collapsed;
-                buttonCancel.Visibility = Visibility.Visible;
-            } 
-            // In progress..
-            else {
-                buttonShowReport.Visibility = Visibility.Collapsed;
-                buttonCancel.Visibility = Visibility.Collapsed;
+
+            // Actions accordingly to the status
+            switch(job.status) {
+                case JobStatus.CANCELLED:
+                case JobStatus.TERMINATED:
+                    buttonShowReport.Visibility = Visibility.Visible;
+                    buttonCancel.Visibility = Visibility.Collapsed;
+                    parent.jobReportDetails.setJob(job);
+                    break;
+                case JobStatus.SCHEDULED:
+                    buttonShowReport.Visibility = Visibility.Visible;
+                    buttonCancel.Visibility = Visibility.Visible;
+                    buttonCancel.IsEnabled = true;
+                    parent.jobReportDetails.setJob(job);
+                    break;
+                case JobStatus.IN_PROGRESS:
+                    buttonShowReport.Visibility = Visibility.Visible;
+                    buttonCancel.Visibility = Visibility.Visible;
+                    buttonCancel.IsEnabled = false;
+                    break;
+                case JobStatus.CREATED:
+                default:
+                    buttonShowReport.Visibility = Visibility.Collapsed;
+                    buttonCancel.Visibility = Visibility.Collapsed;
+                    break;
             }
             buttonCreateJob.Visibility = Visibility.Collapsed;
         }
@@ -164,10 +161,10 @@ namespace NetworkManager.View.Component {
 
             textBox_TaskName.Text = string.Empty;
 
+            trigger = null;
             jobNowCheckbox.IsChecked = false;
-            jobDatePicker.SelectedDate = null;
-            jobHoursPicker.SelectedIndex = -1;
-            jobMinutesPicker.SelectedIndex = -1;
+            textBox_plannedTrigger.Text = string.Empty;
+            jobCyclicCheckbox.IsChecked = false;
 
             selectedComputersGrid.SelectedItems.Clear();
 
@@ -187,9 +184,9 @@ namespace NetworkManager.View.Component {
         }
 
         private void jobNow_Click(object sender, RoutedEventArgs e) {
-            jobDatePicker.IsEnabled = jobNowCheckbox.IsChecked == false;
-            jobHoursPicker.IsEnabled = jobNowCheckbox.IsChecked == false;
-            jobMinutesPicker.IsEnabled = jobNowCheckbox.IsChecked == false;
+            textBox_plannedTrigger.IsEnabled = jobNowCheckbox.IsChecked == false;
+            button_changeTrigger.IsEnabled = jobNowCheckbox.IsChecked == false;
+            jobCyclicCheckbox.IsEnabled = jobNowCheckbox.IsChecked == false;
         }
 
         private async void selectedComputersGrid_Loaded(object sender, RoutedEventArgs e) {
@@ -253,24 +250,10 @@ namespace NetworkManager.View.Component {
 
         private void buttonCreateJob_Click(object sender, RoutedEventArgs e) {
 
-            // Get the picked date
-            DateTime jobDateTime;
-            if (jobNowCheckbox.IsChecked == true) {
-                jobDateTime = DateTime.MinValue;
-            } else {
-                if (jobDatePicker.SelectedDate == null || jobHoursPicker.SelectedItem == null || jobMinutesPicker.SelectedItem == null) {
-                    MessageBox.Show("Error : An execution date must be provided to the job", "Job creation error");
-                    return;
-                }
-
-                jobDateTime = jobDatePicker.SelectedDate.Value;
-                jobDateTime = jobDateTime.AddHours(jobHoursPicker.SelectedIndex);
-                jobDateTime = jobDateTime.AddMinutes(jobMinutesPicker.SelectedIndex);
-
-                if (jobDateTime < DateTime.Now) {
-                    MessageBox.Show("Error : The specified date can't be in the past", "Job creation error");
-                    return;
-                }
+            // If a trigger is defined
+            if (trigger == null && !jobNowCheckbox.IsChecked.Value) {
+                MessageBox.Show("Error : An execution trigger must be provided to the job", "Job creation error");
+                return;
             }
 
             // Get the selected computers
@@ -303,8 +286,10 @@ namespace NetworkManager.View.Component {
 
             // OK, create the job
             var job = new Scheduling.Job {
-                scheduledDateTime = jobDateTime,
-                creationDate = DateTime.Now,
+                creationDateTime = DateTime.Now,
+                cyclic = jobCyclicCheckbox.IsChecked.Value,
+                executeNow = trigger == null,
+                triggerDescription = trigger != null ? trigger.ToString() : "As soon as possible",
                 computers = selectedComputers,
                 status = JobStatus.SCHEDULED,
                 tasks = tasks,
@@ -315,7 +300,10 @@ namespace NetworkManager.View.Component {
             App.jobStore.insertJob(job);
 
             // Create a windows task
-            job.schedule();
+            if (jobNowCheckbox.IsChecked.Value)
+                job.schedule();
+            else
+                job.schedule(trigger);
 
             parent.updateScheduledJobs();
 
@@ -347,6 +335,15 @@ namespace NetworkManager.View.Component {
 
             setJob(job);
             parent.updateScheduledJobs();
+        }
+
+        private void button_changeTrigger_Click(object sender, RoutedEventArgs e) {
+            var triggerDialog = new Microsoft.Win32.TaskScheduler.TriggerEditDialog();
+
+            triggerDialog.ShowDialog();
+            trigger = triggerDialog.Trigger;
+
+            textBox_plannedTrigger.Text = trigger.ToString();
         }
     }
 }

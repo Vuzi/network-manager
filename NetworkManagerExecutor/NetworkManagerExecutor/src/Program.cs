@@ -54,6 +54,7 @@ namespace NetworkManagerExecutor {
 
             foreach (string id in args) {
                 Job job = null;
+                DateTime now = DateTime.Now;
 
                 try {
                     job = jobStore.getJobById(id);
@@ -65,7 +66,6 @@ namespace NetworkManagerExecutor {
                             logger.Debug("\t\t" + c.name);
 
                         job.status = JobStatus.IN_PROGRESS;
-                        job.startDateTime = DateTime.Now;
                         jobStore.updateJob(job);
 
                         logger.Debug("\tTasks processing...");
@@ -76,6 +76,7 @@ namespace NetworkManagerExecutor {
 
                             JobReport report = new JobReport() {
                                 computerName = computer.nameLong,
+                                startDateTime = now,
                                 error = false
                             };
 
@@ -91,16 +92,25 @@ namespace NetworkManagerExecutor {
                                 }
                             }
 
+                            report.endDateTime = DateTime.Now;
+
                             // Save the report
                             jobStore.insertJobReport(job, report);
                         });
 
                         // Execution done
-                        job.status = JobStatus.TERMINATED;
-                        job.endDateTime = DateTime.Now;
-                        jobStore.updateJob(job);
+                        job.lastExecutionDateTime = DateTime.Now;
 
-                        job.unSchedule();
+                        // If cyclic, re-schedule the job
+                        if (job.cyclic)
+                            job.status = JobStatus.SCHEDULED;
+                        // If not, update it as terminated and un-schedule it
+                        else {
+                            job.status = JobStatus.TERMINATED;
+                            job.unSchedule();
+                        }
+
+                        jobStore.updateJob(job);
 
                         logger.Info($"\tJob {job.name} terminated, updated and unscheduled");
                     } else {
@@ -111,10 +121,13 @@ namespace NetworkManagerExecutor {
 
                     if (job != null) {
                         try {
-                            job.unSchedule();
+                            if (job.cyclic)
+                                job.status = JobStatus.SCHEDULED;
+                            else {
+                                job.status = JobStatus.TERMINATED;
+                                job.unSchedule();
+                            }
 
-                            job.status = JobStatus.TERMINATED;
-                            job.endDateTime = DateTime.Now;
                             jobStore.updateJob(job);
                         } catch(Exception e2) {
                             logger.Error("An unexpected error occurred during the handling of the previous exception", e2);

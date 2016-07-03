@@ -45,14 +45,13 @@ namespace NetworkManager.View.Component {
         public void setJob(Scheduling.Job job) {
             this.job = job;
 
-            textBox_PlannedStart.Text = job.scheduledDateTime != DateTime.MinValue ? job.scheduledDateTime.ToString("f",
-                CultureInfo.CreateSpecificCulture("fr-FR")) : "As soon as possible";
-
-            textBox_RealStart.Text = job.startDateTime.ToString("f",
+            textBox_CreationDate.Text = job.creationDateTime.ToString("f",
                 CultureInfo.CreateSpecificCulture("fr-FR"));
 
-            var diff = (job.endDateTime - job.startDateTime);
-            textBox_Duration.Text = (int)diff.TotalMinutes + " minutes " + (int)(diff.TotalSeconds%60) + " seconds";
+            textBox_LastExecutionDate.Text = job.lastExecutionDateTime != DateTime.MinValue ? job.lastExecutionDateTime.ToString("f",
+                CultureInfo.CreateSpecificCulture("fr-FR")) : "Never";
+            
+            textBox_StartTrigger.Text = job.triggerDescription;
 
             float success = job.reports.Aggregate(0, (sum, jr) => jr.error ? sum : sum + 1) / (float)job.reports.Count * 100f;
             string message = null;
@@ -64,7 +63,10 @@ namespace NetworkManager.View.Component {
                 }
             }
 
-            textBox_SuccessRate.Content = $"{message} ({(int)success}%)";
+            if (success < 0 || float.IsNaN(success))
+                textBox_SuccessRate.Content = "-";
+            else
+                textBox_SuccessRate.Content = $"{message} ({(int)success}%)";
 
             // Grid clear
             detailsGrid.Items.Clear();
@@ -74,6 +76,18 @@ namespace NetworkManager.View.Component {
             detailsGrid.Columns.Add(new DataGridTextColumn {
                 Header = "Computer Name",
                 Binding = new Binding("computerName")
+            });
+            detailsGrid.Columns.Add(new DataGridTextColumn {
+                Header = "Start",
+                Binding = new Binding("startDateTime")
+            });
+            detailsGrid.Columns.Add(new DataGridTextColumn {
+                Header = "End",
+                Binding = new Binding("endDateTime")
+            });
+            detailsGrid.Columns.Add(new DataGridTextColumn {
+                Header = "Duration",
+                Binding = new Binding("duration")
             });
 
             int i = 0;
@@ -88,9 +102,14 @@ namespace NetworkManager.View.Component {
 
             // Row creations
             foreach (var report in job.reports) {
-                var dynamicObject = new ExpandoObject() as IDictionary<string, Object>;
+                var dynamicObject = new ExpandoObject() as IDictionary<string, object>;
 
                 dynamicObject.Add("computerName", report.computerName);
+                dynamicObject.Add("startDateTime", report.startDateTime.ToString("dd/MM/yyyy HH:mm:ss"));
+                dynamicObject.Add("endDateTime", report.endDateTime.ToString("dd/MM/yyyy HH:mm:ss"));
+                
+                var diff = (report.endDateTime - report.startDateTime);
+                dynamicObject.Add("duration", (int)diff.TotalMinutes + " minutes " + (int)(diff.TotalSeconds % 60) + " seconds");
 
                 for (i = 0; i < job.tasks.Count; i++) {
                     if (report.tasksReports.Count > i)
@@ -105,7 +124,7 @@ namespace NetworkManager.View.Component {
             // Row styling
             for (i = 0; i < job.reports.Count; i++) {
                 for (int j = 0; j < job.reports[i].tasksReports.Count; j++) {
-                    var cell = detailsGrid.GetCell(i, j + 1);
+                    var cell = detailsGrid.GetCell(i, j + 4);
 
                     switch ((cell.Content as TextBlock).Text) {
                         case "-":

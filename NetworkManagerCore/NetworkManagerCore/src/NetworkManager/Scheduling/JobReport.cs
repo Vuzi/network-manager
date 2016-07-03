@@ -1,5 +1,6 @@
 ﻿
 using SQLite;
+using System;
 using System.Collections.Generic;
 
 namespace NetworkManager.Scheduling {
@@ -13,6 +14,8 @@ namespace NetworkManager.Scheduling {
         public string computerName { get; set; }
         [NotNull]
         public bool error { get; set; }
+        public DateTime startDateTime { get; set; }
+        public DateTime endDateTime { get; set; }
         [Ignore]
         public List<JobTaskReport> tasksReports { get; set; }
     }

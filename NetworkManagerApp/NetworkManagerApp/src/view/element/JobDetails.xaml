@@ -14,7 +14,7 @@
                 <fa:FontAwesome Icon="Refresh" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </DockPanel>
         </Button>
-        
+
         <Grid x:Name="gridControls" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
             <!-- Taks name -->
@@ -22,16 +22,13 @@
             <Label Content="Job name (optional) :" HorizontalAlignment="Left" Margin="16,44,0,0" VerticalAlignment="Top" Width="149"/>
 
             <!-- Task date -->
-            <Label Content="Scheduled execution" VerticalAlignment="Top" Margin="16,75,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="15"/>
+            <Label Content="Scheduled execution" VerticalAlignment="Top" Margin="10,98,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="15"/>
 
-            <Label Content="Planned date :" HorizontalAlignment="Left" Margin="16,107,0,0" VerticalAlignment="Top" Width="149"/>
-            <DatePicker x:Name="jobDatePicker" HorizontalAlignment="Left" Margin="17,131,0,0" VerticalAlignment="Top"/>
-
-            <Label Content="Planned hour :" Padding="2" Margin="185,107,0,0" VerticalAlignment="Top" Height="21" HorizontalAlignment="Left" Width="146"/>
-            <ComboBox x:Name="jobHoursPicker" HorizontalAlignment="Left" Margin="185,132,0,0" VerticalAlignment="Top" Width="51"></ComboBox>
-            <ComboBox x:Name="jobMinutesPicker" HorizontalAlignment="Left" Margin="241,132,0,0" VerticalAlignment="Top" Width="63"></ComboBox>
-            <CheckBox x:Name="jobNowCheckbox" Content="Now" HorizontalAlignment="Left" Margin="333,136,0,0" VerticalAlignment="Top" Click="jobNow_Click"/>
+            <Button x:Name="button_changeTrigger" Content="Change" HorizontalAlignment="Left" Margin="389,133,0,0" VerticalAlignment="Top" Width="75" Click="button_changeTrigger_Click"/>
+            <TextBox x:Name="textBox_plannedTrigger" HorizontalAlignment="Left" Height="20" Margin="91,133,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="283"/>
+            <CheckBox x:Name="jobNowCheckbox" Content="Now" HorizontalAlignment="Left" Margin="32,136,0,0" VerticalAlignment="Top" Click="jobNow_Click"/>
             <Rectangle Fill="Gray" Height="9" Margin="10,177,0,0" VerticalAlignment="Top"/>
+            <CheckBox x:Name="jobCyclicCheckbox" Content="Is Cyclic" HorizontalAlignment="Left" Margin="479,136,0,0" VerticalAlignment="Top" Click="jobNow_Click"/>
 
             <!-- Selected computers -->
             <Label Content="Computers" VerticalAlignment="Top" Margin="11,188,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="15"/>
@@ -54,10 +51,12 @@
                 <StackPanel x:Name="tasksPanel" Orientation="Vertical" VerticalAlignment="Stretch" />
             </ScrollViewer>
             <Button x:Name="buttonAddTask" Content="Add Task" HorizontalAlignment="Left" Margin="71,409,0,0" VerticalAlignment="Top" Width="75" Click="buttonAddTask_Click"/>
+            <Rectangle Fill="Gray" Height="9" Margin="10,84,0,0" VerticalAlignment="Top"/>
         </Grid>
-
-        <Button x:Name="buttonCreateJob" Content="Register and schedule the job" HorizontalAlignment="Left" Margin="10,0,0,10" Width="189" Height="21" VerticalAlignment="Bottom" Click="buttonCreateJob_Click" />
-        <Button x:Name="buttonShowReport" Visibility="Collapsed" Content="Show job reporting" HorizontalAlignment="Left" Margin="10,0,0,10" Width="140" Height="21" VerticalAlignment="Bottom" Click="buttonShowReport_Click" />
-        <Button x:Name="buttonCancel" Visibility="Collapsed" Content="Cancel the job" HorizontalAlignment="Left" Margin="10,0,0,10" Width="140" Height="21" VerticalAlignment="Bottom" Click="buttonCancel_Click" />
+        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,10" Width="530" Height="21" VerticalAlignment="Bottom">
+            <Button x:Name="buttonCreateJob" Margin="0,0,10,0" Content="Register and schedule the job" Width="189" Height="21" Click="buttonCreateJob_Click" />
+            <Button x:Name="buttonShowReport" Margin="0,0,10,0" Visibility="Collapsed" Content="Show job reporting" Width="140" Height="21" Click="buttonShowReport_Click" />
+            <Button x:Name="buttonCancel" Margin="0,0,10,0" Visibility="Collapsed" Content="Cancel the job" Width="140" Height="21"  Click="buttonCancel_Click" />
+        </WrapPanel>
     </Grid>
 </UserControl>
