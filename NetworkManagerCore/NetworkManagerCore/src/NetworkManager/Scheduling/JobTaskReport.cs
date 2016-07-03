@@ -9,8 +9,7 @@ namespace NetworkManager.Scheduling {
         public string id { get; set; }
         public bool error { get; set; }
         public string extra { get; set; }
-
-        [NotNull]
+        
         public int order { get; set; }
         [NotNull]
         public string taskId { get; set; }

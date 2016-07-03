@@ -57,9 +57,7 @@ namespace NetworkManager.Scheduling {
                 td.RegistrationInfo.Description = $"Network Manager Task #{id}";
                 td.RegistrationInfo.Author = $"Network Manager v{Assembly.GetExecutingAssembly().GetName().Version}";
                 td.Settings.DisallowStartIfOnBatteries = false;
-                td.Principal.UserId = "SYSTEM";
                 td.Principal.RunLevel = TaskRunLevel.Highest;
-                td.Principal.LogonType = TaskLogonType.ServiceAccount;
 
                 // Trigger
                 td.Triggers.Add(new TimeTrigger((scheduledDateTime != DateTime.MinValue ? scheduledDateTime : DateTime.Now).AddSeconds(3)));

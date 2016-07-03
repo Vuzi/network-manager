@@ -27,6 +27,13 @@ namespace NetworkManager.View.Component {
             InitializeComponent();
         }
 
+        Dictionary<JobTaskType, string> headers = new Dictionary<JobTaskType, string> {
+            { JobTaskType.INSTALL_SOFTWARE, "Software installation" },
+            { JobTaskType.REBOOT, "Reboot" },
+            { JobTaskType.SHUTDOWN, "Shutdown" },
+            { JobTaskType.WAKE_ON_LAN, "Wake On Lan" },
+        };
+
         List<Tuple<float, string>> messages = new List<Tuple<float, string>> {
             Tuple.Create(99f, "successful"),
             Tuple.Create(74f, "mostly successful"),
@@ -72,7 +79,7 @@ namespace NetworkManager.View.Component {
             int i = 0;
             foreach (var task in job.tasks) {
                 detailsGrid.Columns.Add(new DataGridTextColumn {
-                    Header = task.type.ToString(),
+                    Header = headers.GetValueOrDefault(task.type),
                     Binding = new Binding($"task{i}")
                 });
 

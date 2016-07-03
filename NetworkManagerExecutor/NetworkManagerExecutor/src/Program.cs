@@ -84,9 +84,12 @@ namespace NetworkManagerExecutor {
                             }).Wait();
 
                             // Update report
-                            foreach (JobTaskReport taskReport in report.tasksReports)
-                                if (taskReport.error)
+                            foreach (JobTaskReport taskReport in report.tasksReports) {
+                                if (taskReport.error) {
                                     report.error = true;
+                                    logger.Error($"\tTask failed : {taskReport.extra}");
+                                }
+                            }
 
                             // Save the report
                             jobStore.insertJobReport(job, report);
