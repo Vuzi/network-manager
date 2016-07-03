@@ -29,22 +29,27 @@ namespace NetworkManager.View.Component {
             jobMinutesPicker.Items.Clear();
             for (int i = 0; i < 60; i++)
                 jobMinutesPicker.Items.Add($"{i}mn");
+
+            // Control elements to disable
+            elementToDisable = new List<FrameworkElement> {
+                textBox_TaskName,
+                jobDatePicker,
+                jobHoursPicker,
+                jobMinutesPicker,
+                jobNowCheckbox,
+                selectedComputersGrid,
+                buttonSelectAll,
+                buttonDeselectAll,
+                buttonAddTask,
+                selectedComputersLabel,
+                tasksPanel
+            };
         }
 
-        private void buttonAddTask_Click(object sender, RoutedEventArgs e) {
-            TaskSelectionWindow selectTask = new TaskSelectionWindow();
-            selectTask.mainWindow = this;
-            selectTask.Left = parent.Left + 50;
-            selectTask.Top = parent.Top + 50;
-            selectTask.Show();
-        }
-
-        private void jobNow_Click(object sender, RoutedEventArgs e) {
-            jobDatePicker.IsEnabled = jobNowCheckbox.IsChecked == false;
-            jobHoursPicker.IsEnabled = jobNowCheckbox.IsChecked == false;
-            jobMinutesPicker.IsEnabled = jobNowCheckbox.IsChecked == false;
-        }
-
+        /// <summary>
+        /// Fill recusively the computer panel with the provided domain
+        /// </summary>
+        /// <param name="d"></param>
         private void fillComputers(Domain d) {
             foreach (Computer c in d.computers) {
                 selectedComputersGrid.Items.Add(c);
@@ -59,11 +64,13 @@ namespace NetworkManager.View.Component {
             }
         }
 
+        List<FrameworkElement> elementToDisable;
+
         /// <summary>
         /// Show a job in the panel. If the job is null, the panel will be reset
         /// </summary>
         /// <param name="job">The job to show</param>
-        internal void setJob(Scheduling.Job job) {
+        public void setJob(Scheduling.Job job) {
             this.job = job;
 
             if(job == null) {
@@ -71,10 +78,10 @@ namespace NetworkManager.View.Component {
                 return;
             }
 
-            if(job.status == JobStatus.CREATED /*|| job.status == JobStatus.SCHEDULED*/) {
-                gridControls.IsEnabled = true;
+            if(job.status == JobStatus.CREATED) {
+                elementToDisable.ForEach(element => element.IsEnabled = true);
             } else {
-                gridControls.IsEnabled = false;
+                elementToDisable.ForEach(element => element.IsEnabled = false);
             }
 
             label_jobDetailsTitle.Content = "Selected Job";
@@ -153,7 +160,7 @@ namespace NetworkManager.View.Component {
         /// </summary>
         public void reset() {
             label_jobDetailsTitle.Content = "New Job";
-            gridControls.IsEnabled = true;
+            elementToDisable.ForEach(element => element.IsEnabled = true);
 
             textBox_TaskName.Text = string.Empty;
 
@@ -169,6 +176,20 @@ namespace NetworkManager.View.Component {
             buttonCreateJob.Visibility = Visibility.Visible;
             buttonShowReport.Visibility = Visibility.Collapsed;
             buttonCancel.Visibility = Visibility.Collapsed;
+        }
+
+        private void buttonAddTask_Click(object sender, RoutedEventArgs e) {
+            TaskSelectionWindow selectTask = new TaskSelectionWindow();
+            selectTask.mainWindow = this;
+            selectTask.Left = parent.Left + 50;
+            selectTask.Top = parent.Top + 50;
+            selectTask.Show();
+        }
+
+        private void jobNow_Click(object sender, RoutedEventArgs e) {
+            jobDatePicker.IsEnabled = jobNowCheckbox.IsChecked == false;
+            jobHoursPicker.IsEnabled = jobNowCheckbox.IsChecked == false;
+            jobMinutesPicker.IsEnabled = jobNowCheckbox.IsChecked == false;
         }
 
         private async void selectedComputersGrid_Loaded(object sender, RoutedEventArgs e) {
