@@ -240,17 +240,30 @@ namespace NetworkManager.DomainContent {
             WMIExecutionResult result = null;
 
             try {
-                string destPath = $@"C:\Windows\Temp\{Path.GetFileName(path)}";
+                string destPath = $@"C:\Windows\Temp\{Path.GetFileName(path).Replace(' ', '_')}";
 
                 // Copy the file
                 uploadFile(path, destPath);
 
                 try {
+                    // MSI special case
+                    if (path.ToLower().EndsWith(".msi")) {
+                        string[] newArgs = new string[args.Length + 4];
+                        newArgs[0] = "/quiet";
+                        newArgs[1] = "/norestart";
+                        newArgs[2] = "/i";
+                        newArgs[3] = destPath;
+
+                        for (int i = 0; i < args.Length; i++)
+                            newArgs[i + 4] = args[i];
+
+                        args = newArgs;
+                        destPath = "msiexec.exe";
+                    }
+
                     // Start the install remotely
-                    if (path.ToLower().EndsWith(".msi"))
-                        result = await exec("msiexec.exe /i " + destPath, args, timeout * 1000);
-                    else
-                        result = await exec(destPath, args, timeout * 1000);
+                    result = await exec(destPath, args, timeout * 1000);
+
                 } catch (Exception e) {
                     throw e;
                 } finally {
