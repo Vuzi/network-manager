@@ -14,20 +14,20 @@
                 <fa:FontAwesome Icon="Refresh" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </DockPanel>
         </Button>
-        
+
         <!-- Report details -->
         <Label Content="Job execution status :" HorizontalAlignment="Left" Margin="16,44,0,0" VerticalAlignment="Top" Width="123"/>
         <Label x:Name="textBox_SuccessRate" Content="mostly successful (75%)" HorizontalAlignment="Left" Margin="139,44,0,0" VerticalAlignment="Top" FontWeight="Bold" Width="207"/>
-        <TextBox x:Name="textBox_PlannedStart" HorizontalAlignment="Left" Height="21" Margin="105,76,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="148"/>
-        <Label Content="Planned start :" HorizontalAlignment="Left" Margin="16,73,0,0" VerticalAlignment="Top" Width="149"/>
-        <TextBox x:Name="textBox_RealStart" HorizontalAlignment="Left" Height="21" Margin="105,108,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="148"/>
-        <Label Content="Real start :" HorizontalAlignment="Left" Margin="16,104,0,0" VerticalAlignment="Top" Width="149"/>
-        <Label Content="Duration :" HorizontalAlignment="Left" Margin="258,73,0,0" VerticalAlignment="Top" Width="149"/>
-        <TextBox x:Name="textBox_Duration" HorizontalAlignment="Left" Height="21" Margin="331,76,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="163"/>
+        <TextBox x:Name="textBox_CreationDate" IsReadOnly="True" HorizontalAlignment="Left" Height="21" Margin="105,76,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="166"/>
+        <Label Content="Creation Date :" HorizontalAlignment="Left" Margin="16,73,0,0" VerticalAlignment="Top" Width="149"/>
+        <TextBox x:Name="textBox_StartTrigger" IsReadOnly="True" HorizontalAlignment="Left" Height="21" Margin="105,108,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="433"/>
+        <Label Content="Start Trigger :" HorizontalAlignment="Left" Margin="16,104,0,0" VerticalAlignment="Top" Width="149"/>
+        <Label Content="Last Execution :" HorizontalAlignment="Left" Margin="276,73,0,0" VerticalAlignment="Top" Width="150"/>
+        <TextBox x:Name="textBox_LastExecutionDate" IsReadOnly="True" HorizontalAlignment="Left" Height="21" Margin="372,76,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="166"/>
         <Rectangle Fill="Gray" Height="9" Margin="10,140,0,0" VerticalAlignment="Top"/>
 
         <!-- Detail for each computer -->
-        <Label Content="Details for each computer" VerticalAlignment="Top" Margin="11,152,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="15"/>
+        <Label Content="Details for each report" VerticalAlignment="Top" Margin="11,152,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="15"/>
         <DataGrid x:Name="detailsGrid" Margin="11,186,10,44" CanUserReorderColumns="False" CanUserSortColumns="False" >
             <DataGrid.CellStyle>
                 <Style TargetType="{x:Type DataGridCell}">
