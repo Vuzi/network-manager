@@ -198,20 +198,7 @@ namespace NetworkManager.View.Component {
         /// Update all the information of the selected computer
         /// </summary>
         public async Task updateComputer() {
-            //if (MainWindow.config.get("detailsautoload") == "true")
-                await Task.WhenAll(updateComputerInformations(), updateLoggedUsers(), updateInstalledSoftwares());
-            //else {
-            //    if (loggedUserToken != null)
-            //        loggedUserToken.Cancel();
-            //
-            //    dataGrid_ConnectedUsers.ItemsSource = null;
-            //
-            //     if (installedSofwaresToken != null)
-            //        installedSofwaresToken.Cancel();
-            //
-            //    dataGrid_ShowAllInstalledSoftware.ItemsSource = null;
-            //    await updateComputerInformations();
-            //}
+            await Task.WhenAll(updateComputerInformations(), updateLoggedUsers(), updateInstalledSoftwares());
         }
 
         private void button_Installsoftware_Click(object sender, RoutedEventArgs e) {
@@ -224,14 +211,14 @@ namespace NetworkManager.View.Component {
         }
 
         private void button_JobSchedule_Click(object sender, RoutedEventArgs e) {
-                JobSchedulerWindow jobScheduler = new JobSchedulerWindow();
-                jobScheduler.Left = mainWindow.Left + 50;
-                jobScheduler.Top = mainWindow.Top + 50;
-                jobScheduler.Show();
-                jobScheduler.jobDetails.reset();
+            JobSchedulerWindow jobScheduler = new JobSchedulerWindow();
+            jobScheduler.Left = mainWindow.Left + 50;
+            jobScheduler.Top = mainWindow.Top + 50;
+            jobScheduler.Show();
+            jobScheduler.jobDetails.reset();
 
-                if (computer != null)
-                    jobScheduler.selectComputer(computer);
+            if (computer != null)
+                jobScheduler.selectComputer(computer);
         }
 
         private async void button_ShutDown_Click(object sender, RoutedEventArgs e) {
