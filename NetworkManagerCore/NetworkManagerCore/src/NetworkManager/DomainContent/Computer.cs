@@ -11,6 +11,7 @@ using NetworkManager.WMIExecution;
 
 using System.Net.NetworkInformation;
 using NetworkManager.Scheduling;
+using System.Timers;
 
 namespace NetworkManager.DomainContent {
 
@@ -171,6 +172,31 @@ namespace NetworkManager.DomainContent {
             rdcProcess.StartInfo.FileName = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\system32\mstsc.exe");
             rdcProcess.StartInfo.Arguments = $"/v {nameLong} /admin";
             rdcProcess.Start();
+        }
+
+        /// <summary>
+        /// Start a remote desktop connection to the computer
+        /// </summary>
+        public void startRemoteDesktop(string login, string password) {
+            Process rdcProcess = new Process();
+
+            rdcProcess.StartInfo.FileName = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\system32\cmdkey.exe");
+            rdcProcess.StartInfo.Arguments = $"/generic:TERMSRV/{nameLong} /user:{login} /pass:{password}";
+            rdcProcess.Start();
+
+            rdcProcess.StartInfo.FileName = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\system32\mstsc.exe");
+            rdcProcess.StartInfo.Arguments = $"/v {nameLong}";
+            rdcProcess.Start();
+
+            Timer timer = new Timer();
+            timer.Elapsed += (source, e) => {
+                rdcProcess.StartInfo.FileName = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\system32\cmdkey.exe");
+                rdcProcess.StartInfo.Arguments = $"/delete:TERMSRV/{nameLong}";
+                rdcProcess.Start();
+            };
+            timer.Interval = 1000;
+            timer.AutoReset = false;
+            timer.Enabled = true;
         }
 
         /// <summary>

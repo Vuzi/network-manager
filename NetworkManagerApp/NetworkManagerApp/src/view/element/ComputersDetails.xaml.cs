@@ -2,12 +2,11 @@
 using NetworkManager.DomainContent;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows;
-using System.IO;
+using System.Diagnostics;
 
 namespace NetworkManager.View.Component {
     /// <summary>
@@ -241,11 +240,24 @@ namespace NetworkManager.View.Component {
             await updateComputers();
         }
 
-        private void button_StartRemoteDesktop_Click(object sender, RoutedEventArgs e)
-        {
+        private void button_StartRemoteDesktop_Click(object sender, RoutedEventArgs e) {
             List<Computer>  computersToRemoteDesktop = computers.FindAll(c => c.isAlive);
-            foreach(Computer c in computersToRemoteDesktop)
-                c.startRemoteDesktop();
+
+            PromptWindow promptWindow = new PromptWindow();
+            promptWindow.Left = mainWindow.Left + 250;
+            promptWindow.Top = mainWindow.Top + 250;
+            promptWindow.ShowDialog();
+
+            if (promptWindow.getChoice() == PromptWindowChoice.CANCEL)
+                return;
+
+            if (promptWindow.getChoice() == PromptWindowChoice.CONNECT 
+                && promptWindow.getLogin().Length > 0 && promptWindow.getPassword().Length > 0)
+                foreach (Computer c in computersToRemoteDesktop)
+                    c.startRemoteDesktop(promptWindow.getLogin(), promptWindow.getPassword());
+            else
+                foreach (Computer c in computersToRemoteDesktop)
+                    c.startRemoteDesktop();
         }
     }
 

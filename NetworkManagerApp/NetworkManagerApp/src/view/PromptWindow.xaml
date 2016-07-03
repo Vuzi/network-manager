@@ -1,0 +1,22 @@
+﻿<Window x:Class="NetworkManager.View.PromptWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NetworkManager.View"
+        mc:Ignorable="d"
+        Title="Network Manager - Credential Prompt" Height="198.427" Width="329.302" Background="LightGray" Icon="../../resource/icon.ico" ResizeMode="NoResize">
+    <Grid>
+        <Label Content="Credentials for the remote desktops" Margin="10,10,12,0" VerticalAlignment="Top" FontSize="14" HorizontalContentAlignment="Center"/>
+
+        <Label Content="Login" HorizontalAlignment="Left" Margin="20,48,0,0" VerticalAlignment="Top" />
+        <Label Content="Password" HorizontalAlignment="Left" Margin="20,78,0,0" VerticalAlignment="Top" Width="100" Height="25"/>
+        <TextBox x:Name="textBox_Login" HorizontalAlignment="Left" Height="21" Margin="83,52,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="196" PreviewKeyDown="enterEvent" />
+        <PasswordBox x:Name="textBox_Password" HorizontalAlignment="Left" Height="21" Margin="83,79,0,0" VerticalAlignment="Top" Width="196" PreviewKeyDown="enterEvent" />
+
+        <Button x:Name="button_Connect" Click="button_Connect_Click" Content="Connect" HorizontalAlignment="Left" Margin="20,0,0,15" VerticalAlignment="Bottom" Width="75" RenderTransformOrigin="0.236,0.233"/>
+        <Button x:Name="button_ConnectManually" Click="button_ConnectManually_Click" Content="Connect manually" HorizontalAlignment="Left" Margin="100,0,0,15" VerticalAlignment="Bottom" Width="116" RenderTransformOrigin="0.236,0.233"/>
+        <Button x:Name="button_Cancel" Click="button_Cancel_Click" Content="Cancel" Margin="221,0,16,15" VerticalAlignment="Bottom" RenderTransformOrigin="0.236,0.233"/>
+
+    </Grid>
+</Window>
