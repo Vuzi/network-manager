@@ -240,6 +240,13 @@ namespace NetworkManager.View.Component {
         private async void button_ComputersReload_Click(object sender, RoutedEventArgs e) {
             await updateComputers();
         }
+
+        private void button_StartRemoteDesktop_Click(object sender, RoutedEventArgs e)
+        {
+            List<Computer>  computersToRemoteDesktop = computers.FindAll(c => c.isAlive);
+            foreach(Computer c in computersToRemoteDesktop)
+                c.startRemoteDesktop();
+        }
     }
 
     public class ComputerDetailModel {

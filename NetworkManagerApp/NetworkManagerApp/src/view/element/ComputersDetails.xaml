@@ -42,6 +42,12 @@
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" >Install Software</TextBlock>
             </DockPanel>
         </Button>
+        <Button x:Name="button_StartRemoteDesktop" Margin="673,37,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125" Click="button_StartRemoteDesktop_Click" >
+            <DockPanel LastChildFill="True" Width="121">
+                <fa:FontAwesome Icon="Desktop" FontSize="16px"  VerticalAlignment="Center" Margin="5,0,0,0" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Text="Remote Desktop" Width="89" />
+            </DockPanel>
+        </Button>
 
         <Rectangle Fill="Gray" Height="9" Margin="0,81,0,0" VerticalAlignment="Top"/>
 
