@@ -351,18 +351,18 @@ namespace NetworkManager.View.Component {
             textBox_plannedTrigger.Text = trigger.ToString();
         }
 
-        private void buttonDelete_Click(object sender, RoutedEventArgs e)
-        {
+        private void buttonDelete_Click(object sender, RoutedEventArgs e) {
             MessageBoxResult result = MessageBox.Show($"Are you sure you want to delete this job ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.No)
                 return;
 
             job = App.jobStore.getJobById(job.id);
 
-            if (job.status == JobStatus.TERMINATED || job.status == JobStatus.CANCELLED)
-            {
+            if (job.status == JobStatus.TERMINATED || job.status == JobStatus.CANCELLED) {
                 App.jobStore.deleteJob(job);
             }
+
+            reset();
             parent.updateScheduledJobs();
         }
     }
