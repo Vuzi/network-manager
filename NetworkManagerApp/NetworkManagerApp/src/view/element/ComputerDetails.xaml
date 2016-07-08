@@ -93,7 +93,7 @@
 
         <!-- Connected users -->
         <Label x:Name="label_ConnectedUsers" Content="Connected Users" HorizontalAlignment="Left" Margin="10,202,0,0" VerticalAlignment="Top" Width="146" Height="30px" FontWeight="Bold" FontSize="14"/>
-        <Button x:Name="button_ConnectedUsersReload" Margin="128,204,0,0" HorizontalAlignment="Left" Width="25" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ConnectedUsersReload_Click">
+        <Button x:Name="button_ConnectedUsersReload" Margin="150,204,0,0" HorizontalAlignment="Left" Width="25" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_ConnectedUsersReload_Click">
             <DockPanel LastChildFill="True"  Width="15" Height="15">
                 <fa:FontAwesome Icon="Refresh" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </DockPanel>
@@ -124,7 +124,7 @@
 
         <!-- Installed sofwares -->
         <Label x:Name="label_InstalledSoftware" Content="Installed Softwares" HorizontalAlignment="Left" Margin="10,476,0,0" VerticalAlignment="Top" Width="148" Height="30px" FontWeight="Bold" FontSize="14"/>
-        <Button x:Name="button_InstalledSoftwaresReload" Margin="144,479,0,0" HorizontalAlignment="Left" Width="25" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_InstalledSoftwaresReload_Click">
+        <Button x:Name="button_InstalledSoftwaresReload" Margin="160,479,0,0" HorizontalAlignment="Left" Width="25" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_InstalledSoftwaresReload_Click">
             <DockPanel LastChildFill="True"  Width="15" Height="15">
                 <fa:FontAwesome Icon="Refresh" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </DockPanel>

@@ -12,7 +12,7 @@
     <Grid>
         <!-- List of all already planned tasks -->
         <Label Content="Planned jobs" VerticalAlignment="Top" Margin="10,10,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="18"/>
-        <Button x:Name="button_JobsReload" Margin="130,16,0,0" HorizontalAlignment="Left" Width="25" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_JobsReload_Click">
+        <Button x:Name="button_JobsReload" Margin="133,16,0,0" HorizontalAlignment="Left" Width="25" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_JobsReload_Click">
             <DockPanel LastChildFill="True"  Width="15" Height="15">
                 <fa:FontAwesome Icon="Refresh" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </DockPanel>

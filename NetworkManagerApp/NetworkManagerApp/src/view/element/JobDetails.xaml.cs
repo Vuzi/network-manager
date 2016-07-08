@@ -130,22 +130,26 @@ namespace NetworkManager.View.Component {
                 case JobStatus.TERMINATED:
                     buttonShowReport.Visibility = Visibility.Visible;
                     buttonCancel.Visibility = Visibility.Collapsed;
+                    buttonDelete.Visibility = Visibility.Visible;
                     parent.jobReportDetails.setJob(job);
                     break;
                 case JobStatus.SCHEDULED:
                     buttonShowReport.Visibility = Visibility.Visible;
+                    buttonDelete.Visibility = Visibility.Collapsed;
                     buttonCancel.Visibility = Visibility.Visible;
                     buttonCancel.IsEnabled = true;
                     parent.jobReportDetails.setJob(job);
                     break;
                 case JobStatus.IN_PROGRESS:
                     buttonShowReport.Visibility = Visibility.Visible;
+                    buttonDelete.Visibility = Visibility.Collapsed;
                     buttonCancel.Visibility = Visibility.Visible;
                     buttonCancel.IsEnabled = false;
                     break;
                 case JobStatus.CREATED:
                 default:
                     buttonShowReport.Visibility = Visibility.Collapsed;
+                    buttonDelete.Visibility = Visibility.Collapsed;
                     buttonCancel.Visibility = Visibility.Collapsed;
                     break;
             }
@@ -173,6 +177,7 @@ namespace NetworkManager.View.Component {
             buttonCreateJob.Visibility = Visibility.Visible;
             buttonShowReport.Visibility = Visibility.Collapsed;
             buttonCancel.Visibility = Visibility.Collapsed;
+            buttonDelete.Visibility = Visibility.Collapsed;
         }
 
         private void buttonAddTask_Click(object sender, RoutedEventArgs e) {
@@ -344,6 +349,21 @@ namespace NetworkManager.View.Component {
             trigger = triggerDialog.Trigger;
 
             textBox_plannedTrigger.Text = trigger.ToString();
+        }
+
+        private void buttonDelete_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show($"Are you sure you want to delete this job ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.No)
+                return;
+
+            job = App.jobStore.getJobById(job.id);
+
+            if (job.status == JobStatus.TERMINATED || job.status == JobStatus.CANCELLED)
+            {
+                App.jobStore.deleteJob(job);
+            }
+            parent.updateScheduledJobs();
         }
     }
 }

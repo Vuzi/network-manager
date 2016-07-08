@@ -9,7 +9,7 @@
              d:DesignHeight="700" d:DesignWidth="550">
     <Grid>
         <Label Content="Selected job's execution report" VerticalAlignment="Top" Margin="10,10,0,0" HorizontalAlignment="Left" Width="326" FontWeight="Bold" FontSize="18"/>
-        <Button x:Name="button_JobReload" Margin="285,16,0,0" HorizontalAlignment="Left" Width="25" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_JobReload_Click">
+        <Button x:Name="button_JobReload" Margin="291,16,0,0" HorizontalAlignment="Left" Width="25" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_JobReload_Click">
             <DockPanel LastChildFill="True"  Width="15" Height="15">
                 <fa:FontAwesome Icon="Refresh" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </DockPanel>

@@ -9,7 +9,7 @@
              d:DesignHeight="700" d:DesignWidth="550">
     <Grid>
         <Label x:Name="label_jobDetailsTitle" Content="Selected job" VerticalAlignment="Top" Margin="10,10,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="18"/>
-        <Button x:Name="button_JobReload" Margin="125,16,0,0" HorizontalAlignment="Left" Width="25" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_JobReload_Click">
+        <Button x:Name="button_JobReload" Margin="139,16,0,0" HorizontalAlignment="Left" Width="25" Height="25" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Click="button_JobReload_Click">
             <DockPanel LastChildFill="True"  Width="15" Height="15">
                 <fa:FontAwesome Icon="Refresh" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </DockPanel>
@@ -57,6 +57,7 @@
             <Button x:Name="buttonCreateJob" Margin="0,0,10,0" Content="Register and schedule the job" Width="189" Height="21" Click="buttonCreateJob_Click" />
             <Button x:Name="buttonShowReport" Margin="0,0,10,0" Visibility="Collapsed" Content="Show job reporting" Width="140" Height="21" Click="buttonShowReport_Click" />
             <Button x:Name="buttonCancel" Margin="0,0,10,0" Visibility="Collapsed" Content="Cancel the job" Width="140" Height="21"  Click="buttonCancel_Click" />
+            <Button x:Name="buttonDelete" Margin="0,0,10,0" Visibility="Collapsed" Content="Delete the job" Width="140" Height="21"  Click="buttonDelete_Click" />
         </WrapPanel>
     </Grid>
 </UserControl>
