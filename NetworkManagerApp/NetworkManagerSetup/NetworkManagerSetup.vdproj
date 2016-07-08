@@ -21,6 +21,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_20D1FD009877496EA084BFDB5B811B12"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_34F6D4CCBCF0B237922165B21DE07B6C"
         "OwnerKey" = "8:_E584C2C851DB47D7BBE22AADB8170998"
         "MsmSig" = "8:_UNDEFINED"
@@ -39,6 +45,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_B9F85FD0F6D141E0B43BA596A3138B55"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_BBC7EFFFC05F4C73A7A17CCEA7C71613"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -52,12 +64,6 @@
         "Entry"
         {
         "MsmKey" = "8:_CED829167DE9468EBC671B5358631ABC"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E40A934A406B44B294D73123FAC4C6BF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -194,6 +200,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_20D1FD009877496EA084BFDB5B811B12"
+            {
+            "SourcePath" = "8:..\\NetworkManagerApp\\resource\\sqlite3.dll"
+            "TargetName" = "8:sqlite3.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_289F391238A04610A7F9B9C6E9D94D94"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_34F6D4CCBCF0B237922165B21DE07B6C"
             {
             "AssemblyRegister" = "3:1"
@@ -201,11 +227,6 @@
             "AssemblyAsmDisplayName" = "8:System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
                 "ScatterAssemblies"
                 {
-                    "_34F6D4CCBCF0B237922165B21DE07B6C"
-                    {
-                    "Name" = "8:System.Net.Http.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:System.Net.Http.dll"
             "TargetName" = "8:"
@@ -265,6 +286,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B9F85FD0F6D141E0B43BA596A3138B55"
+            {
+            "SourcePath" = "8:..\\NetworkManagerApp\\resource\\NetworkManager.sqlite"
+            "TargetName" = "8:NetworkManager.sqlite"
+            "Tag" = "8:"
+            "Folder" = "8:_289F391238A04610A7F9B9C6E9D94D94"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BBC7EFFFC05F4C73A7A17CCEA7C71613"
             {
             "SourcePath" = "8:..\\..\\NetworkManagerExecutor\\NetworkManagerExecutor\\config\\log4net-executor.config"
@@ -289,26 +330,6 @@
             {
             "SourcePath" = "8:..\\NetworkManagerApp\\resource\\NetworkManager.sqlite"
             "TargetName" = "8:NetworkManager.sqlite"
-            "Tag" = "8:"
-            "Folder" = "8:_289F391238A04610A7F9B9C6E9D94D94"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E40A934A406B44B294D73123FAC4C6BF"
-            {
-            "SourcePath" = "8:..\\..\\..\\..\\..\\Desktop\\sqlite3.dll"
-            "TargetName" = "8:sqlite3.dll"
             "Tag" = "8:"
             "Folder" = "8:_289F391238A04610A7F9B9C6E9D94D94"
             "Condition" = "8:"
@@ -414,15 +435,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Network Manager"
-        "ProductCode" = "8:{68B29C65-315C-4CAF-B4A5-9F5636B8BCD2}"
-        "PackageCode" = "8:{76036080-8FF9-42A9-8BC2-294F94B259A0}"
+        "ProductCode" = "8:{EA8DA518-97BC-41BA-8FBB-F1D2CC659E6B}"
+        "PackageCode" = "8:{135410A7-ED21-49B7-B4A2-D8A038D98095}"
         "UpgradeCode" = "8:{AE53F5F8-FC5A-4E1C-A0BD-EA34775D7D0A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.3.3"
+        "ProductVersion" = "8:1.0.1"
         "Manufacturer" = "8:ESGI"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -964,7 +985,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C38FF2300F2341C9B41A64524520D201"
             {
-            "SourcePath" = "8:..\\NetworkManagerApp\\obj\\Debug\\NetworkManagerApp.exe"
+            "SourcePath" = "8:..\\NetworkManagerApp\\obj\\Release\\NetworkManagerApp.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_289F391238A04610A7F9B9C6E9D94D94"
@@ -992,7 +1013,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E584C2C851DB47D7BBE22AADB8170998"
             {
-            "SourcePath" = "8:..\\..\\NetworkManagerExecutor\\NetworkManagerExecutor\\obj\\Debug\\NetworkManagerExecutor.exe"
+            "SourcePath" = "8:..\\..\\NetworkManagerExecutor\\NetworkManagerExecutor\\obj\\Release\\NetworkManagerExecutor.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_289F391238A04610A7F9B9C6E9D94D94"
