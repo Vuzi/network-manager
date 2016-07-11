@@ -321,8 +321,13 @@ namespace NetworkManager.View.Component {
         }
 
         private void button_JobReload_Click(object sender, RoutedEventArgs e) {
-            if(job != null)
-                setJob(App.jobStore.getJobById(job.id));
+            if (job != null) {
+                job = App.jobStore.getJobById(job.id);
+                parent.updateScheduledJobs(job);
+
+                // Force 
+                setJob(job);
+            }
         }
 
         private void buttonCancel_Click(object sender, RoutedEventArgs e) {

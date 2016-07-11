@@ -4,12 +4,14 @@ using System.Windows;
 using System.Collections.Generic;
 using NetworkManager.Model;
 using NetworkManager.Scheduling;
+using System;
 
 namespace NetworkManager.View {
 
     public partial class JobSchedulerWindow : Window {
 
         private List<Computer> preSelectedComputers { get; set; } = new List<Computer>();
+        private Job job;
 
         public JobSchedulerWindow() {
             InitializeComponent();
@@ -29,13 +31,17 @@ namespace NetworkManager.View {
         };
 
         public void updateScheduledJobs() {
+            updateScheduledJobs(null);
+        }
+
+        public void updateScheduledJobs(Job job) {
 
             scheduledJobs.Items.Clear();
 
             foreach(var group in groups) {
                 var element = new ScheduledJobModelGroup() { name = group.Value };
                 foreach (Job j in App.jobStore.getJobByStatus(group.Key))
-                    element.Items.Add(new ScheduledJobModel() { job = j });
+                    element.Items.Add(new ScheduledJobModel() { job = j, selected = (job != null ? (job.id == j.id) : false) });
                 scheduledJobs.Items.Add(element);
             }
         }
@@ -51,8 +57,8 @@ namespace NetworkManager.View {
         private void scheduledJobs_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
             var selectedElement = scheduledJobs.SelectedItem;
 
-            if(selectedElement is ScheduledJobModel) {
-                var job = (selectedElement as ScheduledJobModel).job;
+            if(selectedElement != null && selectedElement is ScheduledJobModel) {
+                job = (selectedElement as ScheduledJobModel).job;
 
                 jobDetails.setJob(job);
             }
@@ -66,7 +72,12 @@ namespace NetworkManager.View {
         }
 
         private void button_JobsReload_Click(object sender, RoutedEventArgs e) {
-            updateScheduledJobs();
+            job = App.jobStore.getJobById(job.id);
+            updateScheduledJobs(job);
+
+            // Force update
+            jobDetails.setJob(job);
+            jobReportDetails.setJob(job);
         }
     }
 }

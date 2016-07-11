@@ -21,6 +21,7 @@
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
                     <Setter Property="IsExpanded" Value="True"/>
+                    <Setter Property="IsSelected" Value="{Binding Path=selected}"/>
                 </Style>
             </TreeView.ItemContainerStyle>
             <TreeView.Resources>
@@ -31,7 +32,6 @@
                 <DataTemplate DataType="{x:Type model:ScheduledJobModel}">
                     <TextBlock Text="{Binding name}" FontSize="14" />
                 </DataTemplate>
-
             </TreeView.Resources>
         </TreeView>
         <Button x:Name="newJobButton" Content="Create new Job" VerticalAlignment="Bottom" Margin="10,0,0,10" HorizontalAlignment="Left" Width="210" Click="newJobButton_Click" ></Button>

@@ -4,6 +4,7 @@ using System.ComponentModel;
 
 namespace NetworkManager.Model {
     class ScheduledJobModelGroup {
+        public bool selected { get; set; }
 
         public string _name;
         public string name {

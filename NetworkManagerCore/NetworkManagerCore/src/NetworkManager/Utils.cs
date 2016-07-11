@@ -45,9 +45,7 @@ namespace NetworkManager {
         public static void wakeOnLan(string macAddress) {
             PhysicalAddress.Parse(macAddress.Replace(':', '-')).SendWol();
         }
-
-
-
+        
         public static string getBytesReadable(long i) {
             // Get absolute value
             long absolute_i = (i < 0 ? -i : i);

@@ -185,6 +185,7 @@ namespace NetworkManagerExecutor {
                 logger.Info("Execution done, now closing..");
             } catch (Exception e) {
                 logger.Error("Unhandled exception occured", e);
+                Environment.Exit(1);
             }
         }
     }

@@ -44,7 +44,7 @@ namespace NetworkManager.View.Component {
 
         public void setJob(Scheduling.Job job) {
             this.job = job;
-
+            
             textBox_CreationDate.Text = job.creationDateTime.ToString("f",
                 CultureInfo.CreateSpecificCulture("fr-FR"));
 
@@ -126,16 +126,18 @@ namespace NetworkManager.View.Component {
                 for (int j = 0; j < job.reports[i].tasksReports.Count; j++) {
                     var cell = detailsGrid.GetCell(i, j + 4);
 
-                    switch ((cell.Content as TextBlock).Text) {
-                        case "-":
-                            cell.Background = Brushes.LightYellow;
-                            break;
-                        case "Failed":
-                            cell.Background = Brushes.Red;
-                            break;
-                        case "Success":
-                            cell.Background = Brushes.LightGreen;
-                            break;
+                    if(cell != null) {
+                        switch ((cell.Content as TextBlock).Text) {
+                            case "-":
+                                cell.Background = Brushes.LightYellow;
+                                break;
+                            case "Failed":
+                                cell.Background = Brushes.Red;
+                                break;
+                            case "Success":
+                                cell.Background = Brushes.LightGreen;
+                                break;
+                        }
                     }
                 }
             }
@@ -147,8 +149,13 @@ namespace NetworkManager.View.Component {
         }
 
         private void button_JobReload_Click(object sender, RoutedEventArgs e) {
-            if (job != null)
-                setJob(App.jobStore.getJobById(job.id));
+            if (job != null) {
+                job = App.jobStore.getJobById(job.id);
+                parent.updateScheduledJobs(job);
+
+                // Force
+                setJob(job);
+            }
         }
     }
 
@@ -190,8 +197,10 @@ namespace NetworkManager.View.Component {
                     presenter = GetVisualChild<DataGridCellsPresenter>(row);
                 }
 
-                DataGridCell cell = (DataGridCell)presenter.ItemContainerGenerator.ContainerFromIndex(column);
-                return cell;
+                if (presenter != null) {
+                    DataGridCell cell = (DataGridCell)presenter.ItemContainerGenerator.ContainerFromIndex(column);
+                    return cell;
+                }
             }
             return null;
         }

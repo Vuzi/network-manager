@@ -1,6 +1,7 @@
 ﻿
 namespace NetworkManager.Model {
     class ScheduledJobModel {
+        public bool selected { get; set; }
 
         public string name {
             get {
