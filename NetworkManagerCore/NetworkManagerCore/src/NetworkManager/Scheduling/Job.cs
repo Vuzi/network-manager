@@ -43,7 +43,7 @@ namespace NetworkManager.Scheduling {
         /// </summary>
         public void unSchedule() {
             using (TaskService ts = new TaskService()) {
-                ts.GetFolder("\\Network Manager")?.DeleteTask($"NetworkManager Task #{id}");
+                ts.GetFolder("\\Network Manager")?.DeleteTask($"NetworkManager Task #{id}", false);
             }
         }
 

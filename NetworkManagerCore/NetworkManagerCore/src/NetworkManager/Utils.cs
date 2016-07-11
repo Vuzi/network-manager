@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Security.Principal;
+using System.Threading;
+using System.Threading.Tasks;
 using WindowsInstaller;
 
 namespace NetworkManager {
@@ -24,7 +27,7 @@ namespace NetworkManager {
             return (new WindowsPrincipal(WindowsIdentity.GetCurrent()))
                     .IsInRole(WindowsBuiltInRole.Administrator);
         }
-        
+
         /// <summary>
         /// Open the file explorer on the C disk of the remote computer
         /// </summary>
@@ -114,6 +117,43 @@ namespace NetworkManager {
             public bool hasValue() {
                 return value != null;
             }
+        }
+
+        /// <summary>
+        /// Lock a file, performs an action, and release the lock. If the lock is alreadty token, the method will wait for
+        /// a certain amount of time (30s by default) before timeouting and throw a TimeoutException
+        /// </summary>
+        /// <param name="path">The lock path</param>
+        /// <param name="action">The action to performs</param>
+        /// <param name="timeout">The timeout timer, in ms</param>
+        public static void Lock(string path, Action action, long timeout = 30000) {
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
+            while (true) {
+                try {
+                    using (var file = File.Open(path,
+                                                FileMode.OpenOrCreate,
+                                                FileAccess.ReadWrite,
+                                                FileShare.Delete)) {
+                        action();
+                        break;
+                    }
+                } catch (IOException) {
+                    if (stopWatch.ElapsedMilliseconds < timeout)
+                        throw new TimeoutException($"Could not acquire the lock for the file {path} in less than {timeout}ms");
+
+                    Thread.Sleep(50);
+                }
+            }
+
+            stopWatch.Stop();
+        }
+
+        public static Task LockAsync(string path, Action action, long timeout = 30000) {
+            return Task.Run(() => {
+                Lock(path, action, timeout);
+            });
         }
     }
 }
