@@ -18,15 +18,15 @@
         <Grid x:Name="gridControls" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
             <!-- Taks name -->
-            <TextBox x:Name="textBox_TaskName" HorizontalAlignment="Left" Height="20" Margin="139,48,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+            <TextBox x:Name="textBox_TaskName" HorizontalAlignment="Left" Height="20" Margin="139,48,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="181"/>
             <Label Content="Job name (optional) :" HorizontalAlignment="Left" Margin="16,44,0,0" VerticalAlignment="Top" Width="149"/>
 
             <!-- Task date -->
             <Label Content="Scheduled execution" VerticalAlignment="Top" Margin="10,98,0,0" HorizontalAlignment="Left" Width="210" FontWeight="Bold" FontSize="15"/>
 
             <Button x:Name="button_changeTrigger" Content="Change" HorizontalAlignment="Left" Margin="389,133,0,0" VerticalAlignment="Top" Width="75" Click="button_changeTrigger_Click"/>
-            <TextBox x:Name="textBox_plannedTrigger" HorizontalAlignment="Left" Height="20" Margin="91,133,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="283"/>
-            <CheckBox x:Name="jobNowCheckbox" Content="Now" HorizontalAlignment="Left" Margin="32,136,0,0" VerticalAlignment="Top" Click="jobNow_Click"/>
+            <TextBox x:Name="textBox_plannedTrigger" HorizontalAlignment="Left" Height="20" IsReadOnly="True" Margin="71,133,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="303"/>
+            <CheckBox x:Name="jobNowCheckbox" Content="Now" HorizontalAlignment="Left" Margin="16,133,0,0" VerticalAlignment="Top" Click="jobNow_Click"/>
             <Rectangle Fill="Gray" Height="9" Margin="10,177,0,0" VerticalAlignment="Top"/>
             <CheckBox x:Name="jobCyclicCheckbox" Content="Is Cyclic" HorizontalAlignment="Left" Margin="479,136,0,0" VerticalAlignment="Top" Click="jobNow_Click"/>
 
