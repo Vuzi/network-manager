@@ -72,12 +72,15 @@ namespace NetworkManager.View {
         }
 
         private void button_JobsReload_Click(object sender, RoutedEventArgs e) {
-            job = App.jobStore.getJobById(job.id);
-            updateScheduledJobs(job);
+            if (job != null) {
+                job = App.jobStore.getJobById(job.id);
+                updateScheduledJobs(job);
 
-            // Force update
-            jobDetails.setJob(job);
-            jobReportDetails.setJob(job);
+                // Force update
+                jobDetails.setJob(job);
+                jobReportDetails.setJob(job);
+            } else
+                updateScheduledJobs();
         }
     }
 }
